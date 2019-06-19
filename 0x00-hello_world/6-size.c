@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#define TYPENAME(TYPE) \
-
-int main(int argc, const char *argv[])
+int main(void)
 {
 	printf("Size of a char: %zd byte(s)\n", sizeof(char));
 	printf("Size of an int: %zd byte(s)\n", sizeof(int));
