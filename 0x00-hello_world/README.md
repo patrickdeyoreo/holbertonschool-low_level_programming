@@ -21,10 +21,17 @@
     * The C file name will be saved in the variable ```CFILE```
 
 * **4-puts.c**
-  * Write a C program that prints exactly "Programming is like building a multilingual puzzle, followed by a new line.
+  * Prints exactly ```Programming is like building a multilingual puzzle```, followed by a new line.
+    * Uses ```puts```
+    * Returns 0
+    * Compiles without warnings in ```gcc``` with the ```-Wall``` option
 
 * **5-printf.c**
-  * \*
+  * Prints exactly ```with proper grammar, but the outcome is a piece of art,```, followed by a new line.
+    * Uses ```printf```
+    * Returns 0
+    * Compiles without warnings in ```gcc``` with the ```-Wall``` option
 
 * **6-size.c**
-  * \*
+  * Prints the size of various types on the computer it is compiled and run on.
+    * Returns 0
