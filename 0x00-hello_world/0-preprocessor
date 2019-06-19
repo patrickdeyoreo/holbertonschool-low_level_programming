@@ -1,1 +1,2 @@
 #!/bin/bash
+cpp "${CFILE?}" -o c

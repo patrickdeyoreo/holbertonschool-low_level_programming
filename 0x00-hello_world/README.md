@@ -2,7 +2,7 @@
 #### My first C Project at Holberton School
 
 * **0-preprocessor**
-  * \*
+  * Script that runs the C file who's name is the value of the variable ```CFILE``` through the preprocessor and save the result into the file ```c```.
 
 * **1-compiler**
   * \*
