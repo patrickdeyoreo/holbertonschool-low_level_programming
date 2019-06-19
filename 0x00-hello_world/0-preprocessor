@@ -1,2 +1,2 @@
 #!/bin/bash
-cpp "${CFILE?}" -o c
+gcc -E "${CFILE?}" -o c
