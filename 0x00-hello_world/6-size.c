@@ -1,14 +1,13 @@
 #include <stdio.h>
 
-#define PRINT_SIZE(TYPE) \
-	printf("Size of a " #TYPE ": %zd byte(s)\n", sizeof(TYPE))
+#define TYPENAME(TYPE) \
 
 int main(int argc, const char *argv[])
 {
-	PRINT_SIZE(char);
-	PRINT_SIZE(int);
-	PRINT_SIZE(long int);
-	PRINT_SIZE(long long int);
-	PRINT_SIZE(float);
+	printf("Size of a char: %zd byte(s)\n", sizeof(char));
+	printf("Size of an int: %zd byte(s)\n", sizeof(int));
+	printf("Size of a long int: %zd byte(s)\n", sizeof(long int));
+	printf("Size of a long long int: %zd byte(s)\n", sizeof(long long int));
+	printf("Size of a float: %zd byte(s)\n", sizeof(float));
 	return (0);
 }
