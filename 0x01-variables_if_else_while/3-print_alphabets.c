@@ -2,6 +2,7 @@
 /**
  * main - entry point
  *
+ * Description: Print lower and upper alphabet on the same line
  * Return: 0
  */
 int main(void)
