@@ -2,12 +2,15 @@
 /**
  * main - entry point
  *
+ * Description: Print the lowercase alphabet
  * Return: 0
  */
 int main(void)
 {
-	for (int l = 'a'; l <= 'z'; ++l)
-		putchar(l);
+	for (char alpha = 'a'; alpha <= 'z'; ++alpha)
+	{
+		putchar(alpha);
+	}
 	putchar('\n');
 	return (0);
 }
