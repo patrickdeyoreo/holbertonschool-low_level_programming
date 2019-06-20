@@ -8,7 +8,7 @@
 int main(void)
 {
 	for (int c = 0; c < 26; ++c)
-		putchar(c);
+		putchar('a' + c);
 
 	putchar('\n');
 
