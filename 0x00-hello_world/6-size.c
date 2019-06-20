@@ -2,7 +2,9 @@
 
 /**
  * main - entry point
- */
+ * Description: Print the size of various types
+ * Return: 0
+*/
 int main(void)
 {
 	printf("Size of a char: %ld byte(s)\n", sizeof(char));
