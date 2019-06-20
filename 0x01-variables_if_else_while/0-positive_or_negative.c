@@ -4,6 +4,8 @@
 
 /**
  * main - entry point
+ *
+ * Description: Prints a number and whether it is positive, negative or zero.
  * Returns: 0
  */
 int main(void)
