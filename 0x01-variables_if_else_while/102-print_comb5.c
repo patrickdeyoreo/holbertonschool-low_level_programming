@@ -19,7 +19,7 @@ int main(void)
 		{
 			for (y1 = x1; y1 < 10; ++y1)
 			{
-				for (y2 = x2 + 1; y2 < 10; ++y2)
+				for (y2 = ((x1 == y1) ? (x2 + 1) : 0); y2 < 10; ++y2)
 				{
 					putchar('0' + x1);
 					putchar('0' + x2);
