@@ -1,7 +1,7 @@
 #include "holberton.h"
 
 /**
- * sign - print the sign of a numeric value
+ * print_sign - print the sign of a numeric value
  * @n: The value to test
  *
  * Return: 1 if n is positive.

@@ -3,6 +3,7 @@
 
 /**
  * print_to_98 - print all integers from given value to 98 (inclusive)
+ * @n: The start of the range
  *
  * Return: void
  */
