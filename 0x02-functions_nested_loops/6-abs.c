@@ -1,10 +1,10 @@
 #include "holberton.h"
 
 /**
- * abs - None
+ * abs - compute the absolute value of a number
+ * @i: The value to test
  *
- * Description: None
- * Return: 0
+ * Return: The absolute value of i.
  */
 int _abs(int i)
 {

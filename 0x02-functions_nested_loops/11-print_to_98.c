@@ -2,10 +2,9 @@
 #include <stdio.h>
 
 /**
- * print_to_98 - None
+ * print_to_98 - print all integers from given value to 98 (inclusive)
  *
- * Description: None
- * Return: 0
+ * Return: void
  */
 void print_to_98(int n)
 {

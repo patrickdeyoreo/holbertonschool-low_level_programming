@@ -1,10 +1,9 @@
 #include "holberton.h"
 
 /**
- * times_table - None
+ * times_table - print a multiplication table of single-digit numbers
  *
- * Description: None
- * Return: 0
+ * Return: void
  */
 void times_table(void)
 {

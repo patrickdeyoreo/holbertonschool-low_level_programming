@@ -1,10 +1,11 @@
 #include "holberton.h"
 
 /**
- * isalpha - None
+ * isalpha - check if a character is alphabetical
+ * @c: The character to check
  *
- * Description: None
- * Return: 0
+ * Return: 1 if c is alphabetical.
+ * Otherwise 0.
  */
 int _isalpha(int c)
 {

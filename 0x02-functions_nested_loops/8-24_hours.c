@@ -1,12 +1,10 @@
 #include "holberton.h"
 
 /**
- * 24_hours - None
+ * 24_hours - print all times of day from 00:00 to 23:59
  *
- * Description: None
  * Return: void
  */
-
 void jack_bauer(void)
 {
 	int m;
