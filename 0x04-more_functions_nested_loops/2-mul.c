@@ -2,6 +2,8 @@
 
 /**
  * mul - multiply two numbers
+ * @a: first multiplication operand
+ * @b: second multiplication operand
  *
  * Return: product of a and b
  */

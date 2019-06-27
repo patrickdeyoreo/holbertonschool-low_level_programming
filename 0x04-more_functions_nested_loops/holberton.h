@@ -32,8 +32,6 @@ void print_diagonal(int n);
 /* 8 */
 void print_square(int size);
 
-/* 9 */
-
 /* 10 */
 void print_triangle(int size);
 

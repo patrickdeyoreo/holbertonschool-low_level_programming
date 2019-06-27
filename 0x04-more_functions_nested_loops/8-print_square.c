@@ -2,6 +2,7 @@
 
 /**
  * print_square - print a square in the terminal
+ * @size: size of square
  *
  * Return: void
  */

@@ -2,6 +2,7 @@
 
 /**
  * print_triangle - print a triangle in the terminal
+ * @size: base & height of triangle
  *
  * Return: void
  */
