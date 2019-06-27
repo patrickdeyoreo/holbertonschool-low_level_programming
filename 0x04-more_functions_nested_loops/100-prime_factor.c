@@ -34,8 +34,8 @@ long largest_prime_factor(long n)
 
 	while (!isprime(n))
 	{
-		for ( ; n % i || !isprime(i); ++i)
-			;
+		while (n % i || !isprime(i))
+			++i;
 		n /= i;
 	}
 	return (n);
