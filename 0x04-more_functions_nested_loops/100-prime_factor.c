@@ -30,11 +30,11 @@ int isprime(long n)
  */
 long largest_prime_factor(long n)
 {
-	long i;
+	long i = 2;
 
 	while (!isprime(n))
 	{
-		for (i = 2; n % i || !isprime(i); ++i)
+		for ( ; n % i || !isprime(i); ++i)
 			;
 		n /= i;
 	}
