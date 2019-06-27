@@ -19,7 +19,7 @@ void print_number(int n)
 	else
 	{
 		_putchar('-');
-		m = -1 * ((unsigned int) n);
+		m = -1 * n;
 		if (m >= 10)
 			print_number(m / 10);
 		_putchar('0' + m % 10);
