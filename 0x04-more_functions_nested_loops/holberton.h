@@ -38,5 +38,6 @@ void print_triangle(int size);
 /* 11 */
 
 /* 12 */
+void print_number(int n);
 
 #endif /* HOLBERTON_H */
