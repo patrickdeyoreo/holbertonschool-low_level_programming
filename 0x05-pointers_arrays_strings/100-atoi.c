@@ -25,10 +25,9 @@ int _atoi(char *s)
 					if (n >= INT_MAX)
 						return (INT_MAX);
 				}
-				else
+				else if (n > INT_MAX)
 				{
-					if (((int) (n ^ INT_MIN)) > 0)
-						return (INT_MIN);
+					return (INT_MIN);
 				}
 			}
 			else if (n)
