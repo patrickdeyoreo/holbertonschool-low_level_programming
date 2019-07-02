@@ -3,7 +3,6 @@
 
 /**
  * _atoi - convert a string to an integer
- *
  * @s: the string to convert
  *
  * Return: result of conversion
@@ -31,9 +30,13 @@ int _atoi(char *s)
 				}
 			}
 			else if (n)
+			{
 				break;
+			}
 			else if (*s == '-')
+			{
 				sign *= -1;
+			}
 			++s;
 		}
 	}
