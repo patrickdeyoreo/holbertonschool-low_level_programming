@@ -8,9 +8,9 @@
  */
 void _puts(char *str)
 {
-	if (!str)
+	if (str)
 	{
-		while (*str != '\0')
+		while (*str)
 			_putchar(*str++);
 		_putchar('\n');
 	}

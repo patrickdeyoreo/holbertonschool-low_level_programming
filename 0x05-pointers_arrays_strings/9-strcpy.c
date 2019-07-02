@@ -10,20 +10,19 @@
  */
 char *_strcpy(char *dest, char *src)
 {
-	int len;
-	int pos;
+	int len = 0;
+	int pos = 0;
 
 	if (dest && src)
 	{
-		for (len = 0; *(src + len); ++len)
-			;
+		while (*(src + len))
+			++len;
 
 		if (src + len < dest || dest + len < src)
 		{
-			pos = 0;
 			do {
-				*(dest + pos++) = *src;
-			} while (*src++);
+				*(dest + pos++) = *src++;
+			} while (len--);
 		}
 	}
 
