@@ -23,12 +23,12 @@ int _atoi(char *s)
 				if (sign > 0)
 				{
 					if (n >= INT_MAX)
-						return INT_MAX;
+						return (INT_MAX);
 				}
 				else
 				{
 					if (((int) (n ^ INT_MIN)) > 0)
-						return INT_MIN;
+						return (INT_MIN);
 				}
 			}
 			else if (n)
