@@ -27,7 +27,7 @@ int _atoi(char *s)
 				}
 				else
 				{
-					if ((n >> (sizeof(unsigned int) - 1)))
+					if (((int) (n ^ INT_MIN)) > 0)
 						return INT_MIN;
 				}
 			}
