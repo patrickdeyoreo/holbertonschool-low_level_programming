@@ -12,8 +12,12 @@ int main(void)
 {
 	int n;
 	int max_digits = floor(log10(INT_MAX)) + 2;
+	char s_min[max_digits + 2];
+	char s_max[max_digits + 1];
 	char s_lt_min[max_digits + 2];
-	char s_gt_max[max_digits + 2];
+	char s_gt_max[max_digits + 1];
+	sprintf(s_min, "%d", INT_MIN);
+	sprintf(s_max, "%d", INT_MAX);
 	sprintf(s_lt_min, "%ld", (long) INT_MIN - 1);
 	sprintf(s_gt_max, "%ld", (long) INT_MAX + 1);
 
@@ -47,6 +51,14 @@ int main(void)
 
 	printf("Converting %s\n", "---++++ -++ Sui - te -   402 #cisfun :)");
 	n = _atoi("---++++ -++ Sui - te -   402 #cisfun :)");
+	printf("%d\n", n);
+
+	printf("Converting %s\n", s_min);
+	n = _atoi(s_min);
+	printf("%d\n", n);
+
+	printf("Converting %s\n", s_max);
+	n = _atoi(s_max);
 	printf("%d\n", n);
 
 	printf("Converting %s\n", s_lt_min);
