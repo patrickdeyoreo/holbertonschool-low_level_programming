@@ -1,5 +1,5 @@
-# 0x0. C - Hello, World
-#### My first C Project at Holberton School
+# 0x00. C - Hello, World
+### My first C project at Holberton School
 
 * **0-preprocessor**
   * Runs a C file through the preprocessor and saves the result in another file.

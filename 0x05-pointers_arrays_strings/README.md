@@ -1,5 +1,5 @@
 # 0x05. C - Pointers, arrays and strings
-### Intro to pointers, arrays and strings at Holberton School
+### Intro to pointers, arrays and strings
 
 * **0-reset\_to\_98.c**
   * reset\_to\_98 - reset integer pointed to by n to 98
@@ -46,7 +46,7 @@
 
 * **100-atoi.c**
   * \_atoi - convert a string to an integer
-  * s: the string to convert
+  * @s: the string to convert
 
 * **101-keygen.c**
   * main - generate valid passwords for 101-crackme
