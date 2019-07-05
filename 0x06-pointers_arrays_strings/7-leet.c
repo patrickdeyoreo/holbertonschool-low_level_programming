@@ -1,24 +1,36 @@
 #include "holberton.h"
 
 /**
- * leet - encodes a string into 1337.
+ * leet - encode a string into 1337.
  * @s: the string to encode
+ *
+ * Description: Characters are encoded as follows:
+ * {'a', 'A'} -> '4'
+ * {'e', 'E'} -> '3'
+ * {'o', 'O'} -> '0'
+ * {'t', 'T'} -> '7'
+ * {'l', 'L'} -> '1'
  *
  * Return: pointer to the encoded string
  */
 char *leet(char *s)
 {
-	char table[][3]={ "4Aa", "3Ee", "0Oo", "7Tt", "1Ll" };
-
-	int i;
 	char *c;
+	char map[15] = {
+		'a', 'A', '4',
+		'e', 'E', '3',
+		'o', 'O', '0',
+		't', 'T', '7',
+		'l', 'L', '1'
+	};
+	int i;
 
-	for (i = 0; i < 5; ++i)
+	for (c = s; *c; ++c)
 	{
-		for (c = table[i] + 1; *c; ++c)
+		for (i = 0; i < 15; i += 3)
 		{
-			if (*s == *c)
-				s = table[i];
+			if (*c == map[i] || *c== map[i + 1])
+				*c = map[i + 2];
 		}
 	}
 
