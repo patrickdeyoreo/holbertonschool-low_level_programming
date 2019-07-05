@@ -12,7 +12,7 @@ char *string_toupper(char *s)
 
 	for (c = s; *c; ++c)
 	{
-		if (*c >= 'a' && *c <= 'z')
+		if ('a' <= *c && *c <= 'z')
 			*c -= 'a' - 'A';
 	}
 
