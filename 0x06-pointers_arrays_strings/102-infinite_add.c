@@ -13,25 +13,30 @@
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
 	char sum[size_r];
-	char *n1_end = n1;
-	char *n2_end = n2;
+	char *n1_end;
+	char *n2_end;
+	char *r_end;
 	int i;
-	int j;
 
-	do {
-		++n1_end;
-	} while (*n1_end);
-
-	do {
-		++n2_end;
-	} while (*n2_end);
+	for (n1_end = n1; *n1_end; ++n1_end)
+		;
+	for (n2_end = n2; *n2_end; ++n2_end)
+		;
 
 	for (i = 0; n1 < n1_end || n2 < n2_end; ++i)
 	{
-		if (size_r - 1 <= i)
-			return 0;
+		if (i == size_r - 1)
+			return (0);
 
-		sum[i] = 0;
+		if (i && sum[i - 1] > 9)
+		{
+			sum[i] = sum[i - 1] / 10;
+			sum[i - 1] %=  10;
+		}
+		else
+		{
+			sum[i] = 0;
+		}
 
 		if (n1 < n1_end)
 			sum[i] += *(--n1_end) - '0';
@@ -39,26 +44,22 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 		if (n2 < n2_end)
 			sum[i] += *(--n2_end) - '0';
 
-		if (i && sum[i - 1] > 9)
-		{
-			sum[i] += sum[i - 1] / 10;
-			sum[i - 1] %=  10;
-		}
 	}
 
 	if (sum[i - 1] > 9)
 	{
-		if (size_r - 1 <= i)
-			return 0;
+		if (i == size_r - 1)
+			return (0);
+
 		sum[i] = sum[i - 1] / 10;
 		sum[i - 1] %=  10;
 		++i;
 	}
 
-	for (j = 0; i; ++j)
-		r[j] = sum[--i] + '0';
+	for (r_end = r; i; ++r_end)
+		*r_end = sum[--i] + '0';
 
-	r[j] = '\0';
+	*r_end = '\0';
 
 	return (r);
 }

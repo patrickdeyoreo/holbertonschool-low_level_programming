@@ -29,7 +29,7 @@ char *leet(char *s)
 	{
 		for (i = 0; i < 15; i += 3)
 		{
-			if (*c == map[i] || *c== map[i + 1])
+			if (*c == map[i] || *c == map[i + 1])
 				*c = map[i + 2];
 		}
 	}
