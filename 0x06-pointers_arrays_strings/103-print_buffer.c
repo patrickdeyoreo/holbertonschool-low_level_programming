@@ -33,10 +33,9 @@ void print_buffer(char *b, int size)
 			if (l_pos % 2)
 				putchar(' ');
 		}
-		putchar(' ');
 		for (l_pos = 0; l_pos < 10 && b_pos + l_pos < size; ++l_pos)
 		{
-			if (b[b_pos + l_pos] > 126 || b[b_pos + l_pos] < 32)
+			if (b[b_pos + l_pos] < 32 || b[b_pos + l_pos] > 126)
 				putchar('.');
 			else
 				putchar(b[b_pos + l_pos]);
