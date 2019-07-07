@@ -1,4 +1,5 @@
 #include "holberton.h"
+#include <stdio.h>
 
 /**
  * infinite_add - adds two numbers
@@ -12,54 +13,43 @@
  */
 char *infinite_add(char *n1, char *n2, char *r, int size_r)
 {
-	char sum[size_r];
-	char *n1_end;
-	char *n2_end;
-	char *r_end;
-	int i;
+	char r_temp[size_r];
+	char *n1_end, *n2_end;
+	int i, j, carry_flag;
 
 	for (n1_end = n1; *n1_end; ++n1_end)
 		;
 	for (n2_end = n2; *n2_end; ++n2_end)
 		;
-
-	for (i = 0; n1 < n1_end || n2 < n2_end; ++i)
+	for (i = 0, carry_flag = 0; n1 < n1_end || n2 < n2_end; ++i)
 	{
-		if (i == size_r - 1)
+		if (i + 1 >= size_r)
 			return (0);
-
-		if (i && sum[i - 1] > 9)
+		r_temp[i] = 0;
+		if (carry_flag)
 		{
-			sum[i] = sum[i - 1] / 10;
-			sum[i - 1] %=  10;
+			r_temp[i] = r_temp[i - 1] / 10;
+			r_temp[i - 1] %= 10;
+			carry_flag = 0;
 		}
-		else
-		{
-			sum[i] = 0;
-		}
-
 		if (n1 < n1_end)
-			sum[i] += *(--n1_end) - '0';
-
+			r_temp[i] += *(--n1_end) - '0';
 		if (n2 < n2_end)
-			sum[i] += *(--n2_end) - '0';
-
+			r_temp[i] += *(--n2_end) - '0';
+		if (r_temp[i] > 9)
+			carry_flag = 1;
 	}
-
-	if (sum[i - 1] > 9)
+	if (carry_flag)
 	{
-		if (i == size_r - 1)
+		if (i + 1 >= size_r)
 			return (0);
-
-		sum[i] = sum[i - 1] / 10;
-		sum[i - 1] %=  10;
+		r_temp[i] = r_temp[i - 1] / 10;
+		r_temp[i - 1] %= 10;
 		++i;
 	}
-
-	for (r_end = r; i; ++r_end)
-		*r_end = sum[--i] + '0';
-
-	*r_end = '\0';
+	for (j = 0; i > 0; ++j)
+		r[j] = r_temp[--i] + '0';
+	r[j] = '\0';
 
 	return (r);
 }
