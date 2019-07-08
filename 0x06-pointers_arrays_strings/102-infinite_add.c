@@ -51,5 +51,6 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 	for (j = 0; i > 0; ++j)
 		r[j] = r_temp[--i] + '0';
 	r[j] = '\0';
+
 	return (r);
 }
