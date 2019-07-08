@@ -15,12 +15,15 @@ char *infinite_add(char *n1, char *n2, char *r, int size_r)
 	char r_temp[size_r];
 	char *n1_end;
 	char *n2_end;
-	int i;
-	int j;
+	int i, j;
 
-	for (n1_end = n1 + 1; *n1_end; ++n1_end)
+	for ( ; n1[1] && *n1 == '0'; ++n1)
 		;
-	for (n2_end = n2 + 1; *n2_end; ++n2_end)
+	for ( ; n2[1] && *n2 == '0'; ++n2)
+		;
+	for (n1_end = n1; *n1_end; ++n1_end)
+		;
+	for (n2_end = n2; *n2_end; ++n2_end)
 		;
 	for (i = 0; n1 < n1_end || n2 < n2_end; ++i)
 	{
