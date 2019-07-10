@@ -5,3 +5,5 @@
 !README.md
 !*.c
 !*.h
+!*.py
+!101-crackme_password
