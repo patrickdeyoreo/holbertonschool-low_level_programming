@@ -13,15 +13,18 @@
  */
 char *_strstr(char *haystack, char *needle)
 {
-	int i = 0;
+	char *hpos, *npos;
 
-	for ( ; *haystack; haystack += (i ? i : 1))
-	{
-		for (i = 0; haystack[i] == needle[i]; ++i)
-		{
-			if (!needle[i])
+	do {
+		hpos = haystack;
+		npos = needle;
+		do
+		{	if (!*npos)
 				return (haystack);
-		}
-	}
-	return (needle ? NULL : haystack);
+			if (!*hpos)
+				return (NULL);
+		} while (*hpos++ == *npos++);
+	} while (*++haystack);
+
+	return (NULL);
 }
