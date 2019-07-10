@@ -13,9 +13,9 @@
  */
 char *_strstr(char *haystack, char *needle)
 {
-	int i;
+	int i = 0;
 
-	for ( ; *haystack; haystack += i + 1)
+	for ( ; *haystack; haystack += (i ? i : 1))
 	{
 		for (i = 0; haystack[i] == needle[i]; ++i)
 		{
@@ -23,5 +23,5 @@ char *_strstr(char *haystack, char *needle)
 				return (haystack);
 		}
 	}
-	return (NULL);
+	return (needle ? NULL : haystack);
 }
