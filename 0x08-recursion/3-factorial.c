@@ -1,9 +1,10 @@
 #include "holberton.h"
 
 /**
- * factorial -
+ * factorial - compute the factorial of a number
+ * @n: the number to operate on
  *
- * Return:
+ * Return: the factorial of n
  */
 int factorial(int n)
 {

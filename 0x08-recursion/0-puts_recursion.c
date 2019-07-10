@@ -1,9 +1,10 @@
 #include "holberton.h"
 
 /**
- * _puts_recursion -
+ * _puts_recursion - print a string followed by a newline
+ * @s: a pointer to the string to print
  *
- * Return:
+ * Return: void
  */
 void _puts_recursion(char *s)
 {
