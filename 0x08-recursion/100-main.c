@@ -23,6 +23,10 @@ int main(void)
     pat = "m*a*i*n*.*c";
     r = wildcmp(str, pat);
     printf("string : %s\npattern: %s\nmatched: %d\n", str, pat, r);
+    str = "yo-main.c";
+    pat = "*m*a*i*n*.*c";
+    r = wildcmp(str, pat);
+    printf("string : %s\npattern: %s\nmatched: %d\n", str, pat, r);
     str = "main.c";
     pat = "m*a*i*n*.*c*";
     r = wildcmp(str, pat);

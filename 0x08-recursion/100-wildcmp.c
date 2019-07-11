@@ -63,8 +63,8 @@ char _strncmp(char *s1, char *s2, unsigned int n)
  * _strnstr - locate a substring
  * @s: a pointer to the string to search
  * @ss: a pointer to the substring to search for
- * @s_len: the max number of characters to use in str
- * @ss_len: the max number of characters to use in substr
+ * @s_len: the number of bytes to check in s
+ * @ss_len: the number of bytes to match in ss
  *
  * Description: Find the first occurrence of the substring needle in the
  * string haystack. The terminating null bytes ('\0') are not compared.
