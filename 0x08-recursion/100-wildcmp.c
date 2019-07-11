@@ -112,9 +112,9 @@ int _wildcmp(char *s1, char *s2, char *wild_prev)
 		return (_wildcmp(s1 + (wild - s2), wild + 1, wild));
 	}
 
-	s1 = _strnstr(s1, s2, _strlen(s1), (wild - s2));
+	s1 = _strnstr(s1, s2, s1_len, (wild - s2));
 
-	if (!s1)
+	if (!s1 || !*s1)
 		return (0);
 
 	if (_wildcmp(s1 + (wild - s2), wild + 1, wild))
