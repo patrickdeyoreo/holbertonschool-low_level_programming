@@ -1,25 +1,6 @@
 #include "holberton.h"
 
 /**
- * _strchr - locate character in string
- * @s: a pointer to the string to search
- * @c: the character to search for
- *
- * Return: a pointer to the first match,
- * or NULL if no matches are found.
- */
-char *_strchr(char *s, char c)
-{
-	if (*s == c)
-		return (s);
-	if (*s)
-		return (_strchr(s + 1, c));
-
-	return (NULL);
-}
-
-
-/**
  * _strlen - calculate length of a string
  * @s: a pointer to the string to find the length of
  *
@@ -66,8 +47,8 @@ char _strncmp(char *s1, char *s2, unsigned int n)
  * _strnstr - locate a substring
  * @s: a pointer to the string to search
  * @ss: a pointer to the substring to search for
- * @s_len: the number of bytes to check in s
- * @ss_len: the number of bytes to match in ss
+ * @s_len: the max number of bytes to check in s
+ * @ss_len: the max number of bytes to match in ss
  *
  * Description: Find the first occurrence of the substring needle in the
  * string haystack. The terminating null bytes ('\0') are not compared.
@@ -77,14 +58,14 @@ char _strncmp(char *s1, char *s2, unsigned int n)
  */
 char *_strnstr(char *s, char *ss, unsigned int s_len, unsigned int ss_len)
 {
-	if (!ss_len)
+	if (!ss_len || !*ss)
 		return (s);
-
-	if (s_len < ss_len)
-		return (NULL);
 
 	if (!_strncmp(s, ss, ss_len))
 		return (s);
+
+	if (s_len < ss_len || !*s)
+		return (NULL);
 
 	return (_strnstr(s + 1, ss, s_len - 1, ss_len));
 }
@@ -103,9 +84,9 @@ char *_strnstr(char *s, char *ss, unsigned int s_len, unsigned int ss_len)
  */
 int _wildcmp(char *s1, char *s2, char *wild_prev)
 {
-	char *wild = _strchr(s2, '*');
 	unsigned int s1_len = _strlen(s1);
 	unsigned int s2_len = _strlen(s2);
+	char *wild = _strnstr(s2, "*", s1_len, 1);
 
 	if (!wild)
 	{
