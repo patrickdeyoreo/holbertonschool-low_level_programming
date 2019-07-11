@@ -48,10 +48,13 @@ char _strncmp(char *s1, char *s2, unsigned int n)
 {
 	if (!n)
 		return (0);
+
 	if (*s1 == *s2)
 		return (*s1 ? _strncmp(s1 + 1, s2 + 1, n - 1) : 0);
+
 	if (*s1)
 		return (1);
+
 	if (*s2)
 		return (-1);
 
@@ -110,10 +113,13 @@ int _wildcmp(char *s1, char *s2, char *wild_prev)
 		{
 			if (s1_len != s2_len)
 				return (0);
+
 			return (!_strncmp(s1, s2, s1_len));
 		}
+
 		if (s1_len < s2_len)
 			return (0);
+
 		return (!_strncmp(s1 + (s1_len - s2_len), s2, s2_len));
 	}
 
@@ -121,6 +127,7 @@ int _wildcmp(char *s1, char *s2, char *wild_prev)
 	{
 		if (_strncmp(s1, s2, wild - s2))
 			return (0);
+
 		return (_wildcmp(s1 + (wild - s2), wild + 1, wild));
 	}
 
@@ -128,6 +135,7 @@ int _wildcmp(char *s1, char *s2, char *wild_prev)
 
 	if (!s1)
 		return (0);
+
 	if (_wildcmp(s1 + (wild - s2), wild + 1, wild))
 		return (1);
 
