@@ -11,11 +11,10 @@
 int main(void)
 {
 	int n;
-	int max_digits = floor(log10(INT_MAX)) + 2;
-	char s_min[max_digits + 2];
-	char s_max[max_digits + 1];
-	char s_lt_min[max_digits + 2];
-	char s_gt_max[max_digits + 1];
+	char s_min[12];
+	char s_max[11];
+	char s_lt_min[12];
+	char s_gt_max[11];
 	sprintf(s_min, "%d", INT_MIN);
 	sprintf(s_max, "%d", INT_MAX);
 	sprintf(s_lt_min, "%ld", (long) INT_MIN - 1);
