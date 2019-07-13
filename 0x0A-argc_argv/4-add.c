@@ -41,7 +41,7 @@ void _puts(char *str)
 
 
 /**
- * isnumber - check if a string is a number
+ * isdigits - check if a string is a number
  * @s: a pointer to the string to check
  *
  * Return: 1 if the string is a number,
