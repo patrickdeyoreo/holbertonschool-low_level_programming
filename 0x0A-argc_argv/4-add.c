@@ -71,13 +71,12 @@ int main(int argc, char *argv[])
 	{
 		if (!isdigits(*(++argv)))
 		{
-			puts("Error");
+			_puts("Error");
 			return (1);
 		}
 	}
 
-	print_number(sum);
-	_putchar('\n');
+	printf("%d\n", sum);
 
 	return (0);
 }
