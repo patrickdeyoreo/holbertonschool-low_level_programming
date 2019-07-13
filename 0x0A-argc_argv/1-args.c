@@ -1,5 +1,6 @@
 #include "holberton.h"
 
+
 /**
  * print_number - print an integer
  * @n: the integer to print
@@ -22,6 +23,7 @@ void print_number(int n)
 		_putchar('0' - n % 10);
 	}
 }
+
 
 /**
  * main - print the number of arguments received
