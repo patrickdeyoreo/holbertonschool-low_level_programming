@@ -47,10 +47,8 @@ void _puts(char *str)
  * Return: 1 if the string is a number,
  * otherwise 0
  */
-int isnumber(char *s)
+int isdigits(char *s)
 {
-	if (*s == '-')
-		++s;
 	while ('0' <= *s && *s <= '9')
 		++s;
 	return (!*s);
@@ -58,11 +56,11 @@ int isnumber(char *s)
 
 
 /**
- * main - print the name of the program
+ * main - print the sum of positive integers
  * @argc: size of the argument vector
  * @argv: program name and arguments
  *
- * Return: 1 if called with non-integer arguments,
+ * Return: 1 if called with arguments containing non-digit symbols,
  * otherwise 0
  */
 int main(int argc, char *argv[])
@@ -71,7 +69,7 @@ int main(int argc, char *argv[])
 
 	for (sum = 0; --argc; sum += atoi(*argv))
 	{
-		if (!isnumber(*(++argv)))
+		if (!isdigits(*(++argv)))
 		{
 			_puts("Error");
 			return (1);
