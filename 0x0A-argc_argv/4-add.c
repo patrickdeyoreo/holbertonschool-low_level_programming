@@ -67,17 +67,16 @@ int main(int argc, char *argv[])
 {
 	int sum;
 
-	for (sum = 0; --argc; sum += atoi(*argv))
+	for (sum = 0; --argc > 0; sum += atoi(*argv))
 	{
 		if (!isdigits(*(++argv)))
 		{
-			_puts("Error");
+			puts("Error");
 			return (1);
 		}
 	}
 
-	print_number(sum);
-	_putchar('\n');
+	printf("%d\n", sum);
 
 	return (0);
 }
