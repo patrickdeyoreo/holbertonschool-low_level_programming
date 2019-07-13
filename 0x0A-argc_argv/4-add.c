@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
 {
 	int sum;
 
-	for (sum = 0; --argc > 0; sum += atoi(*argv))
+	for (sum = 0; --argc; sum += atoi(*argv))
 	{
 		if (!isdigits(*(++argv)))
 		{
@@ -76,7 +76,8 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	printf("%d\n", sum);
+	print_number(sum);
+	_putchar('\n');
 
 	return (0);
 }
