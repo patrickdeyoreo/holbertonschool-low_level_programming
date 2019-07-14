@@ -48,11 +48,6 @@ int count_coins(int cents)
 {
 	int coins = 0;
 
-	if (cents >= 50)
-	{
-		coins += cents / 50;
-		cents %= 50;
-	}
 	if (cents >= 25)
 	{
 		coins += cents / 25;
@@ -67,6 +62,11 @@ int count_coins(int cents)
 	{
 		coins += cents / 5;
 		cents %= 5;
+	}
+	if (cents >= 2)
+	{
+		coins += cents / 2;
+		cents %= 2;
 	}
 	if (cents >= 1)
 		coins += cents;
@@ -95,7 +95,7 @@ int main(int argc, char *argv[])
 
 	cents = atoi(argv[1]);
 
-	print_number(cents > 0 ? count_coins(cents) : 0);
+	printf("%d\n", cents > 0 ? count_coins(cents) : 0);
 
 	_putchar('\n');
 
