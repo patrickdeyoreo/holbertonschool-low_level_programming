@@ -53,11 +53,22 @@ int coins(int c)
 	if (c < 0)
 		return (INT_MAX);
 
-	if (c < 1)
-		return (0);
+	if (c - 25 >= 0)
+		return 1 + coins(c - 25);
 
-	return (1 + m5(coins(c - 25), coins(c - 10),
-			coins(c - 5), coins(c - 2), coins(c - 1)));
+	if (c - 10 >= 0)
+		return 1 + coins(c - 10);
+
+	if (c - 5 >= 0)
+		return 1 + coins(c - 5);
+
+	if (c - 2 >= 0)
+		return 1 + coins(c - 2);
+
+	if (c - 1 >= 0)
+		return 1 + coins(c - 1);
+
+	return (0);
 }
 
 /**
