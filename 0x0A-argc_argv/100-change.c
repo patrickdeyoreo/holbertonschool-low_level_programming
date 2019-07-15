@@ -1,77 +1,49 @@
 #include "holberton.h"
+#include <limits.h>
 
 /**
- * print_number - print an integer
- * @n: the integer to print
+ * min - get the minimum value of a set of integers
+ * @v: the values to compare
+ * @c: the number of values
  *
- * Return: void
+ * Return: the minimum value
  */
-void print_number(int n)
+int min(int *v, unsigned int c)
 {
-	if (n > -1)
+	int r = *v;
+
+	while (--c != 0)
 	{
-		if (n > 9)
-			print_number(n / 10);
-		_putchar('0' + n % 10);
+		if (*(++v) < r)
+			r = *v;
 	}
-	else
-	{
-		_putchar('-');
-		if (n < -9)
-			print_number(n / -10);
-		_putchar('0' - n % 10);
-	}
+	return (r);
 }
 
-
 /**
- * _puts - print a string, followed by a new line
- * @str: the string to print
+ * min_coins - compute the minimum number of coins needed to make change
+ * @c: the amount of money to make change for in cents
  *
- * Return: void
+ * Return: the minimum number of coins needed to make change
  */
-void _puts(char *str)
+int min_coins(int c)
 {
-	while (*str)
-		_putchar(*str++);
-	_putchar('\n');
-}
+	int i;
+	int d[5] = { 25, 10, 5, 2, 1 };
+	int r[5] = { INT_MAX, INT_MAX, INT_MAX, INT_MAX, INT_MAX };
 
+	if (c < 1)
+		return (0);
 
-/**
- * count_coins - compute the minimum number of coins needed to make change
- * @cents: the amount of money in cents
- *
- * Return: the number of coins needed to make change
- */
-int count_coins(int cents)
-{
-	int coins = 0;
-
-	if (cents >= 25)
+	for (i = 0; i < 5; ++i)
 	{
-		coins += cents / 25;
-		cents %= 25;
+		if (d[i] <= c)
+		{
+			r[i] = min_coins(c - d[i]);
+			r[i] += 1;
+		}
 	}
-	if (cents >= 10)
-	{
-		coins += cents / 10;
-		cents %= 10;
-	}
-	if (cents >= 5)
-	{
-		coins += cents / 5;
-		cents %= 5;
-	}
-	if (cents >= 2)
-	{
-		coins += cents / 2;
-		cents %= 2;
-	}
-	if (cents >= 1)
-		coins += cents;
-
-	return (coins);
+	return (min(r, 5));
 }
 
 
@@ -89,15 +61,13 @@ int main(int argc, char *argv[])
 
 	if (argc != 2)
 	{
-		_puts("Error");
+		puts("Error");
 		return (1);
 	}
 
 	cents = atoi(argv[1]);
 
-	printf("%d\n", cents > 0 ? count_coins(cents) : 0);
-
-	_putchar('\n');
+	printf("%d\n", cents > 0 ? min_coins(cents) : 0);
 
 	return (0);
 }

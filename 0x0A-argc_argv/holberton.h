@@ -9,6 +9,7 @@ void _puts(char *);
 void print_number(int);
 int _atoi(char *);
 int isnumber(char *);
-int count_coins(int);
+int min(int *, unsigned int);
+int min_coins(int);
 
 #endif /* HOLBERTON_H */
