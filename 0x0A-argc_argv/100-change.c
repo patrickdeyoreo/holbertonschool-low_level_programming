@@ -1,72 +1,27 @@
 #include "holberton.h"
-#include <limits.h>
 
 /**
- * min - get the minimum value of a set of integers
- * @v: the values to compare
- * @c: the number of values
- *
- * Return: the minimum value
- */
-int min(int *v, unsigned int c)
-{
-	int r = *v;
-
-	while (--c != 0)
-	{
-		if (*(++v) < r)
-			r = *v;
-	}
-	return (r);
-}
-
-/**
- * m5 - get the minimum value of a set of integers
- * @a: a value to compare
- * @b: a value to compare
- * @c: a value to compare
- * @d: a value to compare
- * @e: a value to compare
- *
- * Return: the minimum value
- */
-int m5(int a, int b, int c, int d, int e)
-{
-	int values[5];
-
-	values[0] = a;
-	values[1] = b;
-	values[2] = c;
-	values[3] = d;
-	values[4] = e;
-	return (min(values, 5));
-}
-
-/**
- * coins - compute the minimum number of coins needed to make change
- * @c: the amount of money to make change for in cents
+ * subtract_largest_coin - find min number of coins needed to make change
+ * @cents: the amount of money to make change for in cents
  *
  * Return: the minimum number of coins needed to make change
  */
-int coins(int c)
+int subtract_largest_coin(int cents)
 {
-	if (c < 0)
-		return (INT_MAX);
+	if (cents - 25 > -1)
+		return (cents - 25);
 
-	if (c - 25 >= 0)
-		return 1 + coins(c - 25);
+	if (cents - 10 > -1)
+		return (cents - 10);
 
-	if (c - 10 >= 0)
-		return 1 + coins(c - 10);
+	if (cents - 5 > -1)
+		return (cents - 5);
 
-	if (c - 5 >= 0)
-		return 1 + coins(c - 5);
+	if (cents - 2 > -1)
+		return (cents - 2);
 
-	if (c - 2 >= 0)
-		return 1 + coins(c - 2);
-
-	if (c - 1 >= 0)
-		return 1 + coins(c - 1);
+	if (cents - 1 > -1)
+		return (cents - 1);
 
 	return (0);
 }
@@ -81,7 +36,7 @@ int coins(int c)
  */
 int main(int argc, char *argv[])
 {
-	int cents;
+	int cents, coins;
 
 	if (argc != 2)
 	{
@@ -89,9 +44,10 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 
-	cents = atoi(argv[1]);
+	for (cents = atoi(argv[1]), coins = 0; cents > 0; ++coins)
+		cents = subtract_largest_coin(cents);
 
-	printf("%d\n", cents > 0 ? coins(cents) : 0);
+	printf("%d\n", coins);
 
 	return (0);
 }

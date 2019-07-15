@@ -9,8 +9,6 @@ void _puts(char *);
 void print_number(int);
 int _atoi(char *);
 int isnumber(char *);
-int min(int *, unsigned int);
-int m5(int, int, int, int, int);
-int coins(int);
+int subtract_largest_coin(int);
 
 #endif /* HOLBERTON_H */
