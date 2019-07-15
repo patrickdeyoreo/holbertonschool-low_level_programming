@@ -21,31 +21,44 @@ int min(int *v, unsigned int c)
 }
 
 /**
- * min_coins - compute the minimum number of coins needed to make change
+ * m5 - get the minimum value of a set of integers
+ * @a: a value to compare
+ * @b: a value to compare
+ * @c: a value to compare
+ * @d: a value to compare
+ * @e: a value to compare
+ *
+ * Return: the minimum value
+ */
+int m5(int a, int b, int c, int d, int e)
+{
+	int values[5];
+
+	values[0] = a;
+	values[1] = b;
+	values[2] = c;
+	values[3] = d;
+	values[4] = e;
+	return (min(values, 5));
+}
+
+/**
+ * coins - compute the minimum number of coins needed to make change
  * @c: the amount of money to make change for in cents
  *
  * Return: the minimum number of coins needed to make change
  */
-int min_coins(int c)
+int coins(int c)
 {
-	int i;
-	int d[5] = { 25, 10, 5, 2, 1 };
-	int r[5] = { INT_MAX, INT_MAX, INT_MAX, INT_MAX, INT_MAX };
+	if (c < 0)
+		return (INT_MAX);
 
 	if (c < 1)
 		return (0);
 
-	for (i = 0; i < 5; ++i)
-	{
-		if (d[i] <= c)
-		{
-			r[i] = min_coins(c - d[i]);
-			r[i] += 1;
-		}
-	}
-	return (min(r, 5));
+	return (1 + m5(coins(c - 25), coins(c - 10),
+			coins(c - 5), coins(c - 2), coins(c - 1)));
 }
-
 
 /**
  * main - print the minimum number of coins needed to make change
@@ -67,7 +80,7 @@ int main(int argc, char *argv[])
 
 	cents = atoi(argv[1]);
 
-	printf("%d\n", cents > 0 ? min_coins(cents) : 0);
+	printf("%d\n", cents > 0 ? coins(cents) : 0);
 
 	return (0);
 }
