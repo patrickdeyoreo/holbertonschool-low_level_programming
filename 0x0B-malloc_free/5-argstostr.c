@@ -2,6 +2,8 @@
 
 /**
  * argstostr - concatenate all arguments into a new string
+ * @ac: the argument count
+ * @av: the argument vector
  *
  * Return: NULL memory allocation fails, ac is 0 or av is NULL,
  * otherwise return a pointer to the new string
@@ -29,7 +31,7 @@ char *argstostr(int ac, char **av)
 	{
 		for (chr = av[arg]; *chr; ++chr, ++size)
 			cat[size] = *chr;
-		cat[size] ='\n';
+		cat[size] = '\n';
 	}
 
 	cat[size] = '\0';
