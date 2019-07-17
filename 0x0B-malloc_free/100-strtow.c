@@ -23,12 +23,11 @@ int _isspace(int c)
  */
 char **strtow(char *str)
 {
-	char **words, *pos;
-	int w, c;
+	char **words, *pos = str;
+	int w = 0, c;
 
 	if (!(str && *str))
 		return (NULL);
-	w = 0, pos = str;
 	do {
 		while (_isspace(*pos))
 			++pos;
@@ -37,6 +36,8 @@ char **strtow(char *str)
 		while (*(++pos) && !_isspace(*pos))
 			;
 	} while (++w, *pos);
+	if (!w)
+		return (NULL);
 	words = (char **) malloc(sizeof(char *) * (w + 1));
 	if (!words)
 		return (NULL);
@@ -46,8 +47,7 @@ char **strtow(char *str)
 			++pos;
 		if (!*pos)
 			break;
-		str = pos;
-		while (*(++pos) && !_isspace(*pos))
+		for (str = pos++; *pos && !_isspace(*pos); ++pos)
 			;
 		words[w] = (char *) malloc(sizeof(char) * (pos - str + 1));
 		if (!words[w])
