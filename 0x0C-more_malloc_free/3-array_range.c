@@ -10,7 +10,7 @@
  */
 int *array_range(int min, int max)
 {
-	int *range, *pos;
+	int *range;
 	unsigned int width;
 
 	if (max < min)
@@ -22,10 +22,9 @@ int *array_range(int min, int max)
 	if (!range)
 		return (NULL);
 
-	for (pos = range; min <= max; ++min, ++pos)
-	{
-		*pos = min;
-	}
+	do {
+		*range++ = min;
+	} while (++min < max);
 
-	return (range);
+	return (range - width);
 }
