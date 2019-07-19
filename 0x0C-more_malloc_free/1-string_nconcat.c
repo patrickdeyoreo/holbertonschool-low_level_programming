@@ -9,28 +9,31 @@
  * Description: Copy s1 followed by the first n bytes of s2 into dynamically
  * allocated memory, and append a terminating null-byte. If n is greater than
  * or equal to the length of the string s2, use only the bytes from s2 up to
- * it's terminating null-byte. s2 is NULL, treat is as an empty string.
+ * it's terminating null-byte. If a string is NULL, treat is as an empty string.
  *
  * Return: If memory allocation fails, return NULL. Otherwise, return a pointer
  * to the first character of the new string.
  */
 char *string_nconcat(char *s1, char *s2, unsigned int n)
 {
-	char *cat = NULL;
+	char *cat;
 	unsigned int s1_len = 0;
 	unsigned int s2_len = 0;
 
-	if (!s1)
-		return (NULL);
-
-	while (s1[s1_len])
-		++s1_len;
+	if (s1)
+	{
+		while (s1[s1_len])
+			++s1_len;
+	}
 
 	if (s2)
 	{
-		while (s2_len < n && s2[s2_len])
+		while (s2[s2_len])
 			++s2_len;
 	}
+
+	if (n < s2_len)
+		s2_len = n;
 
 	cat = malloc(sizeof(char) * s1_len + s2_len + 1);
 	if (!cat)
