@@ -5,7 +5,7 @@
  * @min: the lower bound (included)
  * @max: the upper bound (included)
  *
- * Return: If memory allocation fails or min is greater than max, return NULL.
+ * Return: If memory allocation fails or max is less than max, return NULL.
  * Otherwise, return the newly created array.
  */
 int *array_range(int min, int max)
@@ -18,7 +18,7 @@ int *array_range(int min, int max)
 
 	width = max - min;
 
-	range = malloc(sizeof(int) * width + 1);
+	range = malloc(sizeof(int) * (width + 1));
 	if (!range)
 		return (NULL);
 
