@@ -9,7 +9,7 @@
  * Description: Copy s1 followed by the first n bytes of s2 into dynamically
  * allocated memory, and append a terminating null-byte. If n is greater than
  * or equal to the length of the string s2, use only the bytes from s2 up to
- * it's terminating null-byte. If a string is NULL, treat is as an empty string.
+ * it's terminating null-byte. Treat NULL as an an empty string.
  *
  * Return: If memory allocation fails, return NULL. Otherwise, return a pointer
  * to the first character of the new string.
