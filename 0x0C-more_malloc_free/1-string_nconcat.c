@@ -1,36 +1,6 @@
 #include "holberton.h"
 
 /**
- * min - get the lesser of two values
- * @a: a positive integer
- * @b: another positive integer
- *
- * Return: whichever value is less (either if they're equal)
- */
-unsigned int min(unsigned int a, unsigned int b)
-{
-	return (a < b ? a : b);
-}
-
-
-/**
- * _strlen - calculate the length of a string
- * @s: the string to measure
- *
- * Return: the length of the string s
- */
-unsigned int _strlen(const char *s)
-{
-	unsigned int len = 0;
-
-	while (s[len])
-		++len;
-
-	return (len);
-}
-
-
-/**
  * string_nconcat - concatenate two strings
  * @s1: the first string
  * @s2: the second string
@@ -47,10 +17,19 @@ unsigned int _strlen(const char *s)
 char *string_nconcat(char *s1, char *s2, unsigned int n)
 {
 	char *cat;
-	unsigned int s1_len = _strlen(s1);
-	unsigned int s2_len = s2 ? min(_strlen(s2), n) : 0;
+	unsigned int s1_len = 0;
+	unsigned int s2_len = 0;
 
-	cat = malloc(sizeof (char) * s1_len + s2_len + 1);
+	while (s1[s1_len])
+		++s1_len;
+
+	if (s2)
+	{
+		while (s2_len < n && s2[s2_len])
+			++s2_len;
+	}
+
+	cat = malloc(sizeof(char) * s1_len + s2_len + 1);
 	if (!cat)
 		return (NULL);
 
