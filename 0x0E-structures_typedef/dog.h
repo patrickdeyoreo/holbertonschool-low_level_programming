@@ -7,6 +7,7 @@
  * @float: the age of the dog
  * @owner: the name of the dog's owner
  *
+ * Description: details of a dog
  */
 struct dog
 {
