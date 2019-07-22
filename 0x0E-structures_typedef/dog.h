@@ -17,7 +17,6 @@ struct dog
 	char *owner;
 };
 
-char *_strdup(char *str);
 void init_dog(struct dog *d, char *name, float age, char *owner);
 
 
