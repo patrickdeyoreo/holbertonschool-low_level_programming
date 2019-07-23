@@ -1,1 +1,1 @@
-#error Hello, Holberton
+#warning Hello, Holberton
