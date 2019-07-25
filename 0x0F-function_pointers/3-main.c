@@ -6,14 +6,14 @@
  * @argc: the size of the argument vector
  * @argv: the argument vector
  *
- * Description: This function accepts a number, an operator and another number,
+ * Description: This program accepts a number, an operator and another number,
  * in that order. It performs the specified operation and prints the result to
  * standard output (followed by a newline). If called with the wrong number of
- * arguments, "Error" is printed and the process is terminated with a status of
- * 98. If the operator given is not one of '+', '-', '*', '/' or '%', "Error"
- * is printed and the process is terminated with a statuss of 99. If asked to
- * perform division by 0 (i.e. using either the '/' or '%' operators), "Error"
- * is printed and the process is terminated with a status value of 100.
+ * arguments, it prints "Error" and terminates the process with a status of 98.
+ * If the operator given is not one of '+', '-', '*', '/' or '%', it prints
+ * "Error" and terminates the process with a status of 99. If asked to perform
+ * division by 0 (e.g. using the '/' or '%' operators), it prints "Error" and
+ * terminates the process with a status value of 100.
  *
  * Return: Always 0
  */
