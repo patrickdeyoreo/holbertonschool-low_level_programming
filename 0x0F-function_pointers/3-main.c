@@ -1,11 +1,41 @@
-#include "function_pointers.h"
+#include "3-calc.h"
+#include <stdio.h>
 
 /**
- * op_add -
+ * main - a basic calculator
+ * argc: the size of the argument vector
+ * argv: the argument vector
  *
- * Return:
+ * Description: This function accepts a number, an operator and another number,
+ * in that order. It performs the specified operation and prints the result to
+ * standard output (followed by a newline). If called with the wrong number of
+ * arguments, "Error" is printed and the process is terminated with a status of
+ * 98. If the operator given is not one of '+', '-', '*', '/' or '%', "Error"
+ * is printed and the process is terminated with a statuss of 99. If asked to
+ * perform division by 0 (i.e. using either the '/' or '%' operators), "Error"
+ * is printed and the process is terminated with a status value of 100.
+ *
+ * Return: Always 0
  */
-int op_add(int a, int b)
+int main(int argc, char *argv[])
 {
+	int (*f)(int, int);
 
+	if (argc != 4)
+	{
+		puts("Error");
+		exit(98);
+	}
+
+	f = get_op_func(argv[2]);
+
+	if (!f)
+	{
+		puts("Error");
+		exit(99);
+	}
+
+	printf("%d\n", f(atoi(argv[1]), atoi(argv[3])));
+
+	return (0);
 }
