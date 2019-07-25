@@ -3,8 +3,8 @@
 
 /**
  * main - a basic calculator
- * argc: the size of the argument vector
- * argv: the argument vector
+ * @argc: the size of the argument vector
+ * @argv: the argument vector
  *
  * Description: This function accepts a number, an operator and another number,
  * in that order. It performs the specified operation and prints the result to
