@@ -65,6 +65,9 @@ void print_all(const char * const format, ...)
 	};
 	unsigned int fn_index, format_index = 0;
 
+	if (!format)
+		return;
+
 	va_start(args, format);
 	while (format[format_index])
 	{
@@ -72,7 +75,10 @@ void print_all(const char * const format, ...)
 		while (fn_list[fn_index].format)
 		{
 			if (format[format_index] == fn_list[fn_index].format)
+			{
 				fn_list[fn_index].fn(args);
+				break;
+			}
 			++fn_index;
 		}
 		++format_index;
