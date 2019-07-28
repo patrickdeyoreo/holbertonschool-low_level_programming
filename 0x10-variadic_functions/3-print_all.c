@@ -3,49 +3,48 @@
 
 /**
  * print_char - print a character
- * @args: a pointer to the current argument
+ * @args: the va_list with the character to print as it's next element
  *
  * Return: the number of bytes printed
  */
-int print_char(va_list args)
+void print_char(va_list args)
 {
-	return (printf("%c", va_arg(args, int)));
+	printf("%c", va_arg(args, int));
 }
 
 
 /**
  * print_float - print a float
- * @args: a pointer to the current argument
+ * @args: the va_list with the float to print as it's next element
  *
  * Return: the number of bytes printed
  */
-int print_float(va_list args)
+void print_float(va_list args)
 {
-	return (printf("%f", va_arg(args, double)));
+	printf("%f", va_arg(args, double));
 }
 
 
 /**
  * print_int - print an integer
- * @args: a pointer to the current argument
+ * @args: the va_list with the integer to print as it's next element
  *
  * Return: the number of bytes printed
  */
-int print_int(va_list args)
+void print_int(va_list args)
 {
-	return (printf("%i", va_arg(args, int)));
+	printf("%i", va_arg(args, int));
 }
 
 
 /**
  * print_str - print a string
- * @args: a pointer to the current argument
- *
- * Return: the number of bytes printed
+ * @args: the va_list with the string to print as it's next element
  */
-int print_str(va_list args)
+void print_str(va_list args)
 {
-	return (printf("%s", va_arg(args, const char *)));
+	const char *str = va_arg(args, const char *);
+	printf("%s", str ? str : "(nil)");
 }
 
 
@@ -57,30 +56,27 @@ int print_str(va_list args)
 void print_all(const char * const format, ...)
 {
 	va_list args;
-	struct print_fn funcs[] = {
+	print_fn_t fn_list[] = {
 		{ 'c',  print_char },
 		{ 'f',  print_float },
 		{ 'i',  print_int },
 		{ 's',  print_str },
 		{ '\0', NULL }
 	};
-	unsigned int fn_index, arg_index;
+	unsigned int fn_index, format_index = 0;
 
 	va_start(args, format);
-
-	arg_index = 0;
-	while (format[arg_index])
+	while (format[format_index])
 	{
 		fn_index = 0;
-		while (funcs[fn_index].spec)
+		while (fn_list[fn_index].format)
 		{
-			if (format[arg_index] == funcs[fn_index].spec)
-				funcs[fn_index].func(args);
+			if (format[format_index] == fn_list[fn_index].format)
+				fn_list[fn_index].fn(args);
 			++fn_index;
 		}
-		++arg_index;
+		++format_index;
 	}
 	printf("\n");
-
 	va_end(args);
 }
