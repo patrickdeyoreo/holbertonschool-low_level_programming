@@ -1,0 +1,61 @@
+#include "lists.h"
+
+/**
+ * _strdup - create a new array containing a copy of the given string
+ * @str: a pointer to the string to copy
+ *
+ * Return: If str is NULL or if memory allocation fails, return NULL.
+ * Otherwise a return a pointer to the new copy
+ */
+char *_strdup(const char *str)
+{
+	char *dup;
+	unsigned int size = 0;
+
+	if (!str)
+		return (NULL);
+
+	while (str[size++])
+		;
+
+	dup = malloc(sizeof(char) * size);
+	if (!dup)
+		return (NULL);
+
+	while (size--)
+		dup[size] = str[size];
+
+	return (dup);
+}
+
+/**
+ * add_node - insert a string at the beginning of the list
+ * @head: a pointer to the address of the first list node
+ * @str: the string to add to the list
+ *
+ * Return: If memory allocation fails, return NULL. Otherwise, return the
+ * address of the new no
+ */
+list_t *add_node(list_t **head, const char *str)
+{
+	list_t *new_node;
+
+	if (!head)
+		return (NULL);
+
+	new_node = malloc(sizeof(list_t));
+	if (!new_node)
+		return (NULL);
+
+	new_node->str = _strdup(str);
+	if (!new_node->str)
+	{
+		free(new_node->str);
+		return (NULL);
+	}
+
+	new_node->next = *head;
+	*head = new_node;
+
+	return (new_node);
+}
