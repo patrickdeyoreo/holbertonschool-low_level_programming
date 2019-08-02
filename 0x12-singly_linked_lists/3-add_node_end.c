@@ -63,7 +63,7 @@ list_t *add_node_end(list_t **head, const char *str)
 		return (NULL);
 
 	if (*head)
-		return add_node_end(&(*head)->next, str);
+		return (add_node_end(&(*head)->next, str));
 
 	new_node = malloc(sizeof(list_t));
 	if (!new_node)
