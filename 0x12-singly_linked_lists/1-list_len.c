@@ -2,6 +2,7 @@
 
 /**
  * list_len - get the length of a list
+ * @h: address of the first node in the list
  *
  * Return: the length of list h
  */
