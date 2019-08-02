@@ -6,17 +6,16 @@
  *
  * Return: the length of the string
  */
-int _strlen(char *s)
+size_t _strlen(const char *str)
 {
-	int len = 0;
+	const char *pos = str;
 
-	if (s)
+	if (str)
 	{
-		while (*(s + len))
-			++len;
+		while (*pos)
+			++pos;
 	}
-
-	return (len);
+	return (pos - str);
 }
 
 /**
@@ -28,8 +27,8 @@ int _strlen(char *s)
  */
 char *_strdup(const char *str)
 {
-	char *dup;
-	unsigned int size = 0;
+	char *dup = NULL;
+	size_t size = 0;
 
 	if (!str)
 		return (NULL);
@@ -57,7 +56,7 @@ char *_strdup(const char *str)
  */
 list_t *add_node_end(list_t **head, const char *str)
 {
-	list_t *new_node;
+	list_t *new = NULL;
 
 	if (!head)
 		return (NULL);
@@ -65,20 +64,16 @@ list_t *add_node_end(list_t **head, const char *str)
 	if (*head)
 		return (add_node_end(&(*head)->next, str));
 
-	new_node = malloc(sizeof(list_t));
-	if (!new_node)
+	new = malloc(sizeof(list_t));
+	if (!new)
 		return (NULL);
 
-	new_node->str = _strdup(str);
-	if (!new_node->str)
-	{
-		free(new_node);
-		return (NULL);
-	}
-	new_node->len = (_strlen(new_node->str));
 
-	new_node->next = *head;
-	*head = new_node;
+	new->str = _strdup(str);
+	new->len = (_strlen(new->str));
+	new->next = *head;
 
-	return (new_node);
+	*head = new;
+
+	return (new);
 }
