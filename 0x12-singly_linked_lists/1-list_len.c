@@ -7,5 +7,5 @@
  */
 size_t list_len(const list_t *h)
 {
-	return (h ? list_len(h->next) + 1 : 1);
+	return (h ? list_len(h->next) + 1 : 0);
 }
