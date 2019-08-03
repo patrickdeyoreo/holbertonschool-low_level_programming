@@ -1,8 +1,12 @@
+#include <stdio.h>
+
+void init(void) __attribute__((constructor));
+
 /**
  * init - execute before main
+ *//**
+ * init - execute before main
  */
-void init(void) __attribute__((constructor));
- 
 void init(void)
 {
 	printf("%s\n%s\n",
