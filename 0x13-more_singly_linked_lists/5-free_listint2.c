@@ -2,13 +2,13 @@
 
 /**
  * free_listint2 - free a linked list and set the head to NULL
- * @head_ptr: a pointer to a pointer the first node
+ * @head: a pointer to a pointer the first node
  */
-void free_listint2(listint_t **head_ptr)
+void free_listint2(listint_t **head)
 {
-	if (head_ptr && *head_ptr)
+	if (head && *head)
 	{
-		free_listint2(&(*head_ptr)->next);
-		*head_ptr = NULL;
+		free_listint2(&(*head)->next);
+		*head = NULL;
 	}
 }
