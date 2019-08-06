@@ -8,6 +8,6 @@
  */
 size_t listint_len(const listint_t *h)
 {
-	return (h ? print_listint(h->next) + 1 : 0);
+	return (h ? listint_len(h->next) + 1 : 0);
 
 }
