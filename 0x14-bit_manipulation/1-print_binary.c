@@ -7,7 +7,7 @@
 void _print_binary(unsigned long int n)
 {
 	if (n)
-		_print_binary(n > 2);
+		_print_binary(n >> 2);
 	_putchar('0' + (n & 1));
 }
 
