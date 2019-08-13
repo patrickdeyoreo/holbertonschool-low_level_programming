@@ -20,13 +20,3 @@ int main(int ac, char **av)
     printf("-> %i)\n", res);
     return (0);
 }
-julien@ubuntu:~/0x15. File descriptors and permissions$ echo -n Hello > hello
-julien@ubuntu:~/0x15. File descriptors and permissions$ ls -l hello
--rw-rw-r-- 1 julien julien 5 Dec  3 14:48 hello
-julien@ubuntu:~/0x15. File descriptors and permissions$ gcc -Wall -pedantic -Werror -Wextra 2-main.c 2-append_text_to_file.c -o c
-julien@ubuntu:~/0x15. File descriptors and permissions$ ./c hello " World!
-> "
--> 1)
-julien@ubuntu:~/0x15. File descriptors and permissions$ cat hello 
-Hello World!
-julien@ubuntu:~/0x15. File descriptors and permissions$
