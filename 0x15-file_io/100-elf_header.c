@@ -36,7 +36,7 @@ void _close(int fd)
 {
 	if (close(fd) != -1)
 		return;
-	dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd);
+	write(STDERR_FILENO, "Error: Can't close fd\n", 22);
 	exit(98);
 }
 
@@ -47,11 +47,11 @@ void _close(int fd)
  * @buf: the buffer to write to
  * @count: the number of bytes to read
  */
-void _read(const char *filename, int fd, char *buf, size_t count)
+void _read(int fd, char *buf, size_t count)
 {
 	if (read(fd, buf, count) != -1)
 		return;
-	dprintf(STDERR_FILENO, "Error: Can't read from file %s\n", filename);
+	write(STDERR_FILENO, "Error: Can't read from file\n", 28);
 	_close(fd);
 	exit(98);
 }
@@ -67,7 +67,7 @@ void elf_magic(const char *buffer)
 
 	if (_strncmp(buffer, "\x7f\x45\x4c\x46", 4))
 	{
-		dprintf(STDERR_FILENO, "Error: Not an ELF file\n");
+		write(STDERR_FILENO, "Error: Not an ELF file\n", 23);
 		exit(98);
 	}
 
@@ -220,7 +220,7 @@ int main(int argc, const char *argv[])
 		exit(98);
 	}
 
-	_read(argv[1], fd, buffer, 18);
+	_read(fd, buffer, 18);
 
 	elf_magic(buffer);
 
@@ -231,7 +231,7 @@ int main(int argc, const char *argv[])
 
 	lseek(fd, 24, SEEK_SET);
 
-	_read(argv[1], fd, buffer, bit_mode / 8);
+	_read(fd, buffer, bit_mode / 8);
 	_close(fd);
 
 	elf_entrypoint(bit_mode / 8, buffer);
