@@ -71,7 +71,8 @@ void elf_magic(const char *buffer)
 		exit(98);
 	}
 
-	printf("Magic:   ");
+	printf("ELF Header:\n");
+	printf("  Magic:   ");
 	for (i = 0; i < 16; ++i)
 		printf("%02x%c", buffer[i], i < 15 ? ' ' : '\n');
 }
@@ -89,7 +90,7 @@ int elf_class(const char *buffer)
 	else
 		bit_mode = 64;
 
-	printf("%-35s ELF%d\n", "Class:", bit_mode);
+	printf("  %-35s ELF%d\n", "Class:", bit_mode);
 	return (bit_mode);
 }
 
@@ -100,9 +101,9 @@ int elf_class(const char *buffer)
 void elf_data(const char *buffer)
 {
 	if (buffer[5] == 1)
-		printf("%-35s 2's complement, little endian\n", "Data:");
+		printf("  %-35s 2's complement, little endian\n", "Data:");
 	else
-		printf("%-35s 2's complement, big endian\n", "Data:");
+		printf("  %-35s 2's complement, big endian\n", "Data:");
 }
 
 /**
@@ -111,7 +112,7 @@ void elf_data(const char *buffer)
  */
 void elf_version(const char *buffer __attribute__((unused)))
 {
-	printf("%-35s 1 (current)\n", "Version:");
+	printf("  %-35s 1 (current)\n", "Version:");
 }
 
 /**
@@ -140,7 +141,7 @@ void elf_osabi(const char *buffer)
 		"CloudABI"
 	};
 
-	printf("%-35s %s\n", "OS/ABI:", os_table[(int) buffer[7]]);
+	printf("  %-35s %s\n", "OS/ABI:", os_table[(int) buffer[7]]);
 }
 
 /**
@@ -149,7 +150,7 @@ void elf_osabi(const char *buffer)
  */
 void elf_abiversion(const char *buffer)
 {
-	printf("%-35s %d\n", "ABI Version:", buffer[8]);
+	printf("  %-35s %d\n", "ABI Version:", buffer[8]);
 }
 
 /**
@@ -166,7 +167,7 @@ void elf_type(const char *buffer)
 		"CORE (Core file)"
 	};
 
-	printf("%-35s %s\n", "Type:", type_table[(int) buffer[16]]);
+	printf("  %-35s %s\n", "Type:", type_table[(int) buffer[16]]);
 }
 
 /**
@@ -175,7 +176,7 @@ void elf_type(const char *buffer)
  */
 void elf_entrypoint(int address_size, const char *buffer)
 {
-	printf("%-35s 0x", "Entry point address:");
+	printf("  %-35s 0x", "Entry point address:");
 
 	buffer += address_size - 1;
 
@@ -209,14 +210,14 @@ int main(int argc, const char *argv[])
 
 	if (argc != 2)
 	{
-		dprintf(STDERR_FILENO, "Usage: elf_header elf_filename\n");
+		write(STDERR_FILENO, "Usage: elf_header elf_filename\n", 31);
 		exit(98);
 	}
 
 	fd = open(argv[1], O_RDONLY);
 	if (fd == -1)
 	{
-		dprintf(STDERR_FILENO, "Error: Can't read from %s\n", argv[1]);
+		write(STDERR_FILENO, "Error: Can't read from file\n", 28);
 		exit(98);
 	}
 
