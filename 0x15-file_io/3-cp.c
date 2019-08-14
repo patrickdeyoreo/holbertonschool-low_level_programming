@@ -38,15 +38,12 @@ int main(int argc, const char *argv[])
 	}
 	while ((bytes_read = read(fd_in, buffer, 1024)))
 		write(fd_out, buffer, bytes_read);
-	if (close(fd_in) < 0)
+	if (close(fd_in))
 	{
 		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_in);
-		if (close(fd_out) < 0)
-			dprintf(STDERR_FILENO, "Error: Can't close fd %d\n",
-					fd_out);
 		exit(100);
 	}
-	if (close(fd_out) < 0)
+	if (close(fd_out))
 	{
 		dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_out);
 		exit(100);
