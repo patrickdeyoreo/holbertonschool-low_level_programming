@@ -18,7 +18,6 @@ int _strncmp(const char *s1, const char *s2, size_t n)
 		if (*s1 != *s2)
 			return (*s1 - *s2);
 	}
-
 	if (n)
 	{
 		if (*s1)
@@ -26,7 +25,6 @@ int _strncmp(const char *s1, const char *s2, size_t n)
 		if (*s2)
 			return (-1);
 	}
-
 	return (0);
 }
 
@@ -63,14 +61,11 @@ void _read(const char *filename, int fd, char *buf, size_t count)
  * @filename: the name of the file
  * @fd: file descriptor to read from
  */
-void elf_magic(const char *filename, int fd)
+void elf_magic(const char *buffer)
 {
-	char magic[16];
 	unsigned int i;
 
-	_read(filename, fd, magic, 16);
-
-	if (_strncmp(magic, "\x7f\x45\x4c\x46", 4))
+	if (_strncmp(buffer, "\x7f\x45\x4c\x46", 4))
 	{
 		dprintf(STDERR_FILENO, "Error: Not an ELF file\n");
 		exit(98);
@@ -78,91 +73,120 @@ void elf_magic(const char *filename, int fd)
 
 	printf("Magic:   ");
 	for (i = 0; i < 16; ++i)
-		printf("%02x%c", magic[i], i < 15 ? ' ' : '\n');
+		printf("%02x%c", buffer[i], i < 15 ? ' ' : '\n');
 }
 
 /**
  * elf_class - print elf class
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the name of the file
  */
-void elf_class(const char *filename, int fd)
+int elf_class(const char *buffer)
 {
-	char class[8];
+	int bit_mode;
 
-	_read(filename, fd, class, 8);
+	if (buffer[4] == 1)
+		bit_mode = 32;
+	else
+		bit_mode = 64;
+
+	printf("%-35s ELF%d\n", "Class:", bit_mode);
+	return (bit_mode);
 }
 
 /**
  * elf_data - print elf data
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the name of the file
  */
-void elf_data(const char *filename, int fd)
+void elf_data(const char *buffer)
 {
-	char data[8];
-
-	_read(filename, fd, data, 8);
+	if (buffer[5] == 1)
+		printf("%-35s 2's complement, little endian\n", "Data:");
+	else
+		printf("%-35s 2's complement, big endian\n", "Data:");
 }
 
 /**
  * elf_version - print elf version
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the name of the file
  */
-void elf_version(const char *filename, int fd)
+void elf_version(const char *buffer __attribute__((unused)))
 {
-	char version[8];
-
-	_read(filename, fd, version, 8);
+	printf("%-35s 1 (current)\n", "Version:");
 }
 
 /**
  * elf_osabi - print elf osabi
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the name of the file
  */
-void elf_osabi(const char *filename, int fd)
+void elf_osabi(const char *buffer)
 {
-	char osabi[8];
+	char *os_table[] = {
+		"Unix - System V",
+		"HP-UX",
+		"NetBSD",
+		"Linux",
+		"GNU Hurd",
+		"Solaris",
+		"AIX",
+		"IRIX",
+		"FreeBSD",
+		"Tru64",
+		"Novell Modesto",
+		"OpenBSD",
+		"OpenVMS",
+		"NonStop Kernel",
+		"AROS",
+		"Fenix OS",
+		"CloudABI"
+	};
 
-	_read(filename, fd, osabi, 8);
+	printf("%-35s %s\n", "OS/ABI:", os_table[(int) buffer[7]]);
 }
 
 /**
  * elf_abiversion - print elf abiversion
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the name of the file
  */
-void elf_abiversion(const char *filename, int fd)
+void elf_abiversion(const char *buffer)
 {
-	char abiversion[8];
-
-	_read(filename, fd, abiversion, 8);
+	printf("%-35s %d\n", "ABI Version:", buffer[8]);
 }
 
 /**
  * elf_type - print elf type
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the name of the file
  */
-void elf_type(const char *filename, int fd)
+void elf_type(const char *buffer)
 {
-	char type[8];
+	char *type_table[] = {
+		"NONE",
+		"REL",
+		"EXEC (Executable file)",
+		"DYN (Shared object file)",
+		"CORE"
+	};
 
-	_read(filename, fd, type, 8);
+	printf("%-35s %s\n", "Type:", type_table[(int) buffer[16]]);
 }
 
 /**
- * elf_entrypoint - print elf entrypoint
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * elf_type - print elf type
+ * @buffer: the name of the file
  */
-void elf_entrypoint(const char *filename, int fd)
+void elf_entrypoint(int address_size, const char *buffer)
 {
-	char entrypoint[8];
+	printf("%-35s 0x", "Entry point address:");
 
-	_read(filename, fd, entrypoint, 8);
+	buffer += address_size;
+
+	while (!*(--buffer) && address_size > 0)
+		 --address_size;
+
+	printf("%x", *(buffer));
+	while (--address_size > 0)
+		printf("%02x", *(--buffer));
+
+	printf("\n");
 }
 
 /**
@@ -174,12 +198,17 @@ void elf_entrypoint(const char *filename, int fd)
  */
 int main(int argc, const char *argv[])
 {
-	void (*elf_header[])(const char *, int) = {
-		elf_magic, elf_class, elf_data, elf_version, elf_osabi,
-		elf_abiversion, elf_type, elf_entrypoint, NULL
+	char buffer[18];
+	void (*elf_header[])(const char *) = {
+		elf_data,
+		elf_version,
+		elf_osabi,
+		elf_abiversion,
+		elf_type,
+		NULL
 	};
-	int fd;
 	unsigned int i;
+	int bit_mode, fd;
 
 	if (argc != 2)
 	{
@@ -188,15 +217,27 @@ int main(int argc, const char *argv[])
 	}
 
 	fd = open(argv[1], O_RDONLY);
-	if (fd < 0)
+	if (fd == -1)
 	{
 		dprintf(STDERR_FILENO, "Error: Can't read from %s\n", argv[1]);
 		exit(98);
 	}
 
-	for (i = 0; elf_header[i]; ++i)
-		elf_header[i](argv[1], fd);
+	_read(argv[1], fd, buffer, 18);
 
+	elf_magic(buffer);
+
+	bit_mode = elf_class(buffer);
+
+	for (i = 0; elf_header[i]; ++i)
+		elf_header[i](buffer);
+
+	lseek(fd, 24, SEEK_SET);
+
+	_read(argv[1], fd, buffer, bit_mode / 8);
 	_close(fd);
+
+	elf_entrypoint(bit_mode / 8, buffer);
+
 	return (0);
 }
