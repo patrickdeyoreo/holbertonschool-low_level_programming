@@ -121,7 +121,7 @@ void elf_version(const char *buffer __attribute__((unused)))
 void elf_osabi(const char *buffer)
 {
 	char *os_table[] = {
-		"Unix - System V",
+		"UNIX - System V",
 		"HP-UX",
 		"NetBSD",
 		"Linux",
@@ -160,10 +160,10 @@ void elf_type(const char *buffer)
 {
 	char *type_table[] = {
 		"NONE",
-		"REL",
+		"REL (Relocatable file)",
 		"EXEC (Executable file)",
 		"DYN (Shared object file)",
-		"CORE"
+		"CORE (Core file)"
 	};
 
 	printf("%-35s %s\n", "Type:", type_table[(int) buffer[16]]);
@@ -177,12 +177,13 @@ void elf_entrypoint(int address_size, const char *buffer)
 {
 	printf("%-35s 0x", "Entry point address:");
 
-	buffer += address_size;
+	buffer += address_size - 1;
 
-	while (!*(--buffer) && address_size > 0)
-		 --address_size;
+	while (!*(buffer) && address_size > 0)
+		--buffer, --address_size;
 
-	printf("%x", *(buffer));
+	printf("%x", *buffer);
+
 	while (--address_size > 0)
 		printf("%02x", *(--buffer));
 
@@ -199,16 +200,12 @@ void elf_entrypoint(int address_size, const char *buffer)
 int main(int argc, const char *argv[])
 {
 	char buffer[18];
-	void (*elf_header[])(const char *) = {
-		elf_data,
-		elf_version,
-		elf_osabi,
-		elf_abiversion,
-		elf_type,
-		NULL
-	};
 	unsigned int i;
 	int bit_mode, fd;
+	void (*elf_header[])(const char *) = {
+		elf_data, elf_version, elf_osabi, elf_abiversion,
+		elf_type, NULL
+	};
 
 	if (argc != 2)
 	{
