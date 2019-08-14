@@ -90,7 +90,7 @@ int elf_class(const char *buffer)
 	else
 		bit_mode = 64;
 
-	printf("  %-35s ELF%d\n", "Class:", bit_mode);
+	printf("  %-34s ELF%d\n", "Class:", bit_mode);
 	return (bit_mode);
 }
 
@@ -101,9 +101,9 @@ int elf_class(const char *buffer)
 void elf_data(const char *buffer)
 {
 	if (buffer[5] == 1)
-		printf("  %-35s 2's complement, little endian\n", "Data:");
+		printf("  %-34s 2's complement, little endian\n", "Data:");
 	else
-		printf("  %-35s 2's complement, big endian\n", "Data:");
+		printf("  %-34s 2's complement, big endian\n", "Data:");
 }
 
 /**
@@ -112,7 +112,7 @@ void elf_data(const char *buffer)
  */
 void elf_version(const char *buffer __attribute__((unused)))
 {
-	printf("  %-35s 1 (current)\n", "Version:");
+	printf("  %-34s 1 (current)\n", "Version:");
 }
 
 /**
@@ -141,7 +141,7 @@ void elf_osabi(const char *buffer)
 		"CloudABI"
 	};
 
-	printf("  %-35s %s\n", "OS/ABI:", os_table[(int) buffer[7]]);
+	printf("  %-34s %s\n", "OS/ABI:", os_table[(int) buffer[7]]);
 }
 
 /**
@@ -150,7 +150,7 @@ void elf_osabi(const char *buffer)
  */
 void elf_abiversion(const char *buffer)
 {
-	printf("  %-35s %d\n", "ABI Version:", buffer[8]);
+	printf("  %-34s %d\n", "ABI Version:", buffer[8]);
 }
 
 /**
@@ -167,7 +167,7 @@ void elf_type(const char *buffer)
 		"CORE (Core file)"
 	};
 
-	printf("  %-35s %s\n", "Type:", type_table[(int) buffer[16]]);
+	printf("  %-34s %s\n", "Type:", type_table[(int) buffer[16]]);
 }
 
 /**
@@ -176,7 +176,7 @@ void elf_type(const char *buffer)
  */
 void elf_entrypoint(int address_size, const char *buffer)
 {
-	printf("  %-35s 0x", "Entry point address:");
+	printf("  %-34s 0x", "Entry point address:");
 
 	buffer += address_size - 1;
 
