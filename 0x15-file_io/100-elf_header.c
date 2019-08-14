@@ -1,3 +1,4 @@
+#include <elf.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -112,7 +113,10 @@ void elf_data(const char *buffer)
  */
 void elf_version(const char *buffer __attribute__((unused)))
 {
-	printf("  %-34s 1 (current)\n", "Version:");
+	printf("  %-34s %d", "Version:", buffer[6]);
+	if (EV_CURRENT == buffer[6])
+		printf(" (current)");
+	printf("\n");
 }
 
 /**
@@ -124,7 +128,7 @@ void elf_osabi(const char *buffer)
 	char *os_table[] = {
 		"UNIX - System V",
 		"HP-UX",
-		"NetBSD",
+		"UNIX - NetBSD",
 		"Linux",
 		"GNU Hurd",
 		"Solaris",
@@ -183,10 +187,10 @@ void elf_entrypoint(int address_size, const char *buffer)
 	while (!*(buffer) && address_size > 0)
 		--buffer, --address_size;
 
-	printf("%x", *buffer);
+	printf("%x", *buffer & 0xff);
 
 	while (--address_size > 0)
-		printf("%02x", *(--buffer));
+		printf("%02x", *(--buffer) & 0xff);
 
 	printf("\n");
 }
