@@ -43,7 +43,6 @@ void _close(int fd)
 
 /**
  * _read - read from a file and print an error message upon failure
- * @filename: the name of the file to read from
  * @fd: the file descriptor to read from
  * @buf: the buffer to write to
  * @count: the number of bytes to read
@@ -59,14 +58,13 @@ void _read(int fd, char *buf, size_t count)
 
 /**
  * elf_magic - print elf magic
- * @filename: the name of the file
- * @fd: file descriptor to read from
+ * @buffer: the ELF header
  */
 void elf_magic(const char *buffer)
 {
 	unsigned int i;
 
-	if (_strncmp(buffer, "\x7f\x45\x4c\x46", 4))
+	if (_strncmp(buffer, ELFMAG, 4))
 	{
 		write(STDERR_FILENO, "Error: Not an ELF file\n", 23);
 		exit(98);
@@ -74,47 +72,56 @@ void elf_magic(const char *buffer)
 
 	printf("ELF Header:\n");
 	printf("  Magic:   ");
+
 	for (i = 0; i < 16; ++i)
 		printf("%02x%c", buffer[i], i < 15 ? ' ' : '\n');
 }
 
 /**
  * elf_class - print elf class
- * @buffer: the name of the file
+ * @buffer: the ELF header
+ *
+ * Return: the bit mode of the executable (32 or 64)
  */
 int elf_class(const char *buffer)
 {
-	int bit_mode;
+	int bit_mode = 0;
 
-	if (buffer[4] == 1)
+	if (buffer[EI_CLASS] == ELFCLASS32)
 		bit_mode = 32;
-	else
+	else if (buffer[EI_CLASS] == ELFCLASS64)
 		bit_mode = 64;
 
 	printf("  %-34s ELF%d\n", "Class:", bit_mode);
+
 	return (bit_mode);
 }
 
 /**
  * elf_data - print elf data
- * @buffer: the name of the file
+ * @buffer: the ELF header
  */
 void elf_data(const char *buffer)
 {
-	if (buffer[5] == 1)
-		printf("  %-34s 2's complement, little endian\n", "Data:");
+	printf("  %-34s ", "Data:");
+
+	if (buffer[EI_DATA] == ELFDATA2LSB)
+		printf("2's complement, little endian\n");
+	else if (buffer[EI_DATA] == ELFDATA2MSB)
+		printf("2's complement, big endian\n");
 	else
-		printf("  %-34s 2's complement, big endian\n", "Data:");
+		printf("<unknown: %d>\n", buffer[EI_DATA]);
 }
 
 /**
  * elf_version - print elf version
- * @buffer: the name of the file
+ * @buffer: the ELF header
  */
-void elf_version(const char *buffer __attribute__((unused)))
+void elf_version(const char *buffer)
 {
-	printf("  %-34s %d", "Version:", buffer[6]);
-	if (EV_CURRENT == buffer[6])
+	printf("  %-34s %d", "Version:", buffer[EI_VERSION]);
+
+	if (EV_CURRENT == buffer[EI_VERSION])
 		printf(" (current)\n");
 	else
 		printf("\n");
@@ -122,76 +129,85 @@ void elf_version(const char *buffer __attribute__((unused)))
 
 /**
  * elf_osabi - print elf osabi
- * @buffer: the name of the file
+ * @buffer: the ELF header
  */
 void elf_osabi(const char *buffer)
 {
-	char *os_table[] = {
+	const char *os_table[18] = {
 		"UNIX - System V",
-		"HP-UX",
+		"UNIX - HP-UX",
 		"UNIX - NetBSD",
-		"Linux",
-		"GNU Hurd",
+		"UNIX - GNU",
+		"<unknown: 4>",
+		"<unknown: 5>",
 		"UNIX - Solaris",
 		"UNIX - AIX",
 		"UNIX - IRIX",
 		"UNIX - FreeBSD",
-		"Tru64",
-		"Novell Modesto",
+		"UNIX - Tru64",
+		"Novell - Modesto",
 		"UNIX - OpenBSD",
-		"OpenVMS",
-		"NonStop Kernel",
+		"VMS - OpenVMS",
+		"HP - Non-Stop Kernel",
 		"AROS",
-		"Fenix OS",
-		"CloudABI"
+		"FenixOS",
+		"Nuxi CloudABI"
 	};
 
 	printf("  %-34s ", "OS/ABI:");
 
-	if (buffer[7] > 17)
-		printf("<unknown: %d>\n", buffer[7]);
+	if (buffer[EI_OSABI] < 18)
+		printf("%s\n", os_table[(unsigned int) buffer[EI_OSABI]]);
 	else
-		printf("%s\n", os_table[(int) buffer[7]]);
+		printf("<unknown: %d>\n", buffer[EI_OSABI]);
 }
 
 /**
  * elf_abiversion - print elf abiversion
- * @buffer: the name of the file
+ * @buffer: the ELF header
  */
 void elf_abiversion(const char *buffer)
 {
-	printf("  %-34s %d\n", "ABI Version:", buffer[8]);
+	printf("  %-34s %d\n", "ABI Version:", buffer[EI_ABIVERSION]);
 }
 
 /**
  * elf_type - print elf type
- * @buffer: the name of the file
+ * @buffer: the ELF header
  */
 void elf_type(const char *buffer)
 {
-	char *type_table[] = {
-		"NONE",
+	char *type_table[5] = {
+		"NONE (No file type)",
 		"REL (Relocatable file)",
 		"EXEC (Executable file)",
 		"DYN (Shared object file)",
 		"CORE (Core file)"
 	};
 
-	printf("  %-34s %s\n", "Type:", type_table[(int) buffer[16]]);
+	printf("  %-34s ", "Type:");
+
+	if (buffer[16] < 5)
+		printf("%s\n", type_table[(unsigned int) buffer[16]]);
+	else
+		printf("<unknown: %d>\n", buffer[16]);
 }
 
 /**
  * elf_type - print elf type
- * @buffer: the name of the file
+ * @bit_mode: the bit mode of the executable (32 or 64)
+ * @buffer: the ELF header
  */
-void elf_entrypoint(int address_size, const char *buffer)
+void elf_entrypoint(unsigned int bit_mode, const char *buffer)
 {
+	int address_size = bit_mode / 8;
+
 	printf("  %-34s 0x", "Entry point address:");
 
-	buffer += address_size - 1;
+	buffer += address_size;
 
-	while (!*(buffer) && address_size > 0)
-		--buffer, --address_size;
+	while (address_size && !*(--buffer))
+		--address_size;
 
 	printf("%x", *buffer & 0xff);
 
@@ -245,7 +261,7 @@ int main(int argc, const char *argv[])
 	_read(fd, buffer, bit_mode / 8);
 	_close(fd);
 
-	elf_entrypoint(bit_mode / 8, buffer);
+	elf_entrypoint(bit_mode, buffer);
 
 	return (0);
 }
