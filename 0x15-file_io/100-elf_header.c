@@ -96,7 +96,7 @@ size_t elf_class(const unsigned char *buffer)
 		printf("ELF32\n");
 		return (32);
 	}
-	printf("<unknown: %u>\n", buffer[EI_CLASS]);
+	printf("<unknown: %x>\n", buffer[EI_CLASS]);
 	return (32);
 }
 
@@ -171,7 +171,7 @@ void elf_osabi(const unsigned char *buffer)
 	if (buffer[EI_OSABI] < 19)
 		printf("%s\n", os_table[(unsigned int) buffer[EI_OSABI]]);
 	else
-		printf("<unknown: %u>\n", buffer[EI_OSABI]);
+		printf("<unknown: %x>\n", buffer[EI_OSABI]);
 }
 
 /**
@@ -213,7 +213,7 @@ void elf_type(const unsigned char *buffer, int big_endian)
 	else if (type >= ET_LOPROC && type <= ET_HIPROC)
 		printf("Processor Specific: (%4x)\n", type);
 	else
-		printf("<unknown: %u>\n", type);
+		printf("<unknown: %x>\n", type);
 }
 
 /**
