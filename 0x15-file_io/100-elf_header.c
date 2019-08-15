@@ -91,7 +91,7 @@ size_t elf_class(const unsigned char *buffer)
 		printf("ELF64\n");
 		return (64);
 	}
-	if (buffer[EI_CLASS] == ELFCLASS64)
+	if (buffer[EI_CLASS] == ELFCLASS32)
 	{
 		printf("ELF32\n");
 		return (32);
