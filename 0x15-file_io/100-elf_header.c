@@ -115,8 +115,9 @@ void elf_version(const char *buffer __attribute__((unused)))
 {
 	printf("  %-34s %d", "Version:", buffer[6]);
 	if (EV_CURRENT == buffer[6])
-		printf(" (current)");
-	printf("\n");
+		printf(" (current)\n");
+	else
+		printf("\n");
 }
 
 /**
@@ -131,13 +132,13 @@ void elf_osabi(const char *buffer)
 		"UNIX - NetBSD",
 		"Linux",
 		"GNU Hurd",
-		"Solaris",
-		"AIX",
-		"IRIX",
-		"FreeBSD",
+		"UNIX - Solaris",
+		"UNIX - AIX",
+		"UNIX - IRIX",
+		"UNIX - FreeBSD",
 		"Tru64",
 		"Novell Modesto",
-		"OpenBSD",
+		"UNIX - OpenBSD",
 		"OpenVMS",
 		"NonStop Kernel",
 		"AROS",
@@ -145,7 +146,12 @@ void elf_osabi(const char *buffer)
 		"CloudABI"
 	};
 
-	printf("  %-34s %s\n", "OS/ABI:", os_table[(int) buffer[7]]);
+	printf("  %-34s ", "OS/ABI:");
+
+	if (buffer[7] > 17)
+		printf("<unknown: %d>\n", buffer[7]);
+	else
+		printf("%s\n", os_table[(int) buffer[7]]);
 }
 
 /**
