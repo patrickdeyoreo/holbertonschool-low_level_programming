@@ -57,83 +57,94 @@ void _read(int fd, char *buf, size_t count)
 }
 
 /**
- * elf_magic - print elf magic
+ * elf_magic - print ELF magic
  * @buffer: the ELF header
  */
-void elf_magic(const char *buffer)
+void elf_magic(const unsigned char *buffer)
 {
 	unsigned int i;
 
-	if (_strncmp(buffer, ELFMAG, 4))
+	if (_strncmp((const char *) buffer, ELFMAG, 4))
 	{
 		write(STDERR_FILENO, "Error: Not an ELF file\n", 23);
 		exit(98);
 	}
 
-	printf("ELF Header:\n");
-	printf("  Magic:   ");
+	printf("ELF Header:\n  Magic:   ");
 
 	for (i = 0; i < 16; ++i)
 		printf("%02x%c", buffer[i], i < 15 ? ' ' : '\n');
 }
 
 /**
- * elf_class - print elf class
+ * elf_class - print ELF class
  * @buffer: the ELF header
  *
- * Return: the bit mode of the executable (32 or 64)
+ * Return: bit mode (32 or 64)
  */
-int elf_class(const char *buffer)
+size_t elf_class(const unsigned char *buffer)
 {
-	int bit_mode = 0;
+	printf("  %-34s ", "Class:");
 
-	if (buffer[EI_CLASS] == ELFCLASS32)
-		bit_mode = 32;
-	else if (buffer[EI_CLASS] == ELFCLASS64)
-		bit_mode = 64;
-
-	printf("  %-34s ELF%d\n", "Class:", bit_mode);
-
-	return (bit_mode);
+	if (buffer[EI_CLASS] == ELFCLASS64)
+	{
+		printf("ELF64\n");
+		return (64);
+	}
+	if (buffer[EI_CLASS] == ELFCLASS64)
+	{
+		printf("ELF32\n");
+		return (32);
+	}
+	printf("<unknown: %u>\n", buffer[EI_CLASS]);
+	return (32);
 }
 
 /**
- * elf_data - print elf data
+ * elf_data - print ELF data
  * @buffer: the ELF header
+ *
+ * Return: 1 if big endian, otherwise 0
  */
-void elf_data(const char *buffer)
+int elf_data(const unsigned char *buffer)
 {
 	printf("  %-34s ", "Data:");
 
-	if (buffer[EI_DATA] == ELFDATA2LSB)
-		printf("2's complement, little endian\n");
-	else if (buffer[EI_DATA] == ELFDATA2MSB)
+	if (buffer[EI_DATA] == ELFDATA2MSB)
+	{
 		printf("2's complement, big endian\n");
-	else
-		printf("<unknown: %d>\n", buffer[EI_DATA]);
+		return (1);
+	}
+	if (buffer[EI_DATA] == ELFDATA2LSB)
+	{
+		printf("2's complement, little endian\n");
+		return (0);
+	}
+	printf("Invalid data encoding\n");
+	return (0);
 }
 
 /**
- * elf_version - print elf version
+ * elf_version - print ELF version
  * @buffer: the ELF header
  */
-void elf_version(const char *buffer)
+void elf_version(const unsigned char *buffer)
 {
-	printf("  %-34s %d", "Version:", buffer[EI_VERSION]);
+	printf("  %-34s %u", "Version:", buffer[EI_VERSION]);
 
-	if (EV_CURRENT == buffer[EI_VERSION])
+	if (buffer[EI_VERSION] == EV_CURRENT)
 		printf(" (current)\n");
 	else
 		printf("\n");
 }
 
 /**
- * elf_osabi - print elf osabi
+ * elf_osabi - print ELF OS/ABI
  * @buffer: the ELF header
  */
-void elf_osabi(const char *buffer)
+void elf_osabi(const unsigned char *buffer)
 {
-	const char *os_table[18] = {
+	const char *os_table[19] = {
 		"UNIX - System V",
 		"UNIX - HP-UX",
 		"UNIX - NetBSD",
@@ -151,31 +162,33 @@ void elf_osabi(const char *buffer)
 		"HP - Non-Stop Kernel",
 		"AROS",
 		"FenixOS",
-		"Nuxi CloudABI"
+		"Nuxi CloudABI",
+		"Stratus Technologies OpenVOS"
 	};
 
 	printf("  %-34s ", "OS/ABI:");
 
-	if (buffer[EI_OSABI] < 18)
+	if (buffer[EI_OSABI] < 19)
 		printf("%s\n", os_table[(unsigned int) buffer[EI_OSABI]]);
 	else
-		printf("<unknown: %d>\n", buffer[EI_OSABI]);
+		printf("<unknown: %u>\n", buffer[EI_OSABI]);
 }
 
 /**
- * elf_abiversion - print elf abiversion
+ * elf_abivers - print ELF ABI version
  * @buffer: the ELF header
  */
-void elf_abiversion(const char *buffer)
+void elf_abivers(const unsigned char *buffer)
 {
-	printf("  %-34s %d\n", "ABI Version:", buffer[EI_ABIVERSION]);
+	printf("  %-34s %u\n", "ABI Version:", buffer[EI_ABIVERSION]);
 }
 
 /**
- * elf_type - print elf type
+ * elf_type - print ELF type
  * @buffer: the ELF header
+ * @big_endian: endianness (big endian if non-zero)
  */
-void elf_type(const char *buffer)
+void elf_type(const unsigned char *buffer, int big_endian)
 {
 	char *type_table[5] = {
 		"NONE (No file type)",
@@ -184,35 +197,59 @@ void elf_type(const char *buffer)
 		"DYN (Shared object file)",
 		"CORE (Core file)"
 	};
+	unsigned int type;
 
 	printf("  %-34s ", "Type:");
 
-	if (buffer[16] < 5)
-		printf("%s\n", type_table[(unsigned int) buffer[16]]);
+	if (big_endian)
+		type = 0x100 * buffer[16] + buffer[17];
 	else
-		printf("<unknown: %d>\n", buffer[16]);
+		type = 0x100 * buffer[17] + buffer[16];
+
+	if (type < 5)
+		printf("%s\n", type_table[type]);
+	else if (type >= ET_LOOS && type <= ET_HIOS)
+		printf("OS Specific: (%4x)\n", type);
+	else if (type >= ET_LOPROC && type <= ET_HIPROC)
+		printf("Processor Specific: (%4x)\n", type);
+	else
+		printf("<unknown: %u>\n", type);
 }
 
 /**
- * elf_type - print elf type
- * @bit_mode: the bit mode of the executable (32 or 64)
- * @buffer: the ELF header
+ * elf_entry - print entry point address
+ * @buffer: string containing the entry point address
+ * @bit_mode: bit mode (32 or 64)
+ * @big_endian: endianness (big endian if non-zero)
  */
-void elf_entrypoint(unsigned int bit_mode, const char *buffer)
+void elf_entry(const unsigned char *buffer, size_t bit_mode, int big_endian)
 {
 	int address_size = bit_mode / 8;
 
 	printf("  %-34s 0x", "Entry point address:");
 
-	buffer += address_size;
+	if (big_endian)
+	{
+		while (address_size && !*(buffer))
+			--address_size, ++buffer;
 
-	while (address_size && !*(--buffer))
-		--address_size;
+		printf("%x", *buffer & 0xff);
 
-	printf("%x", *buffer & 0xff);
+		while (--address_size > 0)
+			printf("%02x", *(++buffer) & 0xff);
+	}
+	else
+	{
+		buffer += address_size;
 
-	while (--address_size > 0)
-		printf("%02x", *(--buffer) & 0xff);
+		while (address_size && !*(--buffer))
+			--address_size;
+
+		printf("%x", *buffer & 0xff);
+
+		while (--address_size > 0)
+			printf("%02x", *(--buffer) & 0xff);
+	}
 
 	printf("\n");
 }
@@ -226,13 +263,10 @@ void elf_entrypoint(unsigned int bit_mode, const char *buffer)
  */
 int main(int argc, const char *argv[])
 {
-	char buffer[18];
-	unsigned int i;
-	int bit_mode, fd;
-	void (*elf_header[])(const char *) = {
-		elf_data, elf_version, elf_osabi, elf_abiversion,
-		elf_type, NULL
-	};
+	unsigned char buffer[18];
+	unsigned int bit_mode;
+	int big_endian;
+	int fd;
 
 	if (argc != 2)
 	{
@@ -247,21 +281,22 @@ int main(int argc, const char *argv[])
 		exit(98);
 	}
 
-	_read(fd, buffer, 18);
+	_read(fd, (char *) buffer, 18);
 
 	elf_magic(buffer);
-
 	bit_mode = elf_class(buffer);
-
-	for (i = 0; elf_header[i]; ++i)
-		elf_header[i](buffer);
+	big_endian = elf_data(buffer);
+	elf_version(buffer);
+	elf_osabi(buffer);
+	elf_abivers(buffer);
+	elf_type(buffer, big_endian);
 
 	lseek(fd, 24, SEEK_SET);
+	_read(fd, (char *) buffer, bit_mode / 8);
 
-	_read(fd, buffer, bit_mode / 8);
+	elf_entry(buffer, bit_mode, big_endian);
+
 	_close(fd);
-
-	elf_entrypoint(bit_mode, buffer);
 
 	return (0);
 }
