@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <time.h>
 
 /**
  * time - time override
@@ -7,10 +6,12 @@
  *
  * Return: Always 98
  */
-time_t time(time_t *tloc __attribute__((unused)))
-{
-	return 98;
-}
+/**
+ *time_t time(time_t *tloc __attribute__((unused)))
+ *{
+ *	return 98;
+ *}
+ */
 
 /**
  * atoi - atoi override
