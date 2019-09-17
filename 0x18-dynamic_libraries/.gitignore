@@ -9,3 +9,4 @@
 !*.py
 !*.sh
 !*.so
+!*.so.tar.gz
