@@ -1,23 +1,10 @@
 #include <stdlib.h>
 
 /**
- * time - time override
- * @tloc: time structure
- *
- * Return: Always 98
- */
-/**
- *time_t time(time_t *tloc __attribute__((unused)))
- *{
- *	return 98;
- *}
- */
-
-/**
  * atoi - atoi override
  * @nptr: string to convert
  *
- * Return: winning numbers
+ * Return: winning numbers at 98 seconds
  */
 int atoi(const char *nptr __attribute__((unused)))
 {
