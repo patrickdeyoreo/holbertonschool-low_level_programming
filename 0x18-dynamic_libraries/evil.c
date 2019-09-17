@@ -1,4 +1,6 @@
 #include <stdlib.h>
+#include <time.h>
+
 
 /**
  * atoi - atoi override
@@ -26,4 +28,16 @@ int atoi(const char *nptr __attribute__((unused)))
 		return (2);
 	}
 	return (0);
+}
+
+
+/**
+ * time - time override
+ * @tloc: time structure
+ *
+ * Return: Always 98
+ */
+time_t time(time_t *tloc __attribute__((unused)))
+{
+	return 98;
 }
