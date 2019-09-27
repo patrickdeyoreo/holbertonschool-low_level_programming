@@ -1,3 +1,6 @@
 [submodule "0x19-stacks_queues_lifo_fifo"]
 	path = 0x19-stacks_queues_lifo_fifo
 	url = https://github.com/patrickdeyoreo/monty
+[submodule "foo"]
+	path = foo
+	url = https://github.com/patrickdeyoreo/my_repo
