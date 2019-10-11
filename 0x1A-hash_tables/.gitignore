@@ -1,0 +1,8 @@
+# .gitignore: whitelist for untracked files - see gitignore(5)
+
+*
+!.gitignore
+!AUTHORS
+!README.md
+!*.c
+!*.h
