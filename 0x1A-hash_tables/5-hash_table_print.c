@@ -1,54 +1,62 @@
 #include "hash_tables.h"
+#include <stdio.h>
 
 /**
- * _hash_table_print - print all entries in a hash table (helper)
- * @head: pointer to linked list
+ * hash_table_print_sep - print a separator between elements in a hash table
  */
-void _hash_table_print(const hash_node_t *head)
+void hash_table_print_sep(void)
+{
+	fputs(", ", stdout);
+}
+
+/**
+ * hash_chain_print - print the elements in a singly-linked list
+ * @head: a pointer to the singly-linked list
+ */
+void hash_chain_print(const hash_node_t *head)
 {
 	for (;;)
 	{
-		printf("'%s': ", head->key);
-
 		if (head->value)
-			printf("'%s'", head->value);
+			printf("'%s': '%s'", head->key, head->value);
 		else
-			printf("%s", head->value);
+			printf("'%s': %s", head->key, head->value);
 
 		head = head->next;
 
 		if (head)
-			printf(", ");
+			hash_table_print_sep();
 		else
-			break;
+			return;
 	}
 }
 
 /**
- * hash_table_print - print all entries in a hash table
- * @ht: pointer to a hash table
+ * hash_table_print - print the elements in a hash table
+ * @ht: a pointer to the hash table
  */
 void hash_table_print(const hash_table_t *ht)
 {
-	hash_node_t **array = NULL;
-	unsigned long int index = 0, size = 0;
-	unsigned char flag = 0;
+	void (*print_sep)(void) = NULL;
+	hash_node_t *(*array)[] = NULL;
+	unsigned long int index = 0;
+	unsigned long int size = 0;
 
-	if (!ht)
-		return;
-
-	putchar('{');
-	for (array = ht->array, size = ht->size; index < size; ++index)
+	if (ht)
 	{
-		if (array[index])
+		putchar('{');
+		for (array = ht->array, size = ht->size; index < size; ++index)
 		{
-			if (flag)
-				printf(", ");
-			else
-				flag = 1;
+			if ((*array)[index])
+			{
+				if (print_sep)
+					print_sep();
+				else
+					print_sep = hash_table_print_sep;
 
-			_hash_table_print(array[index]);
+				hash_chain_print((*array)[index]);
+			}
 		}
+		puts("}");
 	}
-	puts("}");
 }

@@ -2,18 +2,19 @@
 #include <string.h>
 
 /**
- * _hash_table_get - get an element from a hash table (helper)
- * @head: pointer to a linked list
- * @key: the key of the element
+ * hash_chain_get - get an element from a singly-linked list
+ * @head: a pointer to the singly-linked list
+ * @key: a pointer to the element's key
  *
- * Return: a pointer to the element, or NULL if the key was not found
+ * Return: a pointer to the element's value, or NULL if the key wasn't found
  */
-char *_hash_table_get(const hash_node_t *head, const char *key)
+char *hash_chain_get(const hash_node_t *head, const char *key)
 {
 	if (head)
 	{
 		if (strcmp(key, head->key))
-			return (_hash_table_get(head->next, key));
+			return (hash_chain_get(head->next, key));
+
 		return (head->value);
 	}
 	return (NULL);
@@ -21,18 +22,19 @@ char *_hash_table_get(const hash_node_t *head, const char *key)
 
 /**
  * hash_table_get - get an element from a hash table
- * @ht: pointer to a hash table
- * @key: the key of the desired element
+ * @ht: a pointer to the hash table
+ * @key: a pointer to the element's key
  *
- * Return: a pointer to the element, or NULL if the key was not found
+ * Return: a pointer to the element's value, or NULL if the key wasn't found
  */
 char *hash_table_get(const hash_table_t *ht, const char *key)
 {
-	if (!(ht && key && *key))
-		return (0);
+	unsigned long int index = 0;
 
-	return (_hash_table_get(
-		ht->array[key_index((const unsigned char *) key, ht->size)],
-		key
-	));
+	if (ht && key && *key)
+	{
+		index = key_index((const unsigned char *) key, ht->size);
+		return (hash_chain_get((*ht->array)[index], key));
+	}
+	return (0);
 }
