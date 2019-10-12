@@ -37,8 +37,8 @@ void hash_chain_print(const hash_node_t *head)
  */
 void hash_table_print(const hash_table_t *ht)
 {
-	void (*print_sep)(void) = NULL;
-	hash_node_t *(*array)[] = NULL;
+	void (*print_sep)() = NULL;
+	hash_node_t **array = NULL;
 	unsigned long int index = 0;
 	unsigned long int size = 0;
 
@@ -47,14 +47,14 @@ void hash_table_print(const hash_table_t *ht)
 		putchar('{');
 		for (array = ht->array, size = ht->size; index < size; ++index)
 		{
-			if ((*array)[index])
+			if (array[index])
 			{
 				if (print_sep)
 					print_sep();
 				else
 					print_sep = hash_table_print_sep;
 
-				hash_chain_print((*array)[index]);
+				hash_chain_print(array[index]);
 			}
 		}
 		puts("}");

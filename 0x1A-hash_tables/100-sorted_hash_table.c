@@ -15,7 +15,7 @@ shash_table_t *shash_table_create(unsigned long int size)
 
 	if (ht)
 	{
-		ht->array = calloc(size, sizeof(**ht->array));
+		ht->array = calloc(size, sizeof(*ht->array));
 		if (ht->array)
 		{
 			ht->size = size;
@@ -117,7 +117,7 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 
 	index = key_index((const unsigned char *) key, ht->size);
 
-	if (shash_chain_set((*ht->array)[index], key, new_value))
+	if (shash_chain_set(ht->array[index], key, new_value))
 		return (1);
 
 	new_node = malloc(sizeof(*new_node));
@@ -136,8 +136,8 @@ int shash_table_set(shash_table_t *ht, const char *key, const char *value)
 	}
 
 	new_node->value = new_value;
-	new_node->next = (*ht->array)[index];
-	(*ht->array)[index] = new_node;
+	new_node->next = ht->array[index];
+	ht->array[index] = new_node;
 	shash_list_insert(ht, new_node);
 	return (1);
 }
@@ -175,7 +175,7 @@ char *shash_table_get(const shash_table_t *ht, const char *key)
 	if (ht && key && *key)
 	{
 		index = key_index((const unsigned char *) key, ht->size);
-		return (shash_chain_get((*ht->array)[index], key));
+		return (shash_chain_get(ht->array[index], key));
 	}
 	return (0);
 }

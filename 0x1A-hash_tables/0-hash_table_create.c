@@ -13,7 +13,7 @@ hash_table_t *hash_table_create(unsigned long int size)
 
 	if (ht)
 	{
-		ht->array = calloc(size, sizeof(**ht->array));
+		ht->array = calloc(size, sizeof(*ht->array));
 		if (ht->array)
 		{
 			ht->size = size;

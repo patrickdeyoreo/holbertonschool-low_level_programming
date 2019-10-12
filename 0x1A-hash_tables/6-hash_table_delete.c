@@ -22,14 +22,14 @@ void hash_chain_delete(hash_node_t *head)
  */
 void hash_table_delete(hash_table_t *ht)
 {
-	hash_node_t *(*array)[] = NULL;
+	hash_node_t **array = NULL;
 	unsigned long int index = 0;
 	unsigned long int size = 0;
 
 	if (ht)
 	{
 		for (array = ht->array, size = ht->size; index < size; ++index)
-			hash_chain_delete((*array)[index]);
+			hash_chain_delete(array[index]);
 
 		free(ht->array);
 		free(ht);

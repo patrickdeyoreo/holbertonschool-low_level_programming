@@ -27,7 +27,7 @@ typedef struct hash_node_s
  */
 typedef struct hash_table_s
 {
-	hash_node_t *(*array)[];
+	hash_node_t **array;
 	unsigned long int size;
 } hash_table_t;
 
@@ -65,10 +65,10 @@ typedef struct shash_node_s
  */
 typedef struct shash_table_s
 {
+	shash_node_t **array;
 	shash_node_t *shead;
 	shash_node_t *stail;
 	unsigned long int size;
-	shash_node_t *(*array)[];
 } shash_table_t;
 
 unsigned long int hash_djb2(const unsigned char *);

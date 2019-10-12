@@ -50,7 +50,7 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 
 	index = key_index((const unsigned char *) key, ht->size);
 
-	if (hash_chain_set((*ht->array)[index], key, new_value))
+	if (hash_chain_set(ht->array[index], key, new_value))
 		return (1);
 
 	new_node = malloc(sizeof(*new_node));
@@ -69,7 +69,7 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	}
 
 	new_node->value = new_value;
-	new_node->next = (*ht->array)[index];
-	(*ht->array)[index] = new_node;
+	new_node->next = ht->array[index];
+	ht->array[index] = new_node;
 	return (1);
 }

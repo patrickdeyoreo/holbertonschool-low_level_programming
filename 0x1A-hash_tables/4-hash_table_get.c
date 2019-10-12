@@ -34,7 +34,7 @@ char *hash_table_get(const hash_table_t *ht, const char *key)
 	if (ht && key && *key)
 	{
 		index = key_index((const unsigned char *) key, ht->size);
-		return (hash_chain_get((*ht->array)[index], key));
+		return (hash_chain_get(ht->array[index], key));
 	}
 	return (0);
 }
