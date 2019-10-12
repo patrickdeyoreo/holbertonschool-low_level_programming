@@ -52,7 +52,7 @@ int hash_table_set(hash_table_t *ht, const char *key, const char *value)
 	if (_hash_table_set(ht->array[idx], key, new_value))
 		return (1);
 
-	new_node = malloc(sizeof(new_node));
+	new_node = malloc(sizeof(*new_node));
 	if (!new_node)
 	{
 		free(new_value);

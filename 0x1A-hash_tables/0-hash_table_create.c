@@ -12,11 +12,13 @@ hash_table_t *hash_table_create(unsigned long int size)
 
 	if (ht)
 	{
-		ht->array = calloc(size, sizeof(void *));
+		ht->array = calloc(size, sizeof(*ht->array));
 		if (ht->array)
+		{
 			ht->size = size;
-		else
-			free(ht);
+			return (ht);
+		}
+		free(ht);
 	}
-	return (ht);
+	return (NULL);
 }

@@ -37,7 +37,7 @@ void hash_table_print(const hash_table_t *ht)
 	if (!ht)
 		return;
 
-	printf("{");
+	putchar('{');
 	for (array = ht->array, size = ht->size; index < size; ++index)
 	{
 		if (array[index])
@@ -50,5 +50,5 @@ void hash_table_print(const hash_table_t *ht)
 			_hash_table_print(array[index]);
 		}
 	}
-	printf("}\n");
+	puts("}");
 }
