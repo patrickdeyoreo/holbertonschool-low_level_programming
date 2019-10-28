@@ -1,7 +1,7 @@
 #include "sort.h"
 
 /**
- * insertion_sort_list -
+ * insertion_sort_list - Perform the insertion sort alogorithm
  * @list: a double pointer the head of a list
  */
 void insertion_sort_list(listint_t **list)
@@ -9,7 +9,6 @@ void insertion_sort_list(listint_t **list)
 	listint_t *curr = NULL;
 	listint_t *prev = NULL;
 	listint_t *temp = NULL;
-
 
 	if (!(list && *list))
 		return;
@@ -25,7 +24,6 @@ void insertion_sort_list(listint_t **list)
 			temp = curr;
 			prev = curr->prev;
 			curr = curr->next;
-
 			while (prev && temp->n < prev->n)
 				prev = prev->prev;
 
@@ -46,8 +44,6 @@ void insertion_sort_list(listint_t **list)
 			print_list(*list);
 		}
 		else
-		{
 			curr = curr->next;
-		}
 	}
 }
