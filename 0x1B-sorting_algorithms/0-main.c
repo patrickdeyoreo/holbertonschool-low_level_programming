@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
 #include "sort.h"
+
+#define ITERATIONS 5
+#define MAX_SIZE 13
+#define MAX_VALUE 100
+#define SEPARATOR "---"
 
 /**
  * main - Entry point
@@ -9,13 +16,32 @@
  */
 int main(void)
 {
-	int array[] = {19, 48, 99, 71, 13, 52, 96, 73, 86, 7};
-	size_t n = sizeof(array) / sizeof(array[0]);
+	int *array = NULL, *position = NULL;
+	size_t n = MAX_SIZE;
+	unsigned int i = 0;
 
-	print_array(array, n);
-	printf("\n");
-	bubble_sort(array, n);
-	printf("\n");
-	print_array(array, n);
+	srandom((unsigned int) time(NULL));
+
+	while (i++ < ITERATIONS)
+	{
+		array = malloc(sizeof(*array) * n);
+		if (!array)
+		{
+			fprintf(stderr, "Could not allocate %lu bytes\n", n);
+			exit(1);
+		}
+		for (position = array; position < array + n; ++position)
+			*position = random() % MAX_VALUE;
+
+		print_array(array, n);
+		sleep(1);
+		bubble_sort(array, n);
+		free(array);
+		if (i < ITERATIONS)
+		{
+			puts(SEPARATOR);
+			sleep(1);
+		}
+	}
 	return (0);
 }
