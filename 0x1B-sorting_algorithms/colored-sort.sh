@@ -1,10 +1,5 @@
 #!/usr/bin/env bash
 
-if [[ $0 != "${BASH_SOURCE[0]}" ]]
-then
-    printf 1>&2 '%s: Do not source this file\n' "${BASH_SOURCE[0]##*/}"
-    return 2
-fi
 if ! (( $# ))
 then
     printf 1>&2 'usage: %s program [arguments ...]\n' "${0##*/}"
