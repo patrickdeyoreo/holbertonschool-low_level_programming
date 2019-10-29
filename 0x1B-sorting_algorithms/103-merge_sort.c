@@ -1,50 +1,74 @@
 #include "sort.h"
 #include <stdio.h>
 
-void intcpy(int *dest, const int *src, size_t size)
+/**
+ * intcopy - copy an array of integers
+ * @dest: the destination array
+ * @src: the source array
+ * @size: the size of the array
+ */
+void intcopy(int *dest, const int *src, size_t size)
 {
 	while (size--)
 		*dest++ = *src++;
 }
 
-void conquer(int *dest, const int *left, const int *right, size_t size)
+/**
+ * conquer - merge two sub-arrays
+ * @array: the array to be sorted
+ * @aux: the array to hold results
+ * @lsize: the size of the left sub-array
+ * @rsize: the size of the right sub-array
+ */
+void conquer(int *array, int *aux, size_t lsize, size_t rsize)
 {
-	const int *lstop = left + size / 2;
-	const int *rstop = right + (size_t) (size + 0.5) / 2;
+	int *lstart = array, *lstop = lstart + lsize;
+	int *rstart = lstop, *rstop = rstart + rsize;
 
 	printf("[Left]: ");
-	print_array(dest, lstop - left);
-	printf("[Right]: ");
-	print_array(dest, rstop - right);
+	print_array(lstart, lsize);
 
-	while (left < lstop && right < rstop)
-		*dest = (*left < *right) ? *left++ : *right++;
+	printf("[Right]: ");
+	print_array(rstart, rsize);
+
+	while (lstart < lstop && rstart < rstop)
+		*aux++ = (*lstart < *rstart) ? *lstart++ : *rstart++;
+
+	while (lstart < lstop)
+		*aux++ = *lstart++;
+
+	while (rstart < rstop)
+		*aux++ = *rstart++;
 }
 
 /**
- * divide - Merge sort recursion
- * @dest: array to store results
- * @src: array to be sorted
- * @size: size of the array
+ * divide - divide, sort and merge
+ * @array: the array to be sorted
+ * @aux: the array to hold results
+ * @size: the size of the array
  */
-void divide(int *dest, const int *src, size_t size)
+void divide(int *array, int *aux, size_t size)
 {
+	size_t lsize = size / 2;
+	size_t rsize = size / 2 + size % 2;
+
 	if (size > 1)
 	{
-		divide(dest, src, size / 2);
-		divide(dest + size / 2, src + size / 2, size / 2);
+		divide(array, aux, lsize);
+		divide(array + lsize, aux + lsize, rsize);
 
-		conquer(dest, src, src + size / 2, size);
+		conquer(array, aux, lsize, rsize);
+		intcopy(array, aux, size);
 
 		printf("[Done]: ");
-		print_array(dest, size);
+		print_array(array, size);
 	}
 }
 
 /**
  * merge_sort - Perform a merge sort
- * @array: the array to sort
- * @size: size of the array
+ * @array: the array to be sorted
+ * @size: the size of the array
  */
 void merge_sort(int *array, size_t size)
 {
@@ -52,9 +76,7 @@ void merge_sort(int *array, size_t size)
 
 	if (aux)
 	{
-		intcpy(aux, array, size);
-		divide(aux, array, size);
-		intcpy(array, aux, size);
+		divide(array, aux, size);
 		free(aux);
 	}
 }
