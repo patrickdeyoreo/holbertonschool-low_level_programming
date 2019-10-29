@@ -39,15 +39,15 @@ do
   fi
   for i in "${!numbers[@]}"
   do
-    colors["${numbers[i]}"]="$((i))"
+    : "${colors[${numbers[i]}]=$((i))}"
   done
   while
     for i in "${!numbers[@]}"
     do
       numbers[i]="$(
-      tput setaf "$((colors[$((numbers[i]))] % 14 + 1))"
+      tput setaf "$((colors[${numbers[i]}] % 14 + 1))"
       )$(
-      printf '%02d' "$((numbers[i]))"
+      printf '%02d' "${numbers[i]}"
       )$(
       tput sgr0
       )$(
