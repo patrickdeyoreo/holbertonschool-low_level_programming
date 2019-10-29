@@ -1,8 +1,34 @@
 #include "sort.h"
 
 /**
+ * insertion_swap_nodes - Swap two nodes
+ * @a: a double pointer to a node
+ * @b: a double pointer to a node
+ */
+void swap(listint_t *a, listint_t *b)
+{
+	listint_t *temp;
+
+	temp = a->next;
+	a->next = b->next;
+	if (a->next)
+		a->next->prev = a;
+	b->next = temp;
+	if (b->next)
+		b->next->prev = b;
+
+	temp = a->prev;
+	a->prev = b->prev;
+	if (a->prev)
+		a->prev->next = a;
+	b->prev = temp;
+	if (b->prev)
+		b->prev->next = b;
+}
+
+/**
  * insertion_sort_list - Perform the insertion sort alogorithm
- * @list: a double pointer the head of a list
+ * @list: a double pointer to the head of a list
  */
 void insertion_sort_list(listint_t **list)
 {
@@ -13,37 +39,22 @@ void insertion_sort_list(listint_t **list)
 	if (!(list && *list))
 		return;
 
+	prev = (*list);
 	curr = (*list)->next;
+
 	while (curr)
 	{
-		if (curr->n < curr->prev->n)
+		temp = curr;
+		curr = curr->next;
+		while (prev && temp->n < prev->n)
 		{
-			if (curr->next)
-				curr->next->prev = curr->prev;
-			curr->prev->next = curr->next;
-			temp = curr;
-			prev = curr->prev;
-			curr = curr->next;
-			while (prev && temp->n < prev->n)
-				prev = prev->prev;
-
-			if (prev)
-			{
-				temp->next = prev->next;
-				temp->next->prev = temp;
-				temp->prev = prev;
-				prev->next = temp;
-			}
-			else
-			{
-				temp->next = *list;
-				temp->prev = NULL;
-				(*list)->prev = temp;
-				*list = temp;
-			}
 			print_list(*list);
+			swap(temp, prev);
+			prev = temp->prev;
 		}
-		else
-			curr = curr->next;
+		if (!prev)
+			*list = temp;
+		if (curr)
+			prev = curr->prev;
 	}
 }
