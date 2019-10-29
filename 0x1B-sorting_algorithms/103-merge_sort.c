@@ -34,7 +34,7 @@ void conquer(int *array, int *aux, size_t lsize, size_t rsize)
 	print_array(rstart, rsize);
 
 	while (lstart < lstop && rstart < rstop)
-		*aux++ = (*lstart < *rstart) ? *lstart++ : *rstart++;
+		*aux++ = (*lstart <= *rstart) ? *lstart++ : *rstart++;
 
 	while (lstart < lstop)
 		*aux++ = *lstart++;
