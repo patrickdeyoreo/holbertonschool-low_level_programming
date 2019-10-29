@@ -1,7 +1,7 @@
 #include "sort.h"
 
 /**
- * insertion_swap_nodes - Swap two nodes
+ * swap - Swap two nodes
  * @a: a double pointer to a node
  * @b: a double pointer to a node
  */
