@@ -4,8 +4,9 @@
 !.gitignore
 !AUTHORS
 !README.md
-!*.c
-*-main.*
-!*.h
 !*-O
+!*.c
+!*.h
+!*.sh
 !*.txt
+*-main.*
