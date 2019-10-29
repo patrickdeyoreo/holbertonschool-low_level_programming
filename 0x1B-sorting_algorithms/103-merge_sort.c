@@ -25,10 +25,12 @@ void conquer(int *array, int *aux, size_t lsize, size_t rsize)
 	int *lstart = array, *lstop = lstart + lsize;
 	int *rstart = lstop, *rstop = rstart + rsize;
 
-	printf("[Left]: ");
+	printf("Merging...\n");
+
+	printf("[left]: ");
 	print_array(lstart, lsize);
 
-	printf("[Right]: ");
+	printf("[right]: ");
 	print_array(rstart, rsize);
 
 	while (lstart < lstop && rstart < rstop)
