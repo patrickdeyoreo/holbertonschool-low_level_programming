@@ -33,29 +33,27 @@ fi
 colors=( )
 while IFS=$', \t' read -ra numbers
 do
-    if [[ ${numbers[@]} != +([[:digit:]]?(,)*([[:blank:]])) ]]
+    if [[ ${numbers[@]} == +([[:digit:]]?(,)*([[:blank:]])) ]]
     then
-        echo "${numbers[@]}"
-        continue
+      for i in "${!numbers[@]}"
+      do
+          : "${colors[${numbers[i]}]=$((i))}"
+      done
+      for i in "${!numbers[@]}"
+      do
+          numbers[i]="$(
+          tput setaf "$((colors[${numbers[i]}] % 14 + 1))"
+          )$(
+          printf '%02d' "${numbers[i]}"
+          )$(
+          tput sgr0
+          )$(
+          if (( i + 1 < ${#numbers[@]} ))
+          then
+              echo ','
+          fi
+          )"
+      done
     fi
-    for i in "${!numbers[@]}"
-    do
-        : "${colors[${numbers[i]}]=$((i))}"
-    done
-    for i in "${!numbers[@]}"
-    do
-        numbers[i]="$(
-        tput setaf "$((colors[${numbers[i]}] % 14 + 1))"
-        )$(
-        printf '%02d' "${numbers[i]}"
-        )$(
-        tput sgr0
-        )$(
-        if (( i + 1 < ${#numbers[@]} ))
-        then
-            echo ','
-        fi
-        )"
-    done
     echo "${numbers[@]}"
 done < <("$@")
