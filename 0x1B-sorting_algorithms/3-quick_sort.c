@@ -48,16 +48,12 @@ size_t conquer(int *array, size_t size, size_t lower, size_t upper)
  */
 void divide(int *array, size_t size, size_t lower, size_t upper)
 {
-	size_t partition;
+	size_t partition = conquer(array, size, lower, upper);
 
-	if (lower < upper)
-	{
-		partition = conquer(array, size, lower, upper);
-		if (lower < partition)
-			divide(array, size, lower, partition - 1);
-		if (partition < upper)
-			divide(array, size, partition + 1, upper);
-	}
+	if (lower < partition)
+		divide(array, size, lower, partition - 1);
+	if (partition < upper)
+		divide(array, size, partition + 1, upper);
 }
 
 /**
@@ -67,7 +63,6 @@ void divide(int *array, size_t size, size_t lower, size_t upper)
  */
 void quick_sort(int *array, size_t size)
 {
-	if (!array || size < 2)
-		return;
-	divide(array, size, 0, size - 1);
+	if (array && size)
+		divide(array, size, 0, size - 1);
 }
