@@ -3,77 +3,75 @@
 /**
  * cocktail_forward - do a forward pass
  * @list: a double pointer to the head of the list
- * @next: the starting point
- *
- * Return: If a swap occurred, return the tail of the list.
- * Otherwise, return NULL.
+ * @head: the starting point
  */
-listint_t *cocktail_forward(listint_t **list, listint_t *next)
+void cocktail_forward(listint_t **list, listint_t *head)
 {
-	listint_t *curr, *temp;
-	int flag = 0;
+	static int flag;
+	listint_t *curr;
+	listint_t *temp;
 
-	while ((curr = next) && (next = curr->next))
+	flag = 0;
+	while (curr = head, head = head->next)
 	{
-		if (curr->n > next->n)
+		if (curr->n > head->n)
 		{
-			temp = next->next;
-			next->next = curr;
+			flag = 1;
+			temp = head->next;
+			head->next = curr;
 			curr->next = temp;
 			if (temp)
 				temp->prev = curr;
 			temp = curr->prev;
-			curr->prev = next;
-			next->prev = temp;
+			curr->prev = head;
+			head->prev = temp;
 			if (temp)
-				temp->next = next;
-			if (next->prev)
-				print_list(*list);
-			else
-				print_list((*list = next));
-			flag = 1;
-			next = curr;
+				temp->next = head;
+			if (!head->prev)
+				*list = head;
+			print_list(*list);
+			head = curr;
 		}
 	}
-	return (flag ? curr : NULL);
+	if (flag)
+		cocktail_backward(list, curr);
 }
 
 /**
- * cocktail_backward - do a forward pass
+ * cocktail_backward - do a backward pass
  * @list: a double pointer to the head of the list
- * @prev: the starting point
- *
- * Return: If a swap occurred, return the head of the list.
- * Otherwise, return NULL.
+ * @tail: the starting point
  */
-listint_t *cocktail_backward(listint_t **list, listint_t *prev)
+void cocktail_backward(listint_t **list, listint_t *tail)
 {
-	listint_t *curr, *temp;
-	int flag = 0;
+	static int flag;
+	listint_t *curr;
+	listint_t *temp;
 
-	while ((curr = prev) && (prev = curr->prev))
+	flag = 0;
+	while (curr = tail, tail = tail->prev)
 	{
-		if (prev->n > curr->n)
+		if (tail->n > curr->n)
 		{
-			temp = prev->prev;
-			prev->prev = curr;
+			flag = 1;
+			temp = tail->prev;
+			tail->prev = curr;
 			curr->prev = temp;
 			if (temp)
 				temp->next = curr;
 			temp = curr->next;
-			curr->next = prev;
-			prev->next = temp;
+			curr->next = tail;
+			tail->next = temp;
 			if (temp)
-				temp->prev = prev;
-			if (curr->prev)
-				print_list(*list);
-			else
-				print_list((*list = curr));
-			flag = 1;
-			prev = curr;
+				temp->prev = tail;
+			if (!curr->prev)
+				*list = curr;
+			print_list(*list);
+			tail = curr;
 		}
 	}
-	return (flag ? curr : NULL);
+	if (flag)
+		cocktail_forward(list, curr);
 }
 
 /**
@@ -82,7 +80,6 @@ listint_t *cocktail_backward(listint_t **list, listint_t *prev)
  */
 void cocktail_sort_list(listint_t **list)
 {
-	if (list)
-		while (cocktail_backward(list, cocktail_forward(list, *list)))
-			;
+	if (list && *list)
+		cocktail_forward(list, *list);
 }

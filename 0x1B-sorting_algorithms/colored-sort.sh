@@ -2,7 +2,7 @@
 
 if ! (( $# ))
 then
-    printf 1>&2 'usage: %s program [arguments ...]\n' "${0##*/}"
+    printf 1>&2 'usage: %s executable [arguments ...]\n' "${0##*/}"
     exit 2
 fi
 if ! [[ -e $1 ]]
@@ -28,25 +28,24 @@ fi
 colors=( )
 while IFS=$', \t' read -ra numbers
 do
-    if [[ ${numbers[@]} == +([[:digit:]]?(,)*([[:blank:]])) ]]
+    if [[ ${numbers[@]} == +([[:digit:]]*([[:blank:]])) ]]
     then
-      for i in "${!numbers[@]}"
-      do
-          : "${colors[${numbers[i]}]=$((i))}"
-      done
-      for i in "${!numbers[@]}"
-      do
-          numbers[i]="$(
-          tput setaf "$((colors[${numbers[i]}] % 14 + 1))"
-          )$(
-          printf '%02d' "${numbers[i]}"
-          tput sgr0
-          if (( i + 1 < ${#numbers[@]} ))
-          then
-              echo ','
-          fi
-          )"
-      done
+        for i in "${!numbers[@]}"
+        do
+            : "${colors[${numbers[i]}]=${i}}"
+            numbers[i]="$(
+            tput setaf "$((colors[${numbers[i]}] % 14 + 1))"
+            printf '%02d' "${numbers[i]}"
+            tput sgr0
+            if (( i + 1 < ${#numbers[@]} ))
+            then
+                echo ','
+            fi
+            )"
+        done
     fi
     echo "${numbers[@]}"
-done < <("$@")
+    read -t 0.001 -u "${pause}"
+done 0< <("$@") {pause}<> <(:)
+
+exit 0
