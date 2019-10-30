@@ -14,7 +14,7 @@ size_t conquer(int *array, size_t size, size_t lower, size_t upper)
 {
 	size_t index = lower;
 
-	while (index <= upper)
+	while (index < upper)
 	{
 		if (array[index] < array[upper])
 		{
@@ -67,6 +67,6 @@ void divide(int *array, size_t size, size_t lower, size_t upper)
  */
 void quick_sort(int *array, size_t size)
 {
-	if (array && size > 1)
+	if (array && size)
 		divide(array, size, 0, size - 1);
 }
