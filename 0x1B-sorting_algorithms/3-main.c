@@ -11,7 +11,7 @@
 int main(void)
 {
 	int array[] = {19, 48, 99, 71, 13, 52, 96, 73, 86, 7};
-	int arraya[] = {1, 2, INT_MAX, INT_MIN};
+	int arraya[] = {INT_MAX, 1, 2, INT_MIN};
 	int arrayb[] = {1};
 	int arrayc[] = {2, 1};
 	int arrayd[] = {1, 2, 2, 1, 1};
