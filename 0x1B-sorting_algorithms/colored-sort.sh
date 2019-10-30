@@ -28,7 +28,7 @@ fi
 colors=( )
 while IFS=$', \t' read -ra numbers
 do
-    if [[ ${numbers[@]} == +([[:digit:]]*([[:blank:]])) ]]
+    if [[ ${numbers[@]} == +(?(-)[[:digit:]]*([[:blank:]])) ]]
     then
         for i in "${!numbers[@]}"
         do
