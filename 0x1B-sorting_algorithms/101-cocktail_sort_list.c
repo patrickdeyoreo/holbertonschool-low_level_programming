@@ -77,6 +77,6 @@ void cocktail_backward(listint_t **list, listint_t *prev)
  */
 void cocktail_sort_list(listint_t **list)
 {
-	if (list)
+	if (list && *list)
 		cocktail_forward(list, *list);
 }
