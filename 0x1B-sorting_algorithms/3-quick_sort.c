@@ -10,9 +10,9 @@
  *
  * Return: the index of the new partition
  */
-size_t conquer(int *array, size_t size, size_t lower, size_t upper)
+size_t conquer(int *array, size_t size, ssize_t lower, ssize_t upper)
 {
-	size_t index = lower;
+	ssize_t index = lower;
 
 	while (index < upper)
 	{
@@ -46,14 +46,16 @@ size_t conquer(int *array, size_t size, size_t lower, size_t upper)
  * @lower: the lower bound (inclusive)
  * @upper: the upper bound (inclusive)
  */
-void divide(int *array, size_t size, size_t lower, size_t upper)
+void divide(int *array, size_t size, ssize_t lower, ssize_t upper)
 {
-	size_t partition = conquer(array, size, lower, upper);
+	ssize_t partition;
 
-	if (lower < partition)
+	if (lower < upper)
+	{
+		partition = conquer(array, size, lower, upper);
 		divide(array, size, lower, partition - 1);
-	if (partition < upper)
 		divide(array, size, partition + 1, upper);
+	}
 }
 
 /**
