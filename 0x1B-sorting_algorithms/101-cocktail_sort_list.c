@@ -4,9 +4,9 @@
  * cocktail_forward - do a forward pass
  * @list: a double pointer to the head of the list
  */
-void cocktail_forward(listint_t **list)
+void cocktail_forward(listint_t **list, listint_t *next)
 {
-	listint_t *next = *list, *curr, *temp;
+	listint_t *curr, *temp;
 	int flag = 0;
 
 	while ((curr = next) && (next = curr->next))
@@ -68,7 +68,7 @@ void cocktail_backward(listint_t **list, listint_t *prev)
 		}
 	}
 	if (flag)
-		cocktail_forward(list);
+		cocktail_forward(list, curr);
 }
 
 /**
@@ -78,5 +78,5 @@ void cocktail_backward(listint_t **list, listint_t *prev)
 void cocktail_sort_list(listint_t **list)
 {
 	if (list)
-		cocktail_forward(list);
+		cocktail_forward(list, *list);
 }
