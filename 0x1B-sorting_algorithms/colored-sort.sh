@@ -40,9 +40,7 @@ do
           tput setaf "$((colors[${numbers[i]}] % 14 + 1))"
           )$(
           printf '%02d' "${numbers[i]}"
-          )$(
           tput sgr0
-          )$(
           if (( i + 1 < ${#numbers[@]} ))
           then
               echo ','
