@@ -3,8 +3,12 @@
 /**
  * cocktail_forward - do a forward pass
  * @list: a double pointer to the head of the list
+ * @next: the starting point
+ *
+ * Return: If a swap occurred, return the tail of the list.
+ * Otherwise, return NULL.
  */
-void cocktail_forward(listint_t **list, listint_t *next)
+listint_t *cocktail_forward(listint_t **list, listint_t *next)
 {
 	listint_t *curr, *temp;
 	int flag = 0;
@@ -31,16 +35,18 @@ void cocktail_forward(listint_t **list, listint_t *next)
 			next = curr;
 		}
 	}
-	if (flag)
-		cocktail_backward(list, curr);
+	return (flag ? curr : NULL);
 }
 
 /**
  * cocktail_backward - do a forward pass
  * @list: a double pointer to the head of the list
  * @prev: the starting point
+ *
+ * Return: If a swap occurred, return the head of the list.
+ * Otherwise, return NULL.
  */
-void cocktail_backward(listint_t **list, listint_t *prev)
+listint_t *cocktail_backward(listint_t **list, listint_t *prev)
 {
 	listint_t *curr, *temp;
 	int flag = 0;
@@ -67,8 +73,7 @@ void cocktail_backward(listint_t **list, listint_t *prev)
 			prev = curr;
 		}
 	}
-	if (flag)
-		cocktail_forward(list, curr);
+	return (flag ? curr : NULL);
 }
 
 /**
@@ -77,6 +82,7 @@ void cocktail_backward(listint_t **list, listint_t *prev)
  */
 void cocktail_sort_list(listint_t **list)
 {
-	if (list && *list)
-		cocktail_forward(list, *list);
+	if (list)
+		while (cocktail_backward(list, cocktail_forward(list, *list)))
+			;
 }
