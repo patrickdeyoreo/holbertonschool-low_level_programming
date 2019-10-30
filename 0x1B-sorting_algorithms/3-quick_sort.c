@@ -67,6 +67,7 @@ void divide(int *array, size_t size, size_t lower, size_t upper)
  */
 void quick_sort(int *array, size_t size)
 {
-	if (array && size)
-		divide(array, size, 0, size - 1);
+	if (!array || size < 2)
+		return;
+	divide(array, size, 0, size - 1);
 }
