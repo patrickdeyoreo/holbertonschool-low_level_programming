@@ -28,6 +28,7 @@ void cocktail_forward(listint_t **list, listint_t *head);
 void cocktail_backward(listint_t **list, listint_t *tail);
 void merge_sort(int *array, size_t size);
 void shell_sort(int *array, size_t size);
+void counting_sort(int *array, size_t size);
 
 void print_array(const int *array, size_t size);
 void print_list(const listint_t *list);
