@@ -3,11 +3,11 @@
 #include <stdlib.h>
 
 /**
- * find_largest - a function that sorts an array of integers
- * in ascending order using the Counting sort algorithm
+ * getMax - a function that sorts an array of integers
+ * in ascending order using the counting sort algorithm
  * @array: Array to sort
  * @size: size of Array
- * Return: Void
+ * Return: 0
  */
 
 int getMax(int *array, size_t size)
@@ -29,7 +29,7 @@ int getMax(int *array, size_t size)
  * @array: Array to sort
  * @size: size of Array
  * @exp: digit of numbers in array
- * Return: Void
+ * Return: 0
  */
 void radixsort(int *array, int size, int exp)
 {
@@ -58,7 +58,7 @@ void radixsort(int *array, int size, int exp)
  * in ascending order using the Radix sort algorithm
  * @array: Array to sort
  * @size: size of Array
- * Return: Void
+ * Return: 0
  */
 void radix_sort(int *array, size_t size)
 {
