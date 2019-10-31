@@ -31,29 +31,22 @@ then
         exec 0< <("$@")
     fi
 fi
-
-numbers=( ) colors=( ) escapes=( ) reset="$(tput sgr0)"
-
+unset colors escapes numbers reset
 while IFS=$', \t' read -ra numbers
 do
-    read -t "${sleep:=0.03}" -u "${null}" &
+    read -t 0.03 -u "${fd}" &
     if [[ ${numbers[@]} == +(?(-)[[:digit:]]*([[:blank:]])) ]]
     then
         for i in "${!numbers[@]}"
         do
-            printf -v 'numbers[i]' '%s%02d%s' "${escapes[
-            ${colors[${numbers[i]}]=${i}} % 14 + 1
-            ]=$(
+            printf -v 'numbers[i]' '%02d' "${numbers[i]}"
+            numbers[i]="${escapes[${colors[${numbers[i]}]=$((i))} % 14 + 1]=$(
             tput setaf "$((colors[numbers[i]] % 14 + 1))"
-            )}" "${numbers[i]}" "${reset}"
-            if (( i + 1 < ${#numbers[@]} ))
-            then
-                numbers[i]+=','
-            fi
+            )}${numbers[i]}${reset=$(tput sgr0)},"
         done
+        numbers[-1]="${numbers[-1]%,}"
     fi
     echo "${numbers[@]}"
     wait "$!"
-done {null}<> <(:)
-
+done {fd}<> <(:)
 exit 0
