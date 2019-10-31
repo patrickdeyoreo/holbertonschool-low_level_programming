@@ -29,7 +29,7 @@ size_t conquer(int *array, size_t size, ssize_t lower, ssize_t upper)
 		}
 		index += 1;
 	}
-	if (lower != upper && array[lower] != array[upper])
+	if (array[lower] != array[upper])
 	{
 		array[lower] ^= array[upper];
 		array[upper] ^= array[lower];
