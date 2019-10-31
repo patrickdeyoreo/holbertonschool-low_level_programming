@@ -55,8 +55,8 @@ int compare(const void *a, const void *b)
 		"Queen",
 		"King"
 	};
-	int indices[] = {0, 0};
 	const card_t *cards[2];
+	unsigned int indices[] = {0, 0};
 
 	cards[0] = (* (const deck_node_t **) a)->card;
 	cards[1] = (* (const deck_node_t **) b)->card;
@@ -79,27 +79,22 @@ int compare(const void *a, const void *b)
  */
 void sort_deck(deck_node_t **deck)
 {
-	deck_node_t *card, *cards[DECKSIZE];
+	deck_node_t *cards[DECKSIZE], *card;
 	size_t index = 0;
 
 	if (deck)
 	{
 		for (card = *deck; card; card = card->next)
 			cards[index++] = card;
-
 		qsort(cards, DECKSIZE, sizeof(card), compare);
-
-		for (index = 0; index < DECKSIZE; ++index)
+		cards[index = 0]->prev = NULL;
+		while (index < DECKSIZE - 1)
 		{
-			if (index)
-				cards[index]->prev = cards[index - 1];
-			else
-				cards[index]->prev = NULL;
-			if (index + 1 < DECKSIZE)
-				cards[index]->next = cards[index + 1];
-			else
-				cards[index]->next = NULL;
+			cards[index]->next = cards[index + 1];
+			index += 1;
+			cards[index]->prev = cards[index - 1];
 		}
+		cards[index]->next = NULL;
 		*deck = *cards;
 	}
 }
