@@ -7,10 +7,11 @@
  * strcmp - compare two strings
  * @s1: a string to compare
  * @s2: the other string to compare
+ *
  * Return:
- * an integer < 0 if s1 < s2
- * an integer > 0 if s1 > s2
- * 0 otherwise
+ * integer < 0 if s1 < s2,
+ * integer > 0 if s1 > s2,
+ * otherwise 0
  */
 int strcmp(const char *s1, const char *s2)
 {
@@ -34,9 +35,9 @@ int strcmp(const char *s1, const char *s2)
  * @b: a card
  *
  * Return:
- * an integer < 0 if a < b
- * an integer > 0 if a > b
- * 0 otherwise
+ * integer < 0 if a < b,
+ * integer > 0 if a > b,
+ * otherwise 0
  */
 int compare(const void *a, const void *b)
 {
