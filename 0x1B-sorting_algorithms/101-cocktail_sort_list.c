@@ -1,5 +1,10 @@
 #include "sort.h"
 
+/**
+ * swap - swap nodes
+ * @lhs: a pointer to the node before rhs
+ * @rhs: a pointer to the node after lhs
+ */
 void swap(listint_t *lhs, listint_t *rhs)
 {
 	if (rhs->next)
