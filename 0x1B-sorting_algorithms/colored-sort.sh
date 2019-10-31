@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+#
+# Color output for project 0x1B sorting algorithms
 
 if ! (( $# ))
 then
@@ -31,22 +33,28 @@ then
         exec 0< <("$@")
     fi
 fi
-unset colors escapes numbers reset
+
+colors=( ) escapes=( ) numbers=( ) reset="$(tput sgr0)"
+
+for ((i = 1; i < 15; i += 1))
+do
+    escapes[i]="$(tput setaf "$((i))")"
+done
 while IFS=$', \t' read -ra numbers
 do
     read -t 0.03 -u "${fd}" &
     if [[ ${numbers[@]} == +(?(-)[[:digit:]]*([[:blank:]])) ]]
     then
         for i in "${!numbers[@]}"
-        do
-            printf -v 'numbers[i]' '%02d' "${numbers[i]}"
-            numbers[i]="${escapes[${colors[${numbers[i]}]=$((i))} % 14 + 1]=$(
-            tput setaf "$((colors[numbers[i]] % 14 + 1))"
-            )}${numbers[i]}${reset=$(tput sgr0)},"
+        do 
+            printf -v 'numbers[i]' '%s%02d%s,'  \
+                "${escapes[${colors[numbers[i]]=$((i))} % 14 + 1]}" \
+                "${numbers[i]}" "${reset}"
         done
         numbers[-1]="${numbers[-1]%,}"
     fi
     echo "${numbers[@]}"
     wait "$!"
 done {fd}<> <(:)
+
 exit 0
