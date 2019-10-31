@@ -1,5 +1,17 @@
 #include "sort.h"
 
+void swap(listint_t *lhs, listint_t *rhs)
+{
+	if (rhs->next)
+		rhs->next->prev = lhs;
+	if (lhs->prev)
+		lhs->prev->next = rhs;
+	lhs->next = rhs->next;
+	rhs->next = lhs;
+	rhs->prev = lhs->prev;
+	lhs->prev = rhs;
+}
+
 /**
  * cocktail_forward - do a forward pass
  * @list: a double pointer to the head of the list
@@ -7,26 +19,17 @@
  */
 void cocktail_forward(listint_t **list, listint_t *head)
 {
+	static listint_t *stop;
+	static listint_t *curr;
 	static int flag;
-	listint_t *curr;
-	listint_t *temp;
 
 	flag = 0;
-	while (curr = head, head = head->next)
+	while (head != stop && (curr = head, head = head->next))
 	{
 		if (curr->n > head->n)
 		{
 			flag = 1;
-			temp = head->next;
-			head->next = curr;
-			curr->next = temp;
-			if (temp)
-				temp->prev = curr;
-			temp = curr->prev;
-			curr->prev = head;
-			head->prev = temp;
-			if (temp)
-				temp->next = head;
+			swap(curr, head);
 			if (!head->prev)
 				*list = head;
 			print_list(*list);
@@ -34,7 +37,10 @@ void cocktail_forward(listint_t **list, listint_t *head)
 		}
 	}
 	if (flag)
+	{
+		stop = curr;
 		cocktail_backward(list, curr);
+	}
 }
 
 /**
@@ -44,26 +50,17 @@ void cocktail_forward(listint_t **list, listint_t *head)
  */
 void cocktail_backward(listint_t **list, listint_t *tail)
 {
+	static listint_t *stop;
+	static listint_t *curr;
 	static int flag;
-	listint_t *curr;
-	listint_t *temp;
 
 	flag = 0;
-	while (curr = tail, tail = tail->prev)
+	while (tail != stop && (curr = tail, tail = tail->prev))
 	{
 		if (tail->n > curr->n)
 		{
 			flag = 1;
-			temp = tail->prev;
-			tail->prev = curr;
-			curr->prev = temp;
-			if (temp)
-				temp->next = curr;
-			temp = curr->next;
-			curr->next = tail;
-			tail->next = temp;
-			if (temp)
-				temp->prev = tail;
+			swap(tail, curr);
 			if (!curr->prev)
 				*list = curr;
 			print_list(*list);
@@ -71,7 +68,10 @@ void cocktail_backward(listint_t **list, listint_t *tail)
 		}
 	}
 	if (flag)
+	{
+		stop = curr;
 		cocktail_forward(list, curr);
+	}
 }
 
 /**
