@@ -66,7 +66,7 @@ void counting_sort(int *array, size_t size)
 {
 	int max, *unique, *sorted;
 
-	if (!array)
+	if (!array || size < 2)
 		return;
 
 	sorted = malloc(sizeof(*sorted) * size);
