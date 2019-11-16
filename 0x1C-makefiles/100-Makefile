@@ -5,19 +5,19 @@ NAME = holberton
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 SRC = main.c holberton.c
-OBJ = $(patsubst %.c, %.o, ${SRC})
+OBJ = $(patsubst %.c, %.o, $(SRC))
 
 TMPFILES = *~
 
-all: ${OBJ}
-	${CC} $? -o ${NAME}
+all: $(OBJ)
+	$(CC) $? -o $(NAME)
 
 clean:
-	${RM} ${NAME} ${TMPFILES}
+	$(RM) $(NAME) $(TMPFILES)
 
 oclean:
-	${RM} ${OBJ}
+	$(RM) $(OBJ)
 
 fclean: clean oclean
 
-re: oclean obj all
+re: oclean all
