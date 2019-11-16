@@ -7,7 +7,7 @@ CFLAGS = -g -Wall -Werror -Wextra -pedantic
 OBJ = holberton.o main.o
 SRC = holberton.c main.c
 
-TMPFILES = *~ .*.sw[op]
+TMPFILES = *~
 
 RM = rm -f
 
