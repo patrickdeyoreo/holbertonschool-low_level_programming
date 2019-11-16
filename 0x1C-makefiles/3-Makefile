@@ -13,9 +13,6 @@ RM = rm -f
 all: $(OBJ)
 	$(CC) $^ -o $(NAME)
 
-obj: $(SRC)
-	$(CC) $^
-
 clean:
 	$(RM) $(NAME) $(TMPFILES)
 
@@ -24,4 +21,4 @@ oclean:
 
 fclean: clean oclean
 
-re: oclean obj all
+re: oclean all

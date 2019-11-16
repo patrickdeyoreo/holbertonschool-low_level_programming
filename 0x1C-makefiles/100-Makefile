@@ -10,7 +10,7 @@ HEADERS = m.h
 
 TMPFILES = *~
 
-.PHONY: all clean oclean fclean
+.PHONY: all clean oclean fclean re
 
 all: $(HEADERS) $(OBJ)
 	$(CC) $? -o $(NAME)

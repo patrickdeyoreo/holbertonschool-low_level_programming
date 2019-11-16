@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+"""Provides a function to compute the perimeter of an island"""
 
 
 def island_perimeter(grid):
