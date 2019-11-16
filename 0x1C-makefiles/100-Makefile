@@ -6,11 +6,10 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
 SRC = main.c holberton.c
 OBJ = $(patsubst %.c, %.o, $(SRC))
-HEADERS = m.h
 
 TMPFILES = *~
 
-all: $(HEADERS) $(OBJ)
+all: m.h $(OBJ)
 	$(CC) $? -o $(NAME)
 
 clean:
