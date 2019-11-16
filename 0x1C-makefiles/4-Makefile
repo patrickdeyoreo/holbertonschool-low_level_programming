@@ -1,11 +1,11 @@
-# Makefile for holberton, version 0.3
+# Makefile for holberton, version 0.4
 
 NAME = holberton
 
 CC = gcc
-CFLAGS = -g -Wall -Werror -Wextra -pedantic
-OBJ = holberton.o main.o
+CFLAGS = -Wall -Werror -Wextra -pedantic
 SRC = holberton.c main.c
+OBJ = $(patsubst %.c, %.o, $(SRC))
 
 TMPFILES = *~
 

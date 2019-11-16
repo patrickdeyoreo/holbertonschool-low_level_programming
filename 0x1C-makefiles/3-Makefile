@@ -3,9 +3,8 @@
 NAME = holberton
 
 CC = gcc
-#CFLAGS = -Wall -Werror -Wextra -pedantic
-OBJ = holberton.o main.o
 SRC = holberton.c main.c
+OBJ = $(patsubst %.c, %.o, $(SRC))
 
 TMPFILES = *~
 
