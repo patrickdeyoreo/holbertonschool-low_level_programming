@@ -9,19 +9,23 @@ def island_perimeter(grid):
         for x, item in enumerate(row):
             if item == 1:
                 try:
-                    perim += grid[y][x - 1] == 0
+                    if grid[y][x - 1] == 0:
+                        perim += 1
                 except IndexError:
                     perim += 1
                 try:
-                    perim += grid[y][x + 1] == 0
+                    if grid[y][x + 1] == 0:
+                        perim += 1
                 except IndexError:
                     perim += 1
                 try:
-                    perim += grid[y - 1][x] == 0
+                    if grid[y - 1][x] == 0:
+                        perim += 1
                 except IndexError:
                     perim += 1
                 try:
-                    perim += grid[y + 1][x] == 0
+                    if grid[y + 1][x] == 0:
+                        perim += 1
                 except IndexError:
                     perim += 1
     return perim
