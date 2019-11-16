@@ -19,3 +19,8 @@ obj: $(SRC)
 
 clean:
 	$(RM) $(NAME) $(TMPFILES)
+
+oclean:
+	$(RM) $(OBJ)
+
+fclean: clean oclean

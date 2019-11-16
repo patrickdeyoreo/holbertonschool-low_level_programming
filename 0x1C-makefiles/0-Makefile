@@ -13,4 +13,9 @@ all: $(SRC)
 	$(CC) $^ -o $(NAME)
 
 clean:
-	$(RM) $(NAME) $(OBJ)
+	$(RM) $(NAME) $(TMPFILES)
+
+oclean:
+	$(RM) $(OBJ)
+
+fclean: clean oclean
