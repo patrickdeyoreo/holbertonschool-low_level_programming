@@ -4,7 +4,7 @@ NAME = holberton
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
-SRC = holberton.c main.c
+SRC = main.c holberton.c
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
 TMPFILES = *~
@@ -12,10 +12,10 @@ TMPFILES = *~
 RM = rm -f
 
 all: $(OBJ)
-	$(CC) $^ -o $(NAME)
+	$(CC) $? -o $(NAME)
 
 obj: $(SRC)
-	$(CC) $(CFLAGS) $^
+	$(CC) $(CFLAGS) $?
 
 clean:
 	$(RM) $(NAME) $(TMPFILES)

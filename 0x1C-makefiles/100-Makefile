@@ -4,7 +4,7 @@ NAME = holberton
 
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic
-SRC = holberton.c main.c
+SRC = main.c holberton.c
 OBJ = $(patsubst %.c, %.o, ${SRC})
 
 TMPFILES = *~
