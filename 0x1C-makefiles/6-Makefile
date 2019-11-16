@@ -1,0 +1,26 @@
+# Makefile for holberton, version 1.0
+
+NAME = holberton
+
+CC = gcc
+CFLAGS = -Wall -Werror -Wextra -pedantic
+SRC = holberton.c main.c
+OBJ = $(patsubst %.c, %.o, ${SRC})
+
+TMPFILES = *~
+
+all: ${OBJ}
+	${CC} $^ -o ${NAME}
+
+obj: ${SRC}
+	${CC} ${CFLAGS} $^
+
+clean:
+	${RM} ${NAME} ${TMPFILES}
+
+oclean:
+	${RM} ${OBJ}
+
+fclean: clean oclean
+
+re: oclean obj all
