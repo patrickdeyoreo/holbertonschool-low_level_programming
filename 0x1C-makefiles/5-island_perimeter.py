@@ -11,17 +11,17 @@ def island_perimeter(grid):
                 try:
                     perim += grid[y][x - 1] == 0
                 except IndexError:
-                    pass
+                    perim += 1
                 try:
                     perim += grid[y][x + 1] == 0
                 except IndexError:
-                    pass
+                    perim += 1
                 try:
                     perim += grid[y - 1][x] == 0
                 except IndexError:
-                    pass
+                    perim += 1
                 try:
                     perim += grid[y + 1][x] == 0
                 except IndexError:
-                    pass
+                    perim += 1
     return perim
