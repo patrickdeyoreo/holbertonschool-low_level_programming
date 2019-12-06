@@ -1,0 +1,7 @@
+**
+!.gitignore
+!AUTHORS
+!README.md
+!*.h
+!*.c
+!*-O
