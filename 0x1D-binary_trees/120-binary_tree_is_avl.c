@@ -34,7 +34,7 @@ int _binary_tree_is_bst(const binary_tree_t *tree, int lower, int upper)
 	{
 		if (tree->n > lower && tree->n < upper)
 			return (_binary_tree_is_bst(tree->left, lower, tree->n) &&
-					_binary_tree_is_bst(tree->right, tree->n, upper));
+				_binary_tree_is_bst(tree->right, tree->n, upper));
 		return (0);
 	}
 	return (1);
@@ -51,7 +51,7 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 {
 	if (tree)
 		return (_binary_tree_is_bst(tree->left, INT_MIN, tree->n) &&
-				_binary_tree_is_bst(tree->right, tree->n, INT_MAX));
+			_binary_tree_is_bst(tree->right, tree->n, INT_MAX));
 	return (0);
 }
 
@@ -72,7 +72,7 @@ int binary_tree_is_balanced(const binary_tree_t *tree)
 		rhs = binary_tree_height(tree->right);
 		if ((lhs > rhs ? (lhs - rhs) : (rhs - lhs)) <= 1)
 			return (binary_tree_is_balanced(tree->left) &&
-					binary_tree_is_balanced(tree->right));
+				binary_tree_is_balanced(tree->right));
 		return (0);
 	}
 	return (1);
@@ -89,6 +89,6 @@ int binary_tree_is_avl(const binary_tree_t *tree)
 {
 	if (tree)
 		return (binary_tree_is_bst(tree) &&
-				binary_tree_is_balanced(tree));
+			binary_tree_is_balanced(tree));
 	return (0);
 }
