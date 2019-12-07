@@ -72,21 +72,22 @@ bst_t *bst_replace(bst_t **current)
 		else if (target->left)
 		{
 			successor = target->left;
-			successor->parent = target->parent;
 			successor->right = target->right;
 			if (successor->right)
 				successor->right->parent = successor;
+			successor->parent = target->parent;
 		}
 		else if (target->right)
 		{
 			successor = target->right;
-			successor->parent = target->parent;
 			successor->left = target->left;
 			if (successor->left)
 				successor->left->parent = successor;
+			successor->parent = target->parent;
 		}
 	}
-	return ((*current = successor), target);
+	*current = successor;
+	return (target);
 }
 
 
