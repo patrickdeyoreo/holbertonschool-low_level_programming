@@ -4,8 +4,6 @@
 /**
  * binary_tree_height - measure the height of a binary tree
  * @tree: a pointer to the root of the tree
- * @lower: lower bound
- * @upper: upper bound
  *
  * Return: If tree is NULL, return 0.
  * Otherwise, return the height of the tree.
@@ -26,6 +24,8 @@ size_t binary_tree_height(const binary_tree_t *tree)
 /**
  * _binary_tree_is_bst - determine if a binary tree is a BST
  * @tree: the tree to examine
+ * @lower: lower bound
+ * @upper: upper bound
  *
  * Return: If tree is NULL or is not a BST, return 0.
  * Otherwise, return 1.
