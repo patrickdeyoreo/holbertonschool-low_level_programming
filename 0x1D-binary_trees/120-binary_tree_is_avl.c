@@ -4,6 +4,8 @@
 /**
  * binary_tree_height - measure the height of a binary tree
  * @tree: a pointer to the root of the tree
+ * @lower: lower bound
+ * @upper: upper bound
  *
  * Return: If tree is NULL, return 0.
  * Otherwise, return the height of the tree.

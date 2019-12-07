@@ -22,6 +22,7 @@ binary_tree_t *binary_tree_sibling(binary_tree_t *node)
 
 /**
  * binary_tree_uncle - find the uncle of a node
+ * @node: a pointer to the node
  *
  * Return: If node is NULL or does not have a uncle, return NULL.
  * Otherwise, return a pointer to the sibling.
