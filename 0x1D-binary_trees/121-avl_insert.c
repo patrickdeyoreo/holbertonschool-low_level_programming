@@ -25,7 +25,7 @@ avl_state_t _avl_insert2(avl_t **node, avl_t **tree, int value, avl_t **next)
 				*tree = binary_tree_rotate_right(*tree);
 			return (AVL_LCHILD);
 		}
-		if (binary_tree_balance(*tree) < -1)
+		else if (binary_tree_balance(*tree) < -1)
 		{
 			*next = binary_tree_rotate_right(*next);
 			*tree = binary_tree_rotate_left(*tree);
@@ -41,7 +41,7 @@ avl_state_t _avl_insert2(avl_t **node, avl_t **tree, int value, avl_t **next)
 			}
 			return (AVL_LCHILD);
 		}
-		if (binary_tree_balance(*tree) < -1)
+		else if (binary_tree_balance(*tree) < -1)
 			*tree = binary_tree_rotate_left(*tree);
 		return (AVL_RCHILD);
 	default:
