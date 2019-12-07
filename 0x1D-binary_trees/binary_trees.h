@@ -41,15 +41,15 @@ typedef struct pqueue_s
 
 /**
  * enum avl_state_n - a mneumonic for balancing AVL trees
- * @AVL_NEW: insert a new node
- * @AVL_SUBTREE_L: returning from child's left
- * @AVL_SUBTREE_R: returning from child's right
+ * @AVL_NONE: insert a new node
+ * @AVL_LEFT: returning from child's left
+ * @AVL_RIGHT: returning from child's right
  */
 typedef enum avl_state_n
 {
-	AVL_NEW = 0,
-	AVL_SUBTREE_L,
-	AVL_SUBTREE_R
+	AVL_NONE = 0,
+	AVL_LEFT,
+	AVL_RIGHT
 } avl_state_t;
 
 void binary_tree_print(const binary_tree_t *);
