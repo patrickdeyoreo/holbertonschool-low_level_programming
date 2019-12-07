@@ -21,6 +21,7 @@ size_t binary_tree_height(const binary_tree_t *tree)
 
 /**
  * binary_tree_balance - measure the balance factor of a binary tree
+ * @tree: a pointer to the root node of the tree
  *
  * Return: If tree is NULL, return 0.
  * Otherwise, return the balance factor of the tree.
