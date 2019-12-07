@@ -2,6 +2,8 @@
 
 /**
  * array_to_avl - build an AVL tree from an array
+ * @array: source array
+ * @size: size of the array
  *
  * Return: If array is NULL or memory allocation fails, return NULL.
  * Otherwise, return a pointer to the root of the resulting tree.
