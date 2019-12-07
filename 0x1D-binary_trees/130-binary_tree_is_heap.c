@@ -2,25 +2,25 @@
 
 /**
  * queue_insert_sorted - insert an item into a sorted priority queue
- * @front: a double pointer to the front of a queue
+ * @head: a double pointer to the head of a queue
  * @node: a pointer to the node to be added to the queue
  *
- * Return: a pointer to the front of the queue
+ * Return: a pointer to the head of the queue
  */
-pqueue_t *pqueue_insert_sorted(pqueue_t **front, pqueue_t *node)
+pqueue_t *pqueue_insert_sorted(pqueue_t **head, pqueue_t *node)
 {
-	if (front)
+	if (head)
 	{
-		if (*front)
+		if (*head)
 		{
-			if (node->pri >= (*front)->pri)
+			if (node->pri >= (*head)->pri)
 			{
-				pqueue_insert_sorted(&((*front)->next), node);
-				return (*front);
+				pqueue_insert_sorted(&((*head)->next), node);
+				return (*head);
 			}
-			node->next = *front;
+			node->next = *head;
 		}
-		return ((*front = node));
+		return ((*head = node));
 	}
 	return (NULL);
 }
@@ -28,36 +28,36 @@ pqueue_t *pqueue_insert_sorted(pqueue_t **front, pqueue_t *node)
 /**
  * binary_tree_to_queue - build the priority queue
  * @tree: the tree from which to construct a priority queue
- * @front: a double pointer to the front of the queue
+ * @head: a double pointer to the head of the queue
  * @depth: current depth of recursion within this function
  *
- * Return: a pointer to the front of the queue
+ * Return: a pointer to the head of the queue
  */
-pqueue_t *binary_tree_to_queue(const bt_t *tree, pqueue_t **front, size_t depth)
+pqueue_t *binary_tree_to_queue(const bt_t *tree, pqueue_t **head, size_t depth)
 {
 	pqueue_t *temp = NULL;
 
-	if (front)
+	if (head)
 	{
 		if (tree)
 		{
-			binary_tree_to_queue(tree->left, front, depth + 1);
-			binary_tree_to_queue(tree->right, front, depth + 1);
+			binary_tree_to_queue(tree->left, head, depth + 1);
+			binary_tree_to_queue(tree->right, head, depth + 1);
 			temp = calloc(1, sizeof(*temp));
 			if (temp)
 			{
 				temp->item = tree;
 				temp->pri = depth;
-				pqueue_insert_sorted(front, temp);
-				return (*front);
+				pqueue_insert_sorted(head, temp);
+				return (*head);
 			}
-			while ((temp = *front));
+			while ((temp = *head));
 			{
-				front = &((*front)->next);
+				head = &((*head)->next);
 				free(temp);
 			}
 		}
-		return (*front);
+		return (*head);
 	}
 	return (NULL);
 }
@@ -71,38 +71,39 @@ pqueue_t *binary_tree_to_queue(const bt_t *tree, pqueue_t **front, size_t depth)
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	pqueue_t *front = NULL, *temp = NULL;
+	pqueue_t *head = NULL;
+	pqueue_t *temp = NULL;
 	int isfull = 1;
 
 	if (tree)
 	{
-		front = binary_tree_to_queue(tree, &front, 0);
-		while ((temp = front))
+		head = binary_tree_to_queue(tree, &head, 0);
+		while ((temp = head))
 		{
 			if (isfull)
 			{
-				isfull = front->item->left && front->item->right;
-				if (!isfull && front->item->right)
+				isfull = head->item->left && head->item->right;
+				if (!isfull && head->item->right)
 				{
 					do {
-						front = front->next;
+						head = head->next;
 						free(temp);
-					} while ((temp = front));
+					} while ((temp = head));
 					return (0);
 				}
 			}
 			else
 			{
-				if (front->item->left || front->item->right)
+				if (head->item->left || head->item->right)
 				{
 					do {
-						front = front->next;
+						head = head->next;
 						free(temp);
-					} while ((temp = front));
+					} while ((temp = head));
 					return (0);
 				}
 			}
-			front = front->next;
+			head = head->next;
 			free(temp);
 		}
 		return (1);
