@@ -42,7 +42,8 @@ avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
 				(*tree)->right->parent = *tree;
 				if (binary_tree_balance(*tree) > 1)
 				{
-					(*tree)->left = binary_tree_rotate_left((*tree)->left);
+					(*tree)->right = binary_tree_rotate_right((*tree)->right);
+					(*tree)->right->parent = *tree;
 					*tree = binary_tree_rotate_left(*tree);
 				}
 				return (AVL_SUBTREE_R);
@@ -53,7 +54,8 @@ avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
 				(*tree)->left->parent = *tree;
 				if (binary_tree_balance(*tree) < -1)
 				{
-					(*tree)->right = binary_tree_rotate_right((*tree)->right);
+					(*tree)->left = binary_tree_rotate_left((*tree)->left);
+					(*tree)->left->parent = *tree;
 					*tree = binary_tree_rotate_right(*tree);
 				}
 				return (AVL_SUBTREE_L);
@@ -107,6 +109,7 @@ avl_t *avl_insert(avl_t **tree, int value)
 					if (binary_tree_balance(*tree) > 1)
 					{
 						(*tree)->right = binary_tree_rotate_right((*tree)->right);
+						(*tree)->right->parent = *tree;
 						*tree = binary_tree_rotate_left(*tree);
 					}
 				}
@@ -118,6 +121,7 @@ avl_t *avl_insert(avl_t **tree, int value)
 					if (binary_tree_balance(*tree) < -1)
 					{
 						(*tree)->left = binary_tree_rotate_left((*tree)->left);
+						(*tree)->left->parent = *tree;
 						*tree = binary_tree_rotate_right(*tree);
 					}
 				}
