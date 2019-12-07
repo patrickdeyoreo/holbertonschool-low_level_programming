@@ -51,7 +51,7 @@ pqueue_t *binary_tree_to_queue(const bt_t *tree, pqueue_t **head, size_t depth)
 				pqueue_insert_sorted(head, temp);
 				return (*head);
 			}
-			while ((temp = *head));
+			while ((temp = *head))
 			{
 				head = &((*head)->next);
 				free(temp);
