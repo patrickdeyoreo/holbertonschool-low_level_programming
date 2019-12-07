@@ -13,15 +13,44 @@ bst_t *bst_inorder_successor(bst_t *node)
 
 	if (node)
 	{
-		next = next->right;
-		if (next)
+		node = node->right;
+		if (node)
 		{
-			node = next;
+			next = node;
 			while ((next = next->left))
 				node = next;
 		}
 	}
 	return (node);
+}
+
+/**
+ * _bst_replace - replace a node with it's successor a BST
+ * @target: a pointer to the target node
+ *
+ * Return: a pointer to the successor
+ */
+bst_t *_bst_replace(bst_t *target)
+{
+	bst_t *successor = bst_inorder_successor(target);
+
+	if (successor)
+	{
+		successor->left = target->left;
+		if (successor->left)
+			successor->left->parent = successor;
+		if (successor != target->right)
+		{
+			successor->parent->left = successor->right;
+			if (successor->right)
+				successor->right->parent = successor->parent;
+			successor->right = target->right;
+			if (successor->right)
+				successor->right->parent = successor;
+		}
+		successor->parent = target->parent;
+	}
+	return (successor);
 }
 
 /**
@@ -38,20 +67,7 @@ bst_t *bst_replace(bst_t **current)
 	{
 		if (target->left && target->right)
 		{
-			successor = bst_inorder_successor(target);
-			if (successor)
-			{
-				successor->left = target->left;
-				if (successor->left)
-					successor->left->parent = successor;
-				successor->parent->left = successor->right;
-				if (successor->right)
-					successor->right->parent = successor->parent;
-				successor->right = target->right;
-				if (successor->right)
-					successor->right->parent = successor;
-				successor->parent = target->parent;
-			}
+			successor = _bst_replace(target);
 		}
 		else if (target->left)
 		{
@@ -70,8 +86,7 @@ bst_t *bst_replace(bst_t **current)
 				successor->left->parent = successor;
 		}
 	}
-	*current = successor;
-	return (target);
+	return ((*current = successor), target);
 }
 
 
