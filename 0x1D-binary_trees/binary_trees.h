@@ -49,7 +49,7 @@ typedef enum avl_state_n
 {
 	AVL_NEW = 0,
 	AVL_SUBTREE_L,
-	AVL_SUBTREE_R,
+	AVL_SUBTREE_R
 } avl_state_t;
 
 void binary_tree_print(const binary_tree_t *);
