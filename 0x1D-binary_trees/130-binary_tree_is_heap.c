@@ -1,7 +1,7 @@
 #include "binary_trees.h"
 
 /**
- * queue_insert_sorted - insert an item into a sorted priority queue
+ * pqueue_insert_sorted - insert an item into a sorted priority queue
  * @head: a double pointer to the head of a queue
  * @node: a pointer to the node to be added to the queue
  *
