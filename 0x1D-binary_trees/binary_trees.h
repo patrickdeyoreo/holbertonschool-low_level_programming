@@ -39,6 +39,19 @@ typedef struct pqueue_s
 	size_t pri;
 } pqueue_t;
 
+/**
+ * enum avl_state_n - a mneumonic for balancing AVL trees
+ * @AVL_NEW: insert a new node
+ * @AVL_SUBTREE_L: returning from child's left
+ * @AVL_SUBTREE_R: returning from child's right
+ */
+typedef enum avl_state_n
+{
+	AVL_NEW = 0,
+	AVL_SUBTREE_L,
+	AVL_SUBTREE_R,
+} avl_state_t;
+
 void binary_tree_print(const binary_tree_t *);
 binary_tree_t *binary_tree_node(binary_tree_t *parent, int value);
 binary_tree_t *binary_tree_insert_left(binary_tree_t *parent, int value);
