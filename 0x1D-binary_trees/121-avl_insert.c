@@ -1,13 +1,13 @@
 #include "binary_trees.h"
 
 /**
- * _avl_lchild - execute upon return to parent from child's left subtree
+ * _avl_child_l - execute upon return to parent from child's left subtree
  * @tree: a pointer to the node's parent
  * @value: the inserted value
  *
  * Return: the resulting AVL state
  */
-avl_state_t _avl_lchild(avl_t **tree, int value)
+avl_state_t _avl_child_l(avl_t **tree, int value)
 {
 	if (value < (*tree)->n)
 	{
@@ -30,13 +30,13 @@ avl_state_t _avl_lchild(avl_t **tree, int value)
 }
 
 /**
- * _avl_rchild - execute upon return to parent from child's right subtree
+ * _avl_child_r - execute upon return to parent from child's right subtree
  * @tree: a pointer to the node's parent
  * @value: the inserted value
  *
  * Return: the resulting AVL state
  */
-avl_state_t _avl_rchild(avl_t **tree, int value)
+avl_state_t _avl_child_r(avl_t **tree, int value)
 {
 	if (value < (*tree)->n)
 	{
@@ -84,10 +84,10 @@ avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
 	switch (_avl_insert(node, child, value))
 	{
 	case AVL_CHILD_L:
-		return (_avl_lchild(tree, value));
+		return (_avl_child_l(tree, value));
 
 	case AVL_CHILD_R:
-		return (_avl_rchild(tree, value));
+		return (_avl_child_r(tree, value));
 
 	case AVL_CREATE:
 		*node = *child = binary_tree_node(*tree, value);
@@ -122,10 +122,10 @@ avl_t *avl_insert(avl_t **tree, int value)
 	switch (_avl_insert(&node, tree, value))
 	{
 	case AVL_CHILD_L:
-		return (_avl_lchild(tree, value), node);
+		return (_avl_child_l(tree, value), node);
 
 	case AVL_CHILD_R:
-		return (_avl_rchild(tree, value), node);
+		return (_avl_child_r(tree, value), node);
 
 	case AVL_CREATE:
 		if (value < (*tree)->n)
