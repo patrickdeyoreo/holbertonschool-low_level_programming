@@ -1,36 +1,7 @@
 #include "binary_trees.h"
 
 /**
- * _avl_rchild - behavior upon returning from a child's subtree
- * @tree: a pointer to the node's parent
- * @value: the inserted value
- *
- * Return: the resulting AVL state
- */
-avl_state_t _avl_rchild(avl_t **tree, int value)
-{
-	if (value < (*tree)->n)
-	{
-		if (binary_tree_balance(*tree) > 1)
-		{
-			(*tree)->left = binary_tree_rotate_left((*tree)->left);
-			(*tree) = binary_tree_rotate_right(*tree);
-		}
-		return (AVL_CHILD_L);
-	}
-	if (value > (*tree)->n)
-	{
-		if (binary_tree_balance(*tree) < -1)
-		{
-			(*tree) = binary_tree_rotate_left(*tree);
-		}
-		return (AVL_CHILD_R);
-	}
-	return (AVL_RETURN);
-}
-
-/**
- * _avl_lchild - behavior upon returning from a child's subtree
+ * _avl_lchild - execute upon return to parent from child's left subtree
  * @tree: a pointer to the node's parent
  * @value: the inserted value
  *
@@ -51,6 +22,35 @@ avl_state_t _avl_lchild(avl_t **tree, int value)
 		if (binary_tree_balance(*tree) < -1)
 		{
 			(*tree)->right = binary_tree_rotate_right((*tree)->right);
+			(*tree) = binary_tree_rotate_left(*tree);
+		}
+		return (AVL_CHILD_R);
+	}
+	return (AVL_RETURN);
+}
+
+/**
+ * _avl_rchild - execute upon return to parent from child's right subtree
+ * @tree: a pointer to the node's parent
+ * @value: the inserted value
+ *
+ * Return: the resulting AVL state
+ */
+avl_state_t _avl_rchild(avl_t **tree, int value)
+{
+	if (value < (*tree)->n)
+	{
+		if (binary_tree_balance(*tree) > 1)
+		{
+			(*tree)->left = binary_tree_rotate_left((*tree)->left);
+			(*tree) = binary_tree_rotate_right(*tree);
+		}
+		return (AVL_CHILD_L);
+	}
+	if (value > (*tree)->n)
+	{
+		if (binary_tree_balance(*tree) < -1)
+		{
 			(*tree) = binary_tree_rotate_left(*tree);
 		}
 		return (AVL_CHILD_R);
