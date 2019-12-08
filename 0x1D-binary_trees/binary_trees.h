@@ -28,16 +28,18 @@ typedef struct binary_tree_s heap_t;
 
 /**
  * struct pqueue_s - a priority queue node
- * @next: a pointer to the next element in a queue
  * @item: a pointer to the queued item
- * @pri: the priority of the item
+ * @next: a pointer to the next element in a queue
+ * @priority: the priority of the item
  */
-typedef struct priority_queue_s
+typedef struct pqueue_s
 {
-	struct priority_queue_s *next;
-	const struct binary_tree_s *item;
-	size_t pri;
+	const void *item;
+	struct pqueue_s *next;
+	size_t priority;
 } pqueue_t;
+
+typedef struct pqueue_s pq_t;
 
 /**
  * enum avl_state_n - mneumonic for unique states when balancing AVL trees

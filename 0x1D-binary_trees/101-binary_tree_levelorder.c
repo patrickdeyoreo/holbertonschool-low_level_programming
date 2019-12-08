@@ -1,88 +1,57 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_create - dynamically allocate and initialize a new queue node
- * @item: the binary tree node to insert
- * @pri: the priority of the item
+ * pqueue_insert - insert an item into a priority queue
+ * @front: a double pointer to a queue
+ * @item: a pointer to the item to queue
+ * @priority: the item's priority
  *
- * Return: a pointer to the new node
+ * Return: If front is NULL or memory allocation fails, return NULL.
+ * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_create(const bt_t *item, size_t pri)
-{
-	pqueue_t *node = calloc(1, sizeof(*node));
-
-	if (node)
-	{
-		node->item = item;
-		node->pri = pri;
-	}
-	return (node);
-}
-
-/**
- * pqueue_delete - delete an entire priority queue
- * @head: a pointer to the head of the queue
- */
-void pqueue_delete(pqueue_t **head)
+pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
 {
 	pqueue_t *temp = NULL;
 
-	while ((temp = *head))
+	if (front)
 	{
-		*head = (*head)->next;
-		free(temp);
-	}
-}
-/**
- * pqueue_insert_sorted - insert an item into a sorted priority queue
- * @head: a double pointer to the head of a queue
- * @node: a pointer to the node to be added to the queue
- *
- * Return: a pointer to the head of the queue
- */
-pqueue_t *pqueue_insert_sorted(pqueue_t **head, pqueue_t *node)
-{
-	if (head)
-	{
-		if (*head)
+		if (*front && priority >= (*front)->priority)
+			return (pqueue_insert(&((*front)->next), item, priority));
+
+		temp = malloc(sizeof(*temp));
+		if (temp)
 		{
-			if (node->pri >= (*head)->pri)
-			{
-				pqueue_insert_sorted(&((*head)->next), node);
-				return (*head);
-			}
-			node->next = *head;
+			temp->item = item;
+			temp->next = *front;
+			temp->priority = priority;
+			return ((*front = temp));
 		}
-		return ((*head = node));
 	}
 	return (NULL);
 }
 
 /**
- * bt_to_pqueue - build the priority queue
- * @tree: the tree from which to construct a priority queue
- * @head: a double pointer to the head of the queue
- * @depth: current depth of recursion within this function
+ * binary_tree_to_pqueue - queue binary tree nodes in ascending order by depth
+ * @tree: a tree from which to construct the queue
+ * @front: a double pointer to the front of the queue
  *
- * Return: a pointer to the head of the queue
+ * Return: a pointer to the front of the queue
  */
-pqueue_t *bt_to_pqueue(const bt_t *tree, pqueue_t **head, size_t depth)
+pqueue_t *binary_tree_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
 {
-	pqueue_t *temp = NULL;
+	static size_t priority;
 
-	if (head)
+	if (front)
 	{
+		priority += 1;
 		if (tree)
 		{
-			bt_to_pqueue(tree->left, head, depth + 1);
-			bt_to_pqueue(tree->right, head, depth + 1);
-			temp = pqueue_create(tree, depth);
-			if (temp)
-				pqueue_insert_sorted(head, temp);
-			else
-				pqueue_delete(head);
+			binary_tree_to_pqueue(front, tree->left);
+			binary_tree_to_pqueue(front, tree->right);
+			pqueue_insert(front, tree, priority);
 		}
-		return (*head);
+		priority -= 1;
+		return (*front);
 	}
 	return (NULL);
 }
@@ -92,23 +61,20 @@ pqueue_t *bt_to_pqueue(const bt_t *tree, pqueue_t **head, size_t depth)
  * @tree: the tree to traverse
  * @func: the function to apply
  */
-void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
+void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
 {
-	pqueue_t *head = NULL;
+	const binary_tree_t *item = NULL;
+	pqueue_t *front = NULL;
 	pqueue_t *temp = NULL;
 
-	if (tree && func)
+	if (tree && func && binary_tree_to_pqueue(&front, tree))
 	{
-		bt_to_pqueue(tree, &head, 0);
-		if (head)
+		while ((temp = front))
 		{
-			while ((temp = head))
-			{
-				func(head->item->n);
-				head = head->next;
-				free(temp);
-			}
-
+			item = temp->item;
+			func(item->n);
+			front = front->next;
+			free(temp);
 		}
 	}
 }

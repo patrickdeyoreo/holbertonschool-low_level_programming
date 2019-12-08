@@ -21,52 +21,54 @@ const bt_t *binary_tree_find_root(const bt_t *node)
 /**
  * _binary_trees_ancestor - find the least common ancestor of two nodes
  * @root: a pointer to a subtree root
- * @first: a pointer to a descendant
- * @second: a pointer to a descendant
+ * @n1: a pointer to a descendant
+ * @n2: a pointer to a descendant
  *
  * Return: a pointer to the least common ancestor
  */
-const bt_t *_binary_trees_ancestor(
-	const bt_t *root, const bt_t *first, const bt_t *second
-)
+bt_t *_binary_trees_ancestor(const bt_t *root, const bt_t *n1, const bt_t *n2)
 {
-	const bt_t *lhs = NULL, *rhs = NULL;
+	const bt_t *lhs = NULL;
+	const bt_t *rhs = NULL;
 
 	if (root)
 	{
-		if (root == first || root == second)
-			return (root);
+		if (root == n1 || root == n2)
+			return ((bt_t *) root);
 
-		lhs = _binary_trees_ancestor(root->left, first, second);
-		rhs = _binary_trees_ancestor(root->right, first, second);
+		lhs = _binary_trees_ancestor(root->left, n1, n2);
+		rhs = _binary_trees_ancestor(root->right, n1, n2);
 
 		if (lhs && rhs)
-			return (root);
+			return ((bt_t *) root);
 		if (lhs)
-			return (lhs);
+			return ((bt_t *) lhs);
 		if (rhs)
-			return (rhs);
+			return ((bt_t *) rhs);
 	}
 	return (NULL);
 }
 
 /**
  * binary_trees_ancestor - find the least common ancestor of two nodes
- * @first: a pointer to a node
- * @second: a pointer to a node
+ * @n1: a pointer to a node
+ * @n2: a pointer to a node
  *
  * Return: a pointer to the least common ancestor
  */
-bt_t *binary_trees_ancestor(const bt_t *first, const bt_t *second)
+bt_t *binary_trees_ancestor(const bt_t *n1, const bt_t *n2)
 {
-	const bt_t *root1 = binary_tree_find_root(first);
-	const bt_t *root2 = binary_tree_find_root(second);
+	const bt_t *root1 = NULL;
+	const bt_t *root2 = NULL;
 
-	if (first == second)
-		return ((bt_t *) first);
+	if (n1 == n2)
+		return ((bt_t *) n1);
 
-	if (root1 && root2 && root1 == root2)
-		return ((bt_t *) _binary_trees_ancestor(root1, first, second));
+	root1 = binary_tree_find_root(n1);
+	root2 = binary_tree_find_root(n2);
+
+	if (root1 == root2)
+		return ((bt_t *) _binary_trees_ancestor(root1, n1, n2));
 
 	return (NULL);
 }
