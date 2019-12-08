@@ -64,7 +64,7 @@ avl_state_t _avl_child_r(avl_t **tree, int value)
  * @tree: a double pointer to the root of the tree
  * @value: the value to insert
  *
- * Return: a value of type avl_state_t to behavior of previous frames
+ * Return: the current state of AVL insertion
  */
 avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
 {
