@@ -32,26 +32,26 @@ typedef struct binary_tree_s heap_t;
  * @item: a pointer to the queued item
  * @pri: the priority of the item
  */
-typedef struct pqueue_s
+typedef struct priority_queue_s
 {
-	struct pqueue_s *next;
-	const bt_t *item;
+	struct priority_queue_s *next;
+	const struct binary_tree_s *item;
 	size_t pri;
 } pqueue_t;
 
 /**
- * enum avl_state_n - a mneumonic for balancing AVL trees
- * @AVL_EXISTS: element already exists
- * @AVL_INSERT: create and insert a new node
- * @AVL_LCHILD: returned from child's left subtree
- * @AVL_RCHILD: returned from child's right subtree
+ * enum avl_state_n - mneumonic for unique states when balancing AVL trees
+ * @AVL_RETURN: return to caller
+ * @AVL_CREATE: create and insert a node
+ * @AVL_CHILD_L: coming from child's left subtree
+ * @AVL_CHILD_R: coming from child's right subtree
  */
 typedef enum avl_state_n
 {
-	AVL_EXISTS = 0,
-	AVL_INSERT,
-	AVL_LCHILD,
-	AVL_RCHILD
+	AVL_RETURN = 0,
+	AVL_CREATE,
+	AVL_CHILD_L,
+	AVL_CHILD_R
 } avl_state_t;
 
 void binary_tree_print(const binary_tree_t *);

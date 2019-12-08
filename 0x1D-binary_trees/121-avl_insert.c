@@ -1,52 +1,61 @@
 #include "binary_trees.h"
 
-avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value);
+/**
+ * _avl_rchild - behavior upon returning from a child's subtree
+ * @tree: a pointer to the node's parent
+ * @value: the inserted value
+ *
+ * Return: the resulting AVL state
+ */
+avl_state_t _avl_rchild(avl_t **tree, int value)
+{
+	if (value < (*tree)->n)
+	{
+		if (binary_tree_balance(*tree) > 1)
+		{
+			(*tree)->left = binary_tree_rotate_left((*tree)->left);
+			(*tree) = binary_tree_rotate_right(*tree);
+		}
+		return (AVL_CHILD_L);
+	}
+	if (value > (*tree)->n)
+	{
+		if (binary_tree_balance(*tree) < -1)
+		{
+			(*tree) = binary_tree_rotate_left(*tree);
+		}
+		return (AVL_CHILD_R);
+	}
+	return (AVL_RETURN);
+}
 
 /**
- * _avl_insert2 - mutually recurse with _avl_insert
- * @node: a pointer to memory to store a pointer to the new node
- * @tree: a double pointer to the root of the tree
- * @value: the value to insert
- * @next: a double pointer to the root of the next subtree
+ * _avl_lchild - behavior upon returning from a child's subtree
+ * @tree: a pointer to the node's parent
+ * @value: the inserted value
  *
- * Return: a value of type avl_state_t to behavior of previous frames
+ * Return: the resulting AVL state
  */
-avl_state_t _avl_insert2(avl_t **node, avl_t **tree, int value, avl_t **next)
+avl_state_t _avl_lchild(avl_t **tree, int value)
 {
-	switch (_avl_insert(node, next, value))
+	if (value < (*tree)->n)
 	{
-	case AVL_INSERT:
-		*node = *next = binary_tree_node(*tree, value);
-		return (value < (*tree)->n ? AVL_LCHILD : AVL_RCHILD);
-	case AVL_LCHILD:
-		if (value < (*tree)->n)
+		if (binary_tree_balance(*tree) > 1)
 		{
-			if (binary_tree_balance(*tree) > 1)
-				*tree = binary_tree_rotate_right(*tree);
-			return (AVL_LCHILD);
+			(*tree) = binary_tree_rotate_right(*tree);
 		}
-		else if (binary_tree_balance(*tree) < -1)
-		{
-			*next = binary_tree_rotate_right(*next);
-			*tree = binary_tree_rotate_left(*tree);
-		}
-		return (AVL_RCHILD);
-	case AVL_RCHILD:
-		if (value < (*tree)->n)
-		{
-			if (binary_tree_balance(*tree) > 1)
-			{
-				*next = binary_tree_rotate_left(*next);
-				*tree = binary_tree_rotate_right(*tree);
-			}
-			return (AVL_LCHILD);
-		}
-		else if (binary_tree_balance(*tree) < -1)
-			*tree = binary_tree_rotate_left(*tree);
-		return (AVL_RCHILD);
-	default:
-		return (AVL_EXISTS);
+		return (AVL_CHILD_L);
 	}
+	if (value > (*tree)->n)
+	{
+		if (binary_tree_balance(*tree) < -1)
+		{
+			(*tree)->right = binary_tree_rotate_right((*tree)->right);
+			(*tree) = binary_tree_rotate_left(*tree);
+		}
+		return (AVL_CHILD_R);
+	}
+	return (AVL_RETURN);
 }
 
 /**
@@ -59,18 +68,37 @@ avl_state_t _avl_insert2(avl_t **node, avl_t **tree, int value, avl_t **next)
  */
 avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
 {
-	avl_t **next = NULL;
+	avl_t **child = NULL;
 
-	if (*tree)
+	if (!*tree)
+		return (AVL_CREATE);
+
+	if (value == (*tree)->n)
+		return (AVL_RETURN);
+
+	if (value < (*tree)->n)
+		child = &((*tree)->left);
+	else
+		child = &((*tree)->right);
+
+	switch (_avl_insert(node, child, value))
 	{
-		if (value != (*tree)->n)
-		{
-			next = (value < (*tree)->n ? &((*tree)->left) : &((*tree)->right));
-			return (_avl_insert2(node, tree, value, next));
-		}
-		return (AVL_EXISTS);
+	case AVL_CHILD_L:
+		return (_avl_lchild(tree, value));
+
+	case AVL_CHILD_R:
+		return (_avl_rchild(tree, value));
+
+	case AVL_CREATE:
+		*node = *child = binary_tree_node(*tree, value);
+		if (value < (*tree)->n)
+			return (AVL_CHILD_L);
+		else
+			return (AVL_CHILD_R);
+
+	default:
+		return (AVL_RETURN);
 	}
-	return (AVL_INSERT);
 }
 
 /**
@@ -83,7 +111,7 @@ avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
  */
 avl_t *avl_insert(avl_t **tree, int value)
 {
-	avl_t *node = NULL, **next = NULL;
+	avl_t *node = NULL;
 
 	if (!tree)
 		return (NULL);
@@ -91,35 +119,20 @@ avl_t *avl_insert(avl_t **tree, int value)
 	if (!*tree)
 		return ((*tree = binary_tree_node(*tree, value)));
 
-	next = (value < (*tree)->n ? &((*tree)->left) : &((*tree)->right));
 	switch (_avl_insert(&node, tree, value))
 	{
-	case AVL_INSERT:
-		return ((*next = binary_tree_node(*tree, value)));
-	case AVL_LCHILD:
+	case AVL_CHILD_L:
+		return (_avl_lchild(tree, value), node);
+
+	case AVL_CHILD_R:
+		return (_avl_rchild(tree, value), node);
+
+	case AVL_CREATE:
 		if (value < (*tree)->n)
-		{
-			if (binary_tree_balance(*tree) > 1)
-				*tree = binary_tree_rotate_right(*tree);
-		}
-		else if (binary_tree_balance(*tree) < -1)
-		{
-			*next = binary_tree_rotate_right(*next);
-			*tree = binary_tree_rotate_left(*tree);
-		}
-		return (node);
-	case AVL_RCHILD:
-		if (value < (*tree)->n)
-		{
-			if (binary_tree_balance(*tree) > 1)
-			{
-				*next = binary_tree_rotate_left(*next);
-				*tree = binary_tree_rotate_right(*tree);
-			}
-		}
-		else if (binary_tree_balance(*tree) < -1)
-			*tree = binary_tree_rotate_left(*tree);
-		return (node);
+			return ((*tree)->left = binary_tree_node(*tree, value));
+		else
+			return ((*tree)->right = binary_tree_node(*tree, value));
+
 	default:
 		return (NULL);
 	}
