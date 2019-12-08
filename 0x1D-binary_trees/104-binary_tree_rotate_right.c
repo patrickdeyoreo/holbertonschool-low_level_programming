@@ -8,7 +8,7 @@
  */
 binary_tree_t *binary_tree_rotate_right(binary_tree_t *tree)
 {
-	bt_t *node = NULL;
+	binary_tree_t *node = NULL;
 
 	if (tree)
 	{
