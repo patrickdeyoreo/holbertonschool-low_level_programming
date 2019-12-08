@@ -1,63 +1,58 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_insert_sorted - insert an item into a sorted priority queue
- * @head: a double pointer to the head of a queue
- * @node: a pointer to the node to be added to the queue
+ * pqueue_insert - insert an item into a priority queue
+ * @front: a double pointer to a queue
+ * @item: a pointer to the item to queue
+ * @priority: the item's priority
  *
- * Return: a pointer to the head of the queue
+ * Return: If front is NULL or memory allocation fails, return NULL.
+ * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_insert_sorted(pqueue_t **head, pqueue_t *node)
+pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
 {
-	if (head)
+	pqueue_t *temp = NULL;
+
+	if (front)
 	{
-		if (*head)
+		if (*front && priority >= (*front)->priority)
 		{
-			if (node->pri >= (*head)->pri)
-			{
-				pqueue_insert_sorted(&((*head)->next), node);
-				return (*head);
-			}
-			node->next = *head;
+			return (pqueue_insert(&((*front)->next), item, priority));
 		}
-		return ((*head = node));
+		temp = malloc(sizeof(*temp));
+		if (temp)
+		{
+			temp->item = item;
+			temp->next = *front;
+			temp->priority = priority;
+			return ((*front = temp));
+		}
 	}
 	return (NULL);
 }
 
 /**
- * binary_tree_to_queue - build the priority queue
- * @tree: the tree from which to construct a priority queue
- * @head: a double pointer to the head of the queue
- * @depth: current depth of recursion within this function
+ * bt_to_pqueue - build a priority queue of nodes from a binary tree
+ * @tree: a tree from which to construct the queue
+ * @front: a double pointer to the front of the queue
  *
- * Return: a pointer to the head of the queue
+ * Return: a pointer to the front of the queue
  */
-pqueue_t *binary_tree_to_queue(const bt_t *tree, pqueue_t **head, size_t depth)
+pqueue_t *bt_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
 {
-	pqueue_t *temp = NULL;
+	static size_t priority;
 
-	if (head)
+	if (front)
 	{
+		priority += 1;
 		if (tree)
 		{
-			binary_tree_to_queue(tree->left, head, depth + 1);
-			binary_tree_to_queue(tree->right, head, depth + 1);
-			temp = calloc(1, sizeof(*temp));
-			if (temp)
-			{
-				temp->item = tree;
-				temp->pri = depth;
-				pqueue_insert_sorted(head, temp);
-				return (*head);
-			}
-			while ((temp = *head))
-			{
-				head = &((*head)->next);
-				free(temp);
-			}
+			bt_to_pqueue(front, tree->left);
+			bt_to_pqueue(front, tree->right);
+			pqueue_insert(front, tree, priority);
 		}
-		return (*head);
+		priority -= 1;
+		return (*front);
 	}
 	return (NULL);
 }
@@ -71,40 +66,38 @@ pqueue_t *binary_tree_to_queue(const bt_t *tree, pqueue_t **head, size_t depth)
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
-	pqueue_t *head = NULL;
-	pqueue_t *temp = NULL;
+	const bt_t *item = NULL;
+	pqueue_t *front = NULL, *temp = NULL;
 	int isfull = 1;
 
-	if (tree)
+	if (bt_to_pqueue(&front, tree))
 	{
-		head = binary_tree_to_queue(tree, &head, 0);
-		while ((temp = head))
+		while ((temp = front))
 		{
+			item = front->item;
+			front = front->next;
+			free(temp);
+
 			if (isfull)
 			{
-				isfull = head->item->left && head->item->right;
-				if (!isfull && head->item->right)
+				isfull = item->left && item->right;
+
+				if (!isfull && item->right)
 				{
-					do {
-						head = head->next;
-						free(temp);
-					} while ((temp = head));
+					while ((temp = front))
+						front = front->next, free(temp);
 					return (0);
 				}
 			}
 			else
 			{
-				if (head->item->left || head->item->right)
+				if (item->left || item->right)
 				{
-					do {
-						head = head->next;
-						free(temp);
-					} while ((temp = head));
+					while ((temp = front))
+						front = front->next, free(temp);
 					return (0);
 				}
 			}
-			head = head->next;
-			free(temp);
 		}
 		return (1);
 	}
@@ -112,19 +105,19 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 }
 
 /**
- * _binary_tree_is_heap - determine if binary tree is a max heap
+ * binary_subtree_is_heap - determine if binary tree is a max heap
  * @tree: a pointer to the root of the tree
  *
  * Return: If tree is NULL is the tree is not a max heap, return 0.
  * Otherwise, return 1.
  */
-int _binary_tree_is_heap(const binary_tree_t *tree)
+int binary_subtree_is_heap(const binary_tree_t *tree)
 {
 	if (tree)
 	{
-		if (!tree->parent || tree->parent->n >= tree->n)
-			return (_binary_tree_is_heap(tree->left) &&
-					_binary_tree_is_heap(tree->right));
+		if (tree->parent->n >= tree->n)
+			return (binary_subtree_is_heap(tree->left) &&
+					binary_subtree_is_heap(tree->right));
 		return (0);
 	}
 	return (1);
@@ -140,6 +133,8 @@ int _binary_tree_is_heap(const binary_tree_t *tree)
 int binary_tree_is_heap(const binary_tree_t *tree)
 {
 	if (tree)
-		return (binary_tree_is_complete(tree) && _binary_tree_is_heap(tree));
+		return (binary_tree_is_complete(tree) &&
+				binary_subtree_is_heap(tree->left) &&
+				binary_subtree_is_heap(tree->right));
 	return (0);
 }
