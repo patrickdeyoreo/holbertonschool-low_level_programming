@@ -93,9 +93,9 @@ avl_state_t _avl_insert(avl_t **node, avl_t **tree, int value)
 		*node = *child = binary_tree_node(*tree, value);
 		if (value < (*tree)->n)
 			return (AVL_CHILD_L);
-		else
+		if (value > (*tree)->n)
 			return (AVL_CHILD_R);
-
+		/* fallthrough */
 	default:
 		return (AVL_RETURN);
 	}
@@ -130,9 +130,9 @@ avl_t *avl_insert(avl_t **tree, int value)
 	case AVL_CREATE:
 		if (value < (*tree)->n)
 			return ((*tree)->left = binary_tree_node(*tree, value));
-		else
+		if (value > (*tree)->n)
 			return ((*tree)->right = binary_tree_node(*tree, value));
-
+		/* fallthrough */
 	default:
 		return (NULL);
 	}
