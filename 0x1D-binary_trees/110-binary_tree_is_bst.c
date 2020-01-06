@@ -10,7 +10,7 @@
  * Return: If tree is NULL or is not a BST, return 0.
  * Otherwise, return 1.
  */
-int _binary_tree_is_bst(const binary_tree_t *tree, int lower, int upper)
+int _binary_tree_is_bst(const bt_t *tree, int lower, int upper)
 {
 	if (tree)
 	{
@@ -29,7 +29,7 @@ int _binary_tree_is_bst(const binary_tree_t *tree, int lower, int upper)
  * Return: If tree is NULL or is not a BST, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_bst(const binary_tree_t *tree)
+int binary_tree_is_bst(const bt_t *tree)
 {
 	if (tree)
 		return (_binary_tree_is_bst(tree->left, INT_MIN, tree->n) &&

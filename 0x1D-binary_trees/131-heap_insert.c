@@ -1,6 +1,36 @@
 #include "binary_trees.h"
 
 /**
+ * pqueue_insert - insert an element into a priority queue
+ * @front: a double pointer to a queue
+ * @data: a pointer to the element to queue
+ * @pri: the priority of the element
+ *
+ * Return: If front is NULL or memory allocation fails, return NULL.
+ * Otherwise, return a pointer to the new node.
+ */
+pqueue_t *pqueue_insert(pqueue_t **front, const bt_t *data, size_t pri)
+{
+	pqueue_t *temp = NULL;
+
+	if (front)
+	{
+		if (*front && pri >= (*front)->pri)
+			return (pqueue_insert(&((*front)->next), data, pri));
+
+		temp = malloc(sizeof(*temp));
+		if (temp)
+		{
+			temp->data = (bt_t *) data;
+			temp->next = *front;
+			temp->pri = pri;
+			return ((*front = temp));
+		}
+	}
+	return (NULL);
+}
+
+/**
  * pqueue_delete - delete a priority queue
  * @front: a pointer to the front of a queue
  */
@@ -15,37 +45,6 @@ void pqueue_delete(pqueue_t *front)
 	}
 }
 
-
-/**
- * pqueue_insert - insert an item into a priority queue
- * @front: a double pointer to a queue
- * @item: a pointer to the item to queue
- * @priority: the item's priority
- *
- * Return: If front is NULL or memory allocation fails, return NULL.
- * Otherwise, return a pointer to the new node.
- */
-pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
-{
-	pqueue_t *temp = NULL;
-
-	if (front)
-	{
-		if (*front && priority < (*front)->priority)
-			return (pqueue_insert(&((*front)->next), item, priority));
-
-		temp = malloc(sizeof(*temp));
-		if (temp)
-		{
-			temp->item = item;
-			temp->next = *front;
-			temp->priority = priority;
-			return ((*front = temp));
-		}
-	}
-	return (NULL);
-}
-
 /**
  * bt_to_pqueue - build a priority queue of nodes from a binary tree
  * @front: a double pointer to the front of the queue
@@ -53,7 +52,7 @@ pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
  *
  * Return: a pointer to the front of the queue
  */
-pqueue_t *bt_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
+pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
 {
 	if (front)
 	{
@@ -93,25 +92,25 @@ heap_t *heap_insert(heap_t **root, int value)
 	if (front)
 	{
 		parent = child = front;
-		*root = (bt_t *) front->item;
+		*root = front->data;
 		while ((child = child->next))
 		{
-			((bt_t *) child->item)->left = NULL;
-			((bt_t *) child->item)->right = NULL;
-			((bt_t *) child->item)->parent = (bt_t *) parent->item;
-			((bt_t *) parent->item)->left = (bt_t *) child->item;
+			(child->data)->left = NULL;
+			(child->data)->right = NULL;
+			(child->data)->parent = parent->data;
+			(parent->data)->left = child->data;
 
 			child = child->next;
 
 			if (!child)
 			{
-				((bt_t *) parent->item)->right = NULL;
+				(parent->data)->right = NULL;
 				break;
 			}
-			((bt_t *) child->item)->left = NULL;
-			((bt_t *) child->item)->right = NULL;
-			((bt_t *) child->item)->parent = (bt_t *) parent->item;
-			((bt_t *) parent->item)->right = (bt_t *) child->item;
+			(child->data)->left = NULL;
+			(child->data)->right = NULL;
+			(child->data)->parent = parent->data;
+			(parent->data)->right = child->data;
 
 			parent = parent->next;
 		}

@@ -1,30 +1,29 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_insert - insert an item into a priority queue
+ * pqueue_insert - insert an element into a priority queue
  * @front: a double pointer to a queue
- * @item: a pointer to the item to queue
- * @priority: the item's priority
+ * @data: a pointer to the element to queue
+ * @pri: the priority of the element
  *
  * Return: If front is NULL or memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
+pqueue_t *pqueue_insert(pqueue_t **front, const bt_t *data, size_t pri)
 {
 	pqueue_t *temp = NULL;
 
 	if (front)
 	{
-		if (*front && priority >= (*front)->priority)
-		{
-			return (pqueue_insert(&((*front)->next), item, priority));
-		}
+		if (*front && pri >= (*front)->pri)
+			return (pqueue_insert(&((*front)->next), data, pri));
+
 		temp = malloc(sizeof(*temp));
 		if (temp)
 		{
-			temp->item = item;
+			temp->data = data;
 			temp->next = *front;
-			temp->priority = priority;
+			temp->pri = pri;
 			return ((*front = temp));
 		}
 	}
@@ -32,26 +31,61 @@ pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
 }
 
 /**
- * bt_to_pqueue - build a priority queue of nodes from a binary tree
+ * pqueue_pop - pop an element from a priority queue
+ * @front: a pointer to the front of the queue
+ *
+ * Return: a pointer to the popped element
+ */
+const bt_t *pqueue_pop(pqueue_t **front)
+{
+	const bt_t *data = NULL;
+	pqueue_t *temp = front ? *front : NULL;
+
+	if (temp)
+	{
+		*front = temp->next;
+		data = temp->data;
+		free(temp);
+	}
+	return (data);
+}
+
+/**
+ * pqueue_delete - delete a priority queue
+ * @front: a pointer to the front of a queue
+ */
+void pqueue_delete(pqueue_t *front)
+{
+	pqueue_t *temp = NULL;
+
+	while ((temp = front))
+	{
+		front = front->next;
+		free(temp);
+	}
+}
+
+/**
+ * bt_to_pqueue - queue binary tree nodes in ascending order by depth
  * @tree: a tree from which to construct the queue
  * @front: a double pointer to the front of the queue
  *
  * Return: a pointer to the front of the queue
  */
-pqueue_t *bt_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
+pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
 {
-	static size_t priority;
+	static size_t depth;
 
 	if (front)
 	{
-		priority += 1;
+		depth += 1;
 		if (tree)
 		{
 			bt_to_pqueue(front, tree->left);
 			bt_to_pqueue(front, tree->right);
-			pqueue_insert(front, tree, priority);
+			pqueue_insert(front, tree, depth);
 		}
-		priority -= 1;
+		depth -= 1;
 		return (*front);
 	}
 	return (NULL);
@@ -64,63 +98,41 @@ pqueue_t *bt_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
  * Return: If tree is NULL or the tree is not complete, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_complete(const binary_tree_t *tree)
+int binary_tree_is_complete(const bt_t *tree)
 {
-	const bt_t *item = NULL;
-	pqueue_t *front = NULL, *temp = NULL;
-	int isfull = 1;
+	const bt_t *data = NULL;
+	pqueue_t *front = NULL;
+	int comp = 1, full = 1;
 
 	if (bt_to_pqueue(&front, tree))
 	{
-		while ((temp = front))
-		{
-			item = front->item;
-			front = front->next;
-			free(temp);
-
-			if (isfull)
-			{
-				isfull = item->left && item->right;
-
-				if (!isfull && item->right)
-				{
-					while ((temp = front))
-						front = front->next, free(temp);
-					return (0);
-				}
-			}
-			else
-			{
-				if (item->left || item->right)
-				{
-					while ((temp = front))
-						front = front->next, free(temp);
-					return (0);
-				}
-			}
-		}
-		return (1);
+		while (full && (data = pqueue_pop(&front)))
+			full = data->left && data->right;
+		if (data)
+			comp = !data->right;
+		while (comp && (data = pqueue_pop(&front)))
+			comp = !data->left && !data->right;
+		pqueue_delete(front);
+		return (comp);
 	}
 	return (0);
 }
 
 /**
- * binary_subtree_is_heap - determine if binary tree is a max heap
+ * binary_tree_is_descending - determine if binary tree is a max heap
  * @tree: a pointer to the root of the tree
  *
  * Return: If tree is NULL is the tree is not a max heap, return 0.
  * Otherwise, return 1.
  */
-int binary_subtree_is_heap(const binary_tree_t *tree)
+int binary_tree_is_descending(const bt_t *tree)
 {
-	if (tree)
-	{
-		if (tree->parent->n >= tree->n)
-			return (binary_subtree_is_heap(tree->left) &&
-					binary_subtree_is_heap(tree->right));
-		return (0);
-	}
-	return (1);
+	if (!tree)
+		return (1);
+
+	return (tree->parent->n >= tree->n &&
+			binary_tree_is_descending(tree->left) &&
+			binary_tree_is_descending(tree->right));
 }
 
 /**
@@ -130,11 +142,12 @@ int binary_subtree_is_heap(const binary_tree_t *tree)
  * Return: If tree is NULL is the tree is not a max heap, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_heap(const binary_tree_t *tree)
+int binary_tree_is_heap(const bt_t *tree)
 {
-	if (tree)
-		return (binary_tree_is_complete(tree) &&
-				binary_subtree_is_heap(tree->left) &&
-				binary_subtree_is_heap(tree->right));
-	return (0);
+	if (!tree)
+		return (0);
+
+	return (binary_tree_is_complete(tree) &&
+			binary_tree_is_descending(tree->left) &&
+			binary_tree_is_descending(tree->right));
 }

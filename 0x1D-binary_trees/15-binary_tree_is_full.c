@@ -7,7 +7,7 @@
  * Return: If tree is NULL or the tree is not full, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_full(const binary_tree_t *tree)
+int binary_tree_is_full(const bt_t *tree)
 {
 	if (!tree)
 		return (0);

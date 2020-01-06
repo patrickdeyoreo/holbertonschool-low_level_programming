@@ -6,7 +6,7 @@
  *
  * Return: 1 if node is a leaf, otherwise 0
  */
-int binary_tree_is_leaf(const binary_tree_t *node)
+int binary_tree_is_leaf(const bt_t *node)
 {
 	return (node && !node->left && !node->right);
 }
@@ -19,7 +19,7 @@ int binary_tree_is_leaf(const binary_tree_t *node)
  * Return: If tree is NULL or the tree is not perfect, return 0.
  * Otherwise, return 1.
  */
-int _binary_tree_is_perfect(const binary_tree_t *tree, size_t remaining)
+int _binary_tree_is_perfect(const bt_t *tree, size_t remaining)
 {
 	if (tree)
 	{
@@ -38,9 +38,9 @@ int _binary_tree_is_perfect(const binary_tree_t *tree, size_t remaining)
  * Return: If tree is NULL or the tree is not perfect, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_perfect(const binary_tree_t *tree)
+int binary_tree_is_perfect(const bt_t *tree)
 {
-	const binary_tree_t *root = tree;
+	const bt_t *root = tree;
 	size_t levels = 0;
 
 	if (tree)

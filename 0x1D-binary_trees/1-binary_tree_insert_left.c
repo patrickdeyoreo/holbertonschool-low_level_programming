@@ -8,9 +8,9 @@
  * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-binary_tree_t *binary_tree_insert_left(binary_tree_t *parent, int value)
+bt_t *binary_tree_insert_left(bt_t *parent, int value)
 {
-	binary_tree_t *new = NULL;
+	bt_t *new = NULL;
 
 	if (parent)
 	{

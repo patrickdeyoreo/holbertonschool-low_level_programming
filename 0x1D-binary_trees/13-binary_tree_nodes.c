@@ -7,7 +7,7 @@
  * Return: If tree is NULL, return 0.
  * Otherwise the number of non-leaf nodes in a tree.
  */
-size_t binary_tree_nodes(const binary_tree_t *tree)
+size_t binary_tree_nodes(const bt_t *tree)
 {
 	if (!tree)
 		return (0);

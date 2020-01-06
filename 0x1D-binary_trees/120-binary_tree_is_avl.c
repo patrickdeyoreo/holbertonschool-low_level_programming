@@ -8,7 +8,7 @@
  * Return: If tree is NULL, return 0.
  * Otherwise, return the height of the tree.
  */
-size_t binary_tree_height(const binary_tree_t *tree)
+size_t binary_tree_height(const bt_t *tree)
 {
 	size_t lhs, rhs;
 
@@ -30,7 +30,7 @@ size_t binary_tree_height(const binary_tree_t *tree)
  * Return: If tree is NULL or is not a BST, return 0.
  * Otherwise, return 1.
  */
-int _binary_tree_is_bst(const binary_tree_t *tree, int lower, int upper)
+int _binary_tree_is_bst(const bt_t *tree, int lower, int upper)
 {
 	if (tree)
 	{
@@ -49,7 +49,7 @@ int _binary_tree_is_bst(const binary_tree_t *tree, int lower, int upper)
  * Return: If tree is NULL or is not a BST, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_bst(const binary_tree_t *tree)
+int binary_tree_is_bst(const bt_t *tree)
 {
 	if (tree)
 		return (_binary_tree_is_bst(tree->left, INT_MIN, tree->n) &&
@@ -64,7 +64,7 @@ int binary_tree_is_bst(const binary_tree_t *tree)
  * Return: If tree is NULL or is not a valid AVL tree, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_balanced(const binary_tree_t *tree)
+int binary_tree_is_balanced(const bt_t *tree)
 {
 	size_t lhs, rhs;
 
@@ -87,7 +87,7 @@ int binary_tree_is_balanced(const binary_tree_t *tree)
  * Return: If tree is NULL or is not a valid AVL tree, return 0.
  * Otherwise, return 1.
  */
-int binary_tree_is_avl(const binary_tree_t *tree)
+int binary_tree_is_avl(const bt_t *tree)
 {
 	if (tree)
 		return (binary_tree_is_bst(tree) &&

@@ -6,12 +6,11 @@
 #include <stdlib.h>
 
 /**
- * struct binary_tree_s - Binary tree node
- *
- * @n: Integer stored in the node
- * @parent: Pointer to the parent node
- * @left: Pointer to the left child node
- * @right: Pointer to the right child node
+ * struct binary_tree_s - a binary tree node
+ * @n: an integer
+ * @parent: a pointer to the parent node
+ * @left: a pointer to the left child node
+ * @right: a pointer to the right child node
  */
 typedef struct binary_tree_s
 {
@@ -27,19 +26,28 @@ typedef struct binary_tree_s avl_t;
 typedef struct binary_tree_s heap_t;
 
 /**
+ * struct queue_s - a queue node
+ * @data: a pointer to the queued binary tree node
+ * @next: a pointer to the next item in the queue
+ */
+typedef struct queue_s
+{
+	const struct binary_tree_s *data;
+	struct queue_s *next;
+} queue_t;
+
+/**
  * struct pqueue_s - a priority queue node
- * @item: a pointer to the queued item
- * @next: a pointer to the next element in a queue
- * @priority: the priority of the item
+ * @data: a pointer to the queued binary tree node
+ * @next: a pointer to the next item in the queue
+ * @pri: the priority of the queued item
  */
 typedef struct pqueue_s
 {
-	const void *item;
+	struct binary_tree_s *data;
 	struct pqueue_s *next;
-	size_t priority;
+	size_t pri;
 } pqueue_t;
-
-typedef struct pqueue_s pq_t;
 
 /**
  * enum avl_state_n - mneumonic for unique states when balancing AVL trees

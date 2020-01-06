@@ -1,29 +1,29 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_insert - insert an item into a priority queue
+ * pqueue_insert - insert an element into a priority queue
  * @front: a double pointer to a queue
- * @item: a pointer to the item to queue
- * @priority: the item's priority
+ * @data: a pointer to the element to queue
+ * @pri: the priority of the element
  *
  * Return: If front is NULL or memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
+pqueue_t *pqueue_insert(pqueue_t **front, const bt_t *data, size_t pri)
 {
 	pqueue_t *temp = NULL;
 
 	if (front)
 	{
-		if (*front && priority >= (*front)->priority)
-			return (pqueue_insert(&((*front)->next), item, priority));
+		if (*front && pri >= (*front)->pri)
+			return (pqueue_insert(&((*front)->next), data, pri));
 
 		temp = malloc(sizeof(*temp));
 		if (temp)
 		{
-			temp->item = item;
+			temp->data = (bt_t *) data;
 			temp->next = *front;
-			temp->priority = priority;
+			temp->pri = pri;
 			return ((*front = temp));
 		}
 	}
@@ -31,26 +31,26 @@ pqueue_t *pqueue_insert(pqueue_t **front, const void *item, size_t priority)
 }
 
 /**
- * binary_tree_to_pqueue - queue binary tree nodes in ascending order by depth
+ * bt_to_pqueue - queue binary tree nodes in ascending order by depth
  * @tree: a tree from which to construct the queue
  * @front: a double pointer to the front of the queue
  *
  * Return: a pointer to the front of the queue
  */
-pqueue_t *binary_tree_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
+pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
 {
-	static size_t priority;
+	static size_t depth;
 
 	if (front)
 	{
-		priority += 1;
+		depth += 1;
 		if (tree)
 		{
-			binary_tree_to_pqueue(front, tree->left);
-			binary_tree_to_pqueue(front, tree->right);
-			pqueue_insert(front, tree, priority);
+			bt_to_pqueue(front, tree->left);
+			bt_to_pqueue(front, tree->right);
+			pqueue_insert(front, tree, depth);
 		}
-		priority -= 1;
+		depth -= 1;
 		return (*front);
 	}
 	return (NULL);
@@ -61,18 +61,19 @@ pqueue_t *binary_tree_to_pqueue(pqueue_t **front, const binary_tree_t *tree)
  * @tree: the tree to traverse
  * @func: the function to apply
  */
-void binary_tree_levelorder(const binary_tree_t *tree, void (*func)(int))
+void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 {
-	const binary_tree_t *item = NULL;
+	const bt_t *data = NULL;
 	pqueue_t *front = NULL;
 	pqueue_t *temp = NULL;
 
-	if (tree && func && binary_tree_to_pqueue(&front, tree))
+	if (tree && func)
 	{
+		bt_to_pqueue(&front, tree);
 		while ((temp = front))
 		{
-			item = temp->item;
-			func(item->n);
+			data = front->data;
+			func(data->n);
 			front = front->next;
 			free(temp);
 		}

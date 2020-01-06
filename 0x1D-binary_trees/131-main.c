@@ -2,6 +2,16 @@
 #include <stdio.h>
 #include "binary_trees.h"
 
+void binary_tree_delete(binary_tree_t *tree)
+{
+	if (tree)
+	{
+		binary_tree_delete(tree->left);
+		binary_tree_delete(tree->right);
+		free(tree);
+	}
+}
+
 /**
  * main - Entry point
  *
@@ -37,5 +47,6 @@ int main(void)
     node = heap_insert(&root, 50);
     printf("\nInserted: %d\n", node->n);
     binary_tree_print(root);
+    binary_tree_delete(root);
     return (0);
 }

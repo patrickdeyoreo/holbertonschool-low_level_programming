@@ -7,9 +7,9 @@
  * Return: If node is NULL or does not have a sibling, return NULL.
  * Otherwise, return a pointer to the sibling.
  */
-binary_tree_t *binary_tree_sibling(binary_tree_t *node)
+bt_t *binary_tree_sibling(bt_t *node)
 {
-	binary_tree_t *parent = NULL;
+	bt_t *parent = NULL;
 
 	if (node)
 	{
@@ -27,7 +27,7 @@ binary_tree_t *binary_tree_sibling(binary_tree_t *node)
  * Return: If node is NULL or does not have a uncle, return NULL.
  * Otherwise, return a pointer to the sibling.
  */
-binary_tree_t *binary_tree_uncle(binary_tree_t *node)
+bt_t *binary_tree_uncle(bt_t *node)
 {
 	return (node ? binary_tree_sibling(node->parent) : NULL);
 }
