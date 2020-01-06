@@ -1,9 +1,24 @@
 #ifndef BINARY_TREES_H
 #define BINARY_TREES_H
 
-#include <stddef.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+/**
+ * enum avl_state_n - mneumonic for unique states when balancing AVL trees
+ * @AVL_RETURN: return to caller
+ * @AVL_CREATE: create and insert a node
+ * @AVL_CHILD_L: coming from child's left subtree
+ * @AVL_CHILD_R: coming from child's right subtree
+ */
+typedef enum avl_state_n
+{
+	AVL_RETURN = 0,
+	AVL_LCHILD,
+	AVL_RCHILD,
+	AVL_CREATE
+} avl_state_t;
 
 /**
  * struct binary_tree_s - a binary tree node
@@ -27,42 +42,14 @@ typedef struct binary_tree_s heap_t;
 
 /**
  * struct queue_s - a queue node
- * @data: a pointer to the queued binary tree node
+ * @data: a pointer to the queued item
  * @next: a pointer to the next item in the queue
  */
 typedef struct queue_s
 {
-	const struct binary_tree_s *data;
+	struct binary_tree_s *data;
 	struct queue_s *next;
 } queue_t;
-
-/**
- * struct pqueue_s - a priority queue node
- * @data: a pointer to the queued binary tree node
- * @next: a pointer to the next item in the queue
- * @pri: the priority of the queued item
- */
-typedef struct pqueue_s
-{
-	struct binary_tree_s *data;
-	struct pqueue_s *next;
-	size_t pri;
-} pqueue_t;
-
-/**
- * enum avl_state_n - mneumonic for unique states when balancing AVL trees
- * @AVL_RETURN: return to caller
- * @AVL_CREATE: create and insert a node
- * @AVL_CHILD_L: coming from child's left subtree
- * @AVL_CHILD_R: coming from child's right subtree
- */
-typedef enum avl_state_n
-{
-	AVL_RETURN = 0,
-	AVL_CREATE,
-	AVL_CHILD_L,
-	AVL_CHILD_R
-} avl_state_t;
 
 void binary_tree_print(const binary_tree_t *);
 binary_tree_t *binary_tree_node(binary_tree_t *parent, int value);

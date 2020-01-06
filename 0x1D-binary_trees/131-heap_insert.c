@@ -1,71 +1,76 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_insert - insert an element into a priority queue
- * @front: a double pointer to a queue
+ * queue_push - push an element into a queue
+ * @rear: a pointer to the end of the queue
  * @data: a pointer to the element to queue
- * @pri: the priority of the element
  *
- * Return: If front is NULL or memory allocation fails, return NULL.
+ * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_insert(pqueue_t **front, const bt_t *data, size_t pri)
+queue_t *queue_push(queue_t *rear, const bt_t *data)
 {
-	pqueue_t *temp = NULL;
+	queue_t *temp = malloc(sizeof(*temp));
 
-	if (front)
+	if (temp)
 	{
-		if (*front && pri >= (*front)->pri)
-			return (pqueue_insert(&((*front)->next), data, pri));
-
-		temp = malloc(sizeof(*temp));
-		if (temp)
+		temp->data = (bt_t *) data;
+		if (rear)
 		{
-			temp->data = (bt_t *) data;
-			temp->next = *front;
-			temp->pri = pri;
-			return ((*front = temp));
+			temp->next = rear->next;
+			rear->next = temp;
+		}
+		else
+		{
+			temp->next = temp;
 		}
 	}
-	return (NULL);
+	return (temp);
 }
 
 /**
- * pqueue_delete - delete a priority queue
- * @front: a pointer to the front of a queue
- */
-void pqueue_delete(pqueue_t *front)
-{
-	pqueue_t *temp = NULL;
-
-	while ((temp = front))
-	{
-		front = front->next;
-		free(temp);
-	}
-}
-
-/**
- * bt_to_pqueue - build a priority queue of nodes from a binary tree
- * @front: a double pointer to the front of the queue
- * @tree: a tree from which to construct the queue
+ * queue_pop - pop an element from a queue
+ * @rear: a double pointer to the end of the queue
  *
- * Return: a pointer to the front of the queue
+ * Description: This function expects a pointer to a non-empty queue.
+ *
+ * Return: Return a pointer to the popped element.
  */
-pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
+const bt_t *queue_pop(queue_t **rear)
 {
-	if (front)
-	{
-		if (tree)
-		{
-			bt_to_pqueue(front, tree->left);
-			bt_to_pqueue(front, tree->right);
-			pqueue_insert(front, tree, tree->n);
-		}
-		return (*front);
-	}
-	return (NULL);
+	queue_t *front = *rear ? (*rear)->next : NULL;
+	const bt_t *data = front ? front->data : NULL;
+
+	if (*rear == front)
+		*rear = NULL;
+	else
+		(*rear)->next = front->next;
+	free(front);
+
+	return (data);
 }
+
+/**
+ * queue_delete - delete a queue
+ * @rear: a pointer to the rear of the queue
+ */
+void queue_delete(queue_t *rear)
+{
+	queue_t *temp;
+
+	if (rear)
+	{
+		temp = rear->next;
+		rear->next = NULL;
+
+		while ((rear = temp))
+		{
+			temp = temp->next;
+			free(rear);
+		}
+	}
+}
+
 
 /**
  * heap_insert - insert a value into a max heap
@@ -73,48 +78,8 @@ pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
  * @value: a value to be added to the heap
  *
  * Return: If root is NULL or memory allocation fails, return NULL.
- * Otherwise, return a pointer to the newly created node.
+ * Otherwise, return a pointer to the newly inserted node.
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
-	bt_t *item = NULL;
-	pqueue_t *front = NULL, *parent = NULL, *child = NULL;
-
-	if (!root)
-		return (NULL);
-
-	item = binary_tree_node(NULL, value);
-	if (!item)
-		return (NULL);
-
-	bt_to_pqueue(&front, *root);
-	pqueue_insert(&front, item, value);
-	if (front)
-	{
-		parent = child = front;
-		*root = front->data;
-		while ((child = child->next))
-		{
-			(child->data)->left = NULL;
-			(child->data)->right = NULL;
-			(child->data)->parent = parent->data;
-			(parent->data)->left = child->data;
-
-			child = child->next;
-
-			if (!child)
-			{
-				(parent->data)->right = NULL;
-				break;
-			}
-			(child->data)->left = NULL;
-			(child->data)->right = NULL;
-			(child->data)->parent = parent->data;
-			(parent->data)->right = child->data;
-
-			parent = parent->next;
-		}
-	}
-	pqueue_delete(front);
-	return (item);
 }

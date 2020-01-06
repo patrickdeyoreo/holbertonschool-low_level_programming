@@ -19,9 +19,16 @@ void print_num(int n)
  */
 int main(void)
 {
-	binary_tree_t *root;
+	binary_tree_t *root = NULL;
+
+	binary_tree_print(root);
+	binary_tree_levelorder(root, &print_num);
 
 	root = binary_tree_node(NULL, 98);
+
+	binary_tree_print(root);
+	binary_tree_levelorder(root, &print_num);
+
 	root->left = binary_tree_node(root, 12);
 	root->right = binary_tree_node(root, 402);
 	root->left->left = binary_tree_node(root->left, 6);
@@ -35,8 +42,8 @@ int main(void)
 
 	binary_tree_print(root);
 	binary_tree_levelorder(root, &print_num);
-	binary_tree_print(root);
-	binary_tree_levelorder(root, &print_num);
+
 	binary_tree_delete(root);
+
 	return (0);
 }

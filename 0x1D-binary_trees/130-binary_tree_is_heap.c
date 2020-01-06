@@ -1,94 +1,74 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_insert - insert an element into a priority queue
- * @front: a double pointer to a queue
+ * queue_push - push an element into a queue
+ * @rear: a pointer to the end of the queue
  * @data: a pointer to the element to queue
- * @pri: the priority of the element
  *
- * Return: If front is NULL or memory allocation fails, return NULL.
+ * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_insert(pqueue_t **front, const bt_t *data, size_t pri)
+queue_t *queue_push(queue_t *rear, const bt_t *data)
 {
-	pqueue_t *temp = NULL;
-
-	if (front)
-	{
-		if (*front && pri >= (*front)->pri)
-			return (pqueue_insert(&((*front)->next), data, pri));
-
-		temp = malloc(sizeof(*temp));
-		if (temp)
-		{
-			temp->data = data;
-			temp->next = *front;
-			temp->pri = pri;
-			return ((*front = temp));
-		}
-	}
-	return (NULL);
-}
-
-/**
- * pqueue_pop - pop an element from a priority queue
- * @front: a pointer to the front of the queue
- *
- * Return: a pointer to the popped element
- */
-const bt_t *pqueue_pop(pqueue_t **front)
-{
-	const bt_t *data = NULL;
-	pqueue_t *temp = front ? *front : NULL;
+	queue_t *temp = malloc(sizeof(*temp));
 
 	if (temp)
 	{
-		*front = temp->next;
-		data = temp->data;
-		free(temp);
+		temp->data = (bt_t *) data;
+		if (rear)
+		{
+			temp->next = rear->next;
+			rear->next = temp;
+		}
+		else
+		{
+			temp->next = temp;
+		}
 	}
+	return (temp);
+}
+
+/**
+ * queue_pop - pop an element from a queue
+ * @rear: a double pointer to the end of the queue
+ *
+ * Description: This function expects a pointer to a non-empty queue.
+ *
+ * Return: Return a pointer to the popped element.
+ */
+const bt_t *queue_pop(queue_t **rear)
+{
+	queue_t *front = *rear ? (*rear)->next : NULL;
+	const bt_t *data = front ? front->data : NULL;
+
+	if (*rear == front)
+		*rear = NULL;
+	else
+		(*rear)->next = front->next;
+	free(front);
+
 	return (data);
 }
 
 /**
- * pqueue_delete - delete a priority queue
- * @front: a pointer to the front of a queue
+ * queue_delete - delete a queue
+ * @rear: a pointer to the rear of the queue
  */
-void pqueue_delete(pqueue_t *front)
+void queue_delete(queue_t *rear)
 {
-	pqueue_t *temp = NULL;
+	queue_t *temp;
 
-	while ((temp = front))
+	if (rear)
 	{
-		front = front->next;
-		free(temp);
-	}
-}
+		temp = rear->next;
+		rear->next = NULL;
 
-/**
- * bt_to_pqueue - queue binary tree nodes in ascending order by depth
- * @tree: a tree from which to construct the queue
- * @front: a double pointer to the front of the queue
- *
- * Return: a pointer to the front of the queue
- */
-pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
-{
-	static size_t depth;
-
-	if (front)
-	{
-		depth += 1;
-		if (tree)
+		while ((rear = temp))
 		{
-			bt_to_pqueue(front, tree->left);
-			bt_to_pqueue(front, tree->right);
-			pqueue_insert(front, tree, depth);
+			temp = temp->next;
+			free(rear);
 		}
-		depth -= 1;
-		return (*front);
 	}
-	return (NULL);
 }
 
 /**
@@ -96,43 +76,48 @@ pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
  * @tree: a pointer to the root of the tree to examine
  *
  * Return: If tree is NULL or the tree is not complete, return 0.
+ * If memory allocation fails, return -1.
  * Otherwise, return 1.
  */
 int binary_tree_is_complete(const bt_t *tree)
 {
-	const bt_t *data = NULL;
-	pqueue_t *front = NULL;
-	int comp = 1, full = 1;
+	queue_t *new, *rear;
+	bool is_full = true;
 
-	if (bt_to_pqueue(&front, tree))
+	if (tree)
 	{
-		while (full && (data = pqueue_pop(&front)))
-			full = data->left && data->right;
-		if (data)
-			comp = !data->right;
-		while (comp && (data = pqueue_pop(&front)))
-			comp = !data->left && !data->right;
-		pqueue_delete(front);
-		return (comp);
+		rear = queue_push(NULL, tree);
+		while (rear && (tree = queue_pop(&rear)))
+		{
+			if (!is_full)
+			{
+				if (tree->left || tree->right)
+					return (queue_delete(rear), 0);
+			}
+			else
+			{
+				is_full = tree->left && tree->right;
+				if (!is_full && tree->right)
+					return (queue_delete(rear), 0);
+			}
+			if (tree->left)
+			{
+				new = queue_push(rear, tree->left);
+				if (!new)
+					return (queue_delete(rear), -1);
+				rear = new;
+			}
+			if (tree->right)
+			{
+				new = queue_push(rear, tree->right);
+				if (!new)
+					return (queue_delete(rear), -1);
+				rear = new;
+			}
+		}
+		return (1);
 	}
 	return (0);
-}
-
-/**
- * binary_tree_is_descending - determine if binary tree is a max heap
- * @tree: a pointer to the root of the tree
- *
- * Return: If tree is NULL is the tree is not a max heap, return 0.
- * Otherwise, return 1.
- */
-int binary_tree_is_descending(const bt_t *tree)
-{
-	if (!tree)
-		return (1);
-
-	return (tree->parent->n >= tree->n &&
-			binary_tree_is_descending(tree->left) &&
-			binary_tree_is_descending(tree->right));
 }
 
 /**
@@ -144,10 +129,15 @@ int binary_tree_is_descending(const bt_t *tree)
  */
 int binary_tree_is_heap(const bt_t *tree)
 {
-	if (!tree)
-		return (0);
-
-	return (binary_tree_is_complete(tree) &&
-			binary_tree_is_descending(tree->left) &&
-			binary_tree_is_descending(tree->right));
+	return (tree && (
+			tree->parent ?
+			tree->parent->n >= tree->n :
+			binary_tree_is_complete(tree) == 1
+			) && (
+			!tree->left ||
+			binary_tree_is_heap(tree->left)
+			) && (
+			!tree->right ||
+			binary_tree_is_heap(tree->right)
+			));
 }

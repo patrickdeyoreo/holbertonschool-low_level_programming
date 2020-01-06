@@ -1,59 +1,74 @@
 #include "binary_trees.h"
 
 /**
- * pqueue_insert - insert an element into a priority queue
- * @front: a double pointer to a queue
+ * queue_push - push an element into a queue
+ * @rear: a pointer to the end of the queue
  * @data: a pointer to the element to queue
- * @pri: the priority of the element
  *
- * Return: If front is NULL or memory allocation fails, return NULL.
+ * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-pqueue_t *pqueue_insert(pqueue_t **front, const bt_t *data, size_t pri)
+queue_t *queue_push(queue_t *rear, const bt_t *data)
 {
-	pqueue_t *temp = NULL;
+	queue_t *temp = malloc(sizeof(*temp));
 
-	if (front)
+	if (temp)
 	{
-		if (*front && pri >= (*front)->pri)
-			return (pqueue_insert(&((*front)->next), data, pri));
-
-		temp = malloc(sizeof(*temp));
-		if (temp)
+		temp->data = (bt_t *) data;
+		if (rear)
 		{
-			temp->data = (bt_t *) data;
-			temp->next = *front;
-			temp->pri = pri;
-			return ((*front = temp));
+			temp->next = rear->next;
+			rear->next = temp;
+		}
+		else
+		{
+			temp->next = temp;
 		}
 	}
-	return (NULL);
+	return (temp);
 }
 
 /**
- * bt_to_pqueue - queue binary tree nodes in ascending order by depth
- * @tree: a tree from which to construct the queue
- * @front: a double pointer to the front of the queue
+ * queue_pop - pop an element from a queue
+ * @rear: a double pointer to the end of the queue
  *
- * Return: a pointer to the front of the queue
+ * Description: This function expects a pointer to a non-empty queue.
+ *
+ * Return: Return a pointer to the popped element.
  */
-pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
+const bt_t *queue_pop(queue_t **rear)
 {
-	static size_t depth;
+	queue_t *front = *rear ? (*rear)->next : NULL;
+	const bt_t *data = front ? front->data : NULL;
 
-	if (front)
+	if (*rear == front)
+		*rear = NULL;
+	else
+		(*rear)->next = front->next;
+	free(front);
+
+	return (data);
+}
+
+/**
+ * queue_delete - delete a queue
+ * @rear: a pointer to the rear of the queue
+ */
+void queue_delete(queue_t *rear)
+{
+	queue_t *temp;
+
+	if (rear)
 	{
-		depth += 1;
-		if (tree)
+		temp = rear->next;
+		rear->next = NULL;
+
+		while ((rear = temp))
 		{
-			bt_to_pqueue(front, tree->left);
-			bt_to_pqueue(front, tree->right);
-			pqueue_insert(front, tree, depth);
+			temp = temp->next;
+			free(rear);
 		}
-		depth -= 1;
-		return (*front);
 	}
-	return (NULL);
 }
 
 /**
@@ -63,19 +78,34 @@ pqueue_t *bt_to_pqueue(pqueue_t **front, const bt_t *tree)
  */
 void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 {
-	const bt_t *data = NULL;
-	pqueue_t *front = NULL;
-	pqueue_t *temp = NULL;
+	queue_t *new, *rear;
 
 	if (tree && func)
 	{
-		bt_to_pqueue(&front, tree);
-		while ((temp = front))
+		rear = queue_push(NULL, tree);
+		while (rear && (tree = queue_pop(&rear)))
 		{
-			data = front->data;
-			func(data->n);
-			front = front->next;
-			free(temp);
+			if (tree->left)
+			{
+				new = queue_push(rear, tree->left);
+				if (!new)
+				{
+					queue_delete(rear);
+					return;
+				}
+				rear = new;
+			}
+			if (tree->right)
+			{
+				new = queue_push(rear, tree->right);
+				if (!new)
+				{
+					queue_delete(rear);
+					return;
+				}
+				rear = new;
+			}
+			func(tree->n);
 		}
 	}
 }

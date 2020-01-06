@@ -23,10 +23,10 @@ int main(void)
     heap_t *node;
 
     root = NULL;
-    node = heap_insert(&root, 98);
+    node = heap_insert(&root, 402);
     printf("Inserted: %d\n", node->n);
     binary_tree_print(root);
-    node = heap_insert(&root, 402);
+    node = heap_insert(&root, 98);
     printf("\nInserted: %d\n", node->n);
     binary_tree_print(root);
     node = heap_insert(&root, 12);
