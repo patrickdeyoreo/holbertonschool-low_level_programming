@@ -78,28 +78,26 @@ void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 
 	if (tree && func)
 	{
-		rear = queue_push(NULL, tree);
+		queue_push(&rear, tree);
 		while (rear && (tree = queue_pop(&rear)))
 		{
 			if (tree->left)
 			{
-				new = queue_push(&rear, tree->left);
-				if (!new)
+				if (!queue_push(&rear, tree->left))
 				{
 					queue_delete(rear);
-					return;
+					break;
 				}
-				rear = new;
+				rear = rear->next;
 			}
 			if (tree->right)
 			{
-				new = queue_push(&rear, tree->right);
-				if (!new)
+				if (!queue_push(&rear, tree->right))
 				{
 					queue_delete(rear);
-					return;
+					break;
 				}
-				rear = new;
+				rear = rear->next;
 			}
 			func(tree->n);
 		}
