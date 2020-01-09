@@ -74,7 +74,7 @@ void queue_delete(queue_t *rear)
  */
 void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 {
-	queue_t *new, *rear;
+	queue_t *rear;
 
 	if (tree && func)
 	{
