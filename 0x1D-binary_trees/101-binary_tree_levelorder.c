@@ -2,28 +2,24 @@
 
 /**
  * queue_push - push an element into a queue
- * @rear: a pointer to the end of the queue
+ * @rear: a double pointer to the end of the queue
  * @data: a pointer to the element to queue
  *
  * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-queue_t *queue_push(queue_t *rear, const bt_t *data)
+queue_t *queue_push(queue_t **rear, const bt_t *data)
 {
 	queue_t *temp = malloc(sizeof(*temp));
 
 	if (temp)
 	{
-		temp->data = (bt_t *) data;
-		if (rear)
-		{
-			temp->next = rear->next;
-			rear->next = temp;
-		}
+		temp->data = (void *) data;
+		if (*rear)
+			temp->next = (*rear)->next;
 		else
-		{
-			temp->next = temp;
-		}
+			*rear = temp;
+		(*rear)->next = temp;
 	}
 	return (temp);
 }
@@ -38,8 +34,8 @@ queue_t *queue_push(queue_t *rear, const bt_t *data)
  */
 const bt_t *queue_pop(queue_t **rear)
 {
-	queue_t *front = *rear ? (*rear)->next : NULL;
-	const bt_t *data = front ? front->data : NULL;
+	stack_t *front = (*rear)->next;
+	const bt_t *data = front->data;
 
 	if (*rear == front)
 		*rear = NULL;
@@ -87,7 +83,7 @@ void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 		{
 			if (tree->left)
 			{
-				new = queue_push(rear, tree->left);
+				new = queue_push(&rear, tree->left);
 				if (!new)
 				{
 					queue_delete(rear);
@@ -97,7 +93,7 @@ void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 			}
 			if (tree->right)
 			{
-				new = queue_push(rear, tree->right);
+				new = queue_push(&rear, tree->right);
 				if (!new)
 				{
 					queue_delete(rear);

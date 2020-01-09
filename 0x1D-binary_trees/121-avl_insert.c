@@ -1,7 +1,7 @@
 #include "binary_trees.h"
 
 /**
- * _avl_insert_lchild - execute upon return to parent from child's left subtree
+ * _avl_insert_lchild - call upon return to parent from child's left subtree
  * @tree: a pointer to the node's parent
  * @value: the inserted value
  *
@@ -26,7 +26,7 @@ avl_state_t _avl_insert_lchild(avl_t **tree, int value)
 }
 
 /**
- * _avl_insert_rchild - execute upon return to parent from child's right subtree
+ * _avl_insert_rchild - call upon return to parent from child's right subtree
  * @tree: a pointer to the node's parent
  * @value: the inserted value
  *

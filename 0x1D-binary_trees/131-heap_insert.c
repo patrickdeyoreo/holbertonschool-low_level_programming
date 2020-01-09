@@ -2,30 +2,29 @@
 
 /**
  * queue_push - push an element into a queue
- * @rear: a pointer to the end of the queue
+ * @rear: a double pointer to the end of the queue
  * @data: a pointer to the element to queue
  *
  * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-queue_t *queue_push(queue_t *rear, const bt_t *data)
+queue_t *queue_push(queue_t **rear, heap_t *data)
 {
-	queue_t *temp = malloc(sizeof(*temp));
+	queue_t *new = calloc(1, sizeof(*new));
 
-	if (temp)
+	if (new)
 	{
-		temp->data = (bt_t *) data;
+		new->data = (void *) data;
 		if (rear)
 		{
-			temp->next = rear->next;
-			rear->next = temp;
-		}
-		else
-		{
-			temp->next = temp;
+			if (*rear)
+				new->next = (*rear)->next;
+			else
+				*rear = new;
+			(*rear)->next = new;
 		}
 	}
-	return (temp);
+	return (new);
 }
 
 /**
@@ -36,17 +35,16 @@ queue_t *queue_push(queue_t *rear, const bt_t *data)
  *
  * Return: Return a pointer to the popped element.
  */
-const bt_t *queue_pop(queue_t **rear)
+heap_t *queue_pop(queue_t **rear)
 {
-	queue_t *front = *rear ? (*rear)->next : NULL;
-	const bt_t *data = front ? front->data : NULL;
+	queue_t *front = (*rear)->next;
+	heap_t *data = front->data;
 
 	if (*rear == front)
 		*rear = NULL;
 	else
 		(*rear)->next = front->next;
 	free(front);
-
 	return (data);
 }
 
@@ -62,7 +60,6 @@ void queue_delete(queue_t *rear)
 	{
 		temp = rear->next;
 		rear->next = NULL;
-
 		while ((rear = temp))
 		{
 			temp = temp->next;
@@ -71,6 +68,48 @@ void queue_delete(queue_t *rear)
 	}
 }
 
+/**
+ * _heap_insert - insert a value into a max heap
+ * @rear: the rear of an initialized level-order queue
+ * @new: the node to be inserted
+ */
+void _heap_insert(queue_t *rear, heap_t *new)
+{
+	heap_t *current;
+
+	while (rear)
+	{
+		current = queue_pop(&rear);
+		if (!current->left)
+		{
+			new->parent = current;
+			current->left = new;
+			queue_delete(rear);
+			break;
+		}
+		if (!current->right)
+		{
+			new->parent = current;
+			current->right = new;
+			queue_delete(rear);
+			break;
+		}
+		if (!queue_push(&rear, current->left))
+		{
+			free(new);
+			queue_delete(rear);
+			break;
+		}
+		rear = rear->next;
+		if (!queue_push(&rear, current->right))
+		{
+			free(new);
+			queue_delete(rear);
+			break;
+		}
+		rear = rear->next;
+	}
+}
 
 /**
  * heap_insert - insert a value into a max heap
@@ -82,4 +121,32 @@ void queue_delete(queue_t *rear)
  */
 heap_t *heap_insert(heap_t **root, int value)
 {
+	queue_t *rear = NULL;
+	heap_t *new;
+
+	if (!root)
+		return (NULL);
+
+	new = binary_tree_node(NULL, value);
+	if (!new)
+		return (NULL);
+
+	if (!*root)
+		return ((*root = new));
+
+	if (!queue_push(&rear, *root))
+		return (free(new), NULL);
+
+	_heap_insert(rear, new);
+
+	while (new->parent && new->n > new->parent->n)
+	{
+		new->n ^= new->parent->n;
+		new->parent->n ^= new->n;
+		new->n ^= new->parent->n;
+		new = new->parent;
+		if (!new->parent)
+			return ((*root = new));
+	}
+	return (new);
 }

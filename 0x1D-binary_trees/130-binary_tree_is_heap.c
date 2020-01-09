@@ -2,30 +2,29 @@
 
 /**
  * queue_push - push an element into a queue
- * @rear: a pointer to the end of the queue
+ * @rear: a double pointer to the end of the queue
  * @data: a pointer to the element to queue
  *
  * Return: If memory allocation fails, return NULL.
  * Otherwise, return a pointer to the new node.
  */
-queue_t *queue_push(queue_t *rear, const bt_t *data)
+queue_t *queue_push(queue_t **rear, const bt_t *data)
 {
-	queue_t *temp = malloc(sizeof(*temp));
+	queue_t *new = calloc(1, sizeof(*new));
 
-	if (temp)
+	if (new)
 	{
-		temp->data = (bt_t *) data;
+		new->data = (void *) data;
 		if (rear)
 		{
-			temp->next = rear->next;
-			rear->next = temp;
-		}
-		else
-		{
-			temp->next = temp;
+			if (*rear)
+				new->next = (*rear)->next;
+			else
+				*rear = new;
+			(*rear)->next = new;
 		}
 	}
-	return (temp);
+	return (new);
 }
 
 /**
@@ -38,15 +37,14 @@ queue_t *queue_push(queue_t *rear, const bt_t *data)
  */
 const bt_t *queue_pop(queue_t **rear)
 {
-	queue_t *front = *rear ? (*rear)->next : NULL;
-	const bt_t *data = front ? front->data : NULL;
+	queue_t *front = (*rear)->next;
+	const bt_t *data = front->data;
 
 	if (*rear == front)
 		*rear = NULL;
 	else
 		(*rear)->next = front->next;
 	free(front);
-
 	return (data);
 }
 
@@ -62,7 +60,6 @@ void queue_delete(queue_t *rear)
 	{
 		temp = rear->next;
 		rear->next = NULL;
-
 		while ((rear = temp))
 		{
 			temp = temp->next;
@@ -81,43 +78,42 @@ void queue_delete(queue_t *rear)
  */
 int binary_tree_is_complete(const bt_t *tree)
 {
-	queue_t *new, *rear;
+	queue_t *rear = NULL;
 	bool is_full = true;
 
-	if (tree)
+	if (!tree)
+		return (0);
+
+	if (!queue_push(&rear, tree))
+		return (-1);
+	while (rear)
 	{
-		rear = queue_push(NULL, tree);
-		while (rear && (tree = queue_pop(&rear)))
+		tree = queue_pop(&rear);
+		if (is_full)
 		{
-			if (!is_full)
-			{
-				if (tree->left || tree->right)
-					return (queue_delete(rear), 0);
-			}
-			else
-			{
-				is_full = tree->left && tree->right;
-				if (!is_full && tree->right)
-					return (queue_delete(rear), 0);
-			}
-			if (tree->left)
-			{
-				new = queue_push(rear, tree->left);
-				if (!new)
-					return (queue_delete(rear), -1);
-				rear = new;
-			}
-			if (tree->right)
-			{
-				new = queue_push(rear, tree->right);
-				if (!new)
-					return (queue_delete(rear), -1);
-				rear = new;
-			}
+			is_full = tree->left && tree->right;
+			if (!is_full && tree->right)
+				return (queue_delete(rear), 0);
 		}
-		return (1);
+		else
+		{
+			if (tree->left || tree->right)
+				return (queue_delete(rear), 0);
+		}
+		if (tree->left)
+		{
+			if (!queue_push(&rear, tree->left))
+				return (queue_delete(rear), -1);
+			rear = rear->next;
+		}
+		if (tree->right)
+		{
+			if (!queue_push(&rear, tree->right))
+				return (queue_delete(rear), -1);
+			rear = rear->next;
+		}
 	}
-	return (0);
+	return (1);
 }
 
 /**
