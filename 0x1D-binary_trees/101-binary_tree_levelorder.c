@@ -10,18 +10,21 @@
  */
 queue_t *queue_push(queue_t **rear, const bt_t *data)
 {
-	queue_t *temp = malloc(sizeof(*temp));
+	queue_t *new = calloc(1, sizeof(*new));
 
-	if (temp)
+	if (new)
 	{
-		temp->data = (void *) data;
-		if (*rear)
-			temp->next = (*rear)->next;
-		else
-			*rear = temp;
-		(*rear)->next = temp;
+		new->data = (void *) data;
+		if (rear)
+		{
+			if (*rear)
+				new->next = (*rear)->next;
+			else
+				*rear = new;
+			(*rear)->next = new;
+		}
 	}
-	return (temp);
+	return (new);
 }
 
 /**
@@ -34,7 +37,7 @@ queue_t *queue_push(queue_t **rear, const bt_t *data)
  */
 const bt_t *queue_pop(queue_t **rear)
 {
-	stack_t *front = (*rear)->next;
+	queue_t *front = (*rear)->next;
 	const bt_t *data = front->data;
 
 	if (*rear == front)
@@ -42,7 +45,6 @@ const bt_t *queue_pop(queue_t **rear)
 	else
 		(*rear)->next = front->next;
 	free(front);
-
 	return (data);
 }
 
@@ -58,7 +60,6 @@ void queue_delete(queue_t *rear)
 	{
 		temp = rear->next;
 		rear->next = NULL;
-
 		while ((rear = temp))
 		{
 			temp = temp->next;
@@ -74,32 +75,32 @@ void queue_delete(queue_t *rear)
  */
 void binary_tree_levelorder(const bt_t *tree, void (*func)(int))
 {
-	queue_t *rear;
+	queue_t *rear = NULL;
 
 	if (tree && func)
 	{
-		queue_push(&rear, tree);
-		while (rear && (tree = queue_pop(&rear)))
+		if (queue_push(&rear, tree))
 		{
-			if (tree->left)
+			while (rear)
 			{
-				if (!queue_push(&rear, tree->left))
+				tree = queue_pop(&rear);
+				if (tree->left)
 				{
-					queue_delete(rear);
-					break;
+					if (queue_push(&rear, tree->left))
+						rear = rear->next;
+					else
+						break;
 				}
-				rear = rear->next;
-			}
-			if (tree->right)
-			{
-				if (!queue_push(&rear, tree->right))
+				if (tree->right)
 				{
-					queue_delete(rear);
-					break;
+					if (queue_push(&rear, tree->right))
+						rear = rear->next;
+					else
+						break;
 				}
-				rear = rear->next;
+				func(tree->n);
 			}
-			func(tree->n);
+			queue_delete(rear);
 		}
 	}
 }
