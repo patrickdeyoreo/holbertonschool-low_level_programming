@@ -32,9 +32,10 @@ static int _advanced_binary(int *array, size_t lo, size_t hi, int value)
 {
 	size_t mid = (lo + hi) / 2;
 
+	if (lo > hi)
+		return (-1);
+
 	print_array(array, lo, hi);
-	if (lo == hi)
-		return (array[lo] == value ? (int) lo : -1);
 	if (array[mid] < value)
 		return (_advanced_binary(array, mid + 1, hi, value));
 	if (array[mid] > value)
