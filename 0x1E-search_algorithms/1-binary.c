@@ -29,23 +29,26 @@ static void print_array(int *array, size_t lo, size_t hi)
  */
 int binary_search(int *array, size_t size, int value)
 {
-	size_t lo = 0, mid, hi = size - 1;
+	size_t lo, hi;
 
 	if (array)
 	{
+		lo = 0;
+		hi = size - 1;
 		while (lo < hi)
 		{
 			print_array(array, lo, hi);
-			mid = (lo + hi - 1) / 2;
-			if (lo == hi)
-				return (*array == value ? (int) mid : -1);
-			if (array[mid] == value)
-				return mid;
-			if (array[mid] < value)
-				lo += mid + 1;
-			else
-				hi -= mid + 2;
+			if (array[(hi - lo) / 2] < value)
+				lo += (hi - lo) / 2 + 1;
+			if (array[(hi - lo) / 2] > value)
+				hi -= (hi - lo) / 2 + 2;
+			if (array[(hi - lo) / 2] == value)
+				return ((hi - lo) / 2);
 		}
+		print_array(array, lo, hi);
+		if (lo == hi)
+			return (array[lo] == value ? (int) lo : -1);
+
 	}
 	return (-1);
 }
