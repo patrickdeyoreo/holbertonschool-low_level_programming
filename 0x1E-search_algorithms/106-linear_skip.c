@@ -17,33 +17,30 @@
  */
 skiplist_t *linear_skip(skiplist_t *list, int value)
 {
-	skiplist_t *head = list;
+	skiplist_t *tail = list;
 
 	if (list)
 	{
-		while (list->express && value > list->n)
+		while (tail->express && value > tail->n)
 		{
-			head = list;
-			list = list->express;
+			list = tail;
+			tail = tail->express;
+			VALUE_CHECKED(tail->index, tail->n);
+		}
+		if (value > tail->n)
+		{
+			list = tail;
+			while (tail->next)
+				tail = tail->next;
+		}
+		VALUE_BOUNDED(list->index, tail->index);
+		tail = tail->next;
+		while (list != tail)
+		{
 			VALUE_CHECKED(list->index, list->n);
-		}
-		if (value > list->n)
-		{
-			head = list;
-		}
-		while (list->next && value > list->n)
-		{
+			if (list->n == value)
+				return (list);
 			list = list->next;
-			VALUE_CHECKED(list->index, list->n);
-		}
-		VALUE_BOUNDED(head->index, list->index);
-		list = list->next;
-		while (head != list)
-		{
-			VALUE_CHECKED(head->index, head->n);
-			if (head->n == value)
-				return (head);
-			head = head->next;
 		}
 	}
 	return (NULL);
