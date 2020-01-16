@@ -1,5 +1,13 @@
 #include "search_algos.h"
 
+#define FACTOR 2
+
+#define VALUE_CHECKED(array, index) \
+	printf("Value checked array[%lu] = [%d]\n", (index), (array)[index])
+
+#define VALUE_BOUNDED(lower, upper) \
+	printf("Value found between indexes [%lu] and [%lu]\n", (lower), (upper))
+
 /**
  * print_array - print the values in an array
  * @array: the array of values
@@ -52,7 +60,7 @@ static int _binary_search(int *array, size_t lo, size_t hi, int value)
 }
 
 /**
- * binary_search - search for a value in a sorted array of integers
+ * exponential_search - search for a value in a sorted array of integers
  * @array: the array of values
  * @size: the number of values
  * @value: the value to locate
@@ -60,7 +68,22 @@ static int _binary_search(int *array, size_t lo, size_t hi, int value)
  * Return: If value is not present in array or array is NULL, return -1.
  * Otherwise, returh the first index where value is located.
  */
-int binary_search(int *array, size_t size, int value)
+int exponential_search(int *array, size_t size, int value)
 {
-	return (array && size ? _binary_search(array, 0, size - 1, value) : -1);
+	size_t i = 1;
+
+	if (array && size)
+	{
+		while (i < size && array[i] < value)
+		{
+			VALUE_CHECKED(array, i);
+			i *= 2;
+		}
+		VALUE_BOUNDED(i / 2, i - 1);
+		if (size > i)
+			size = i;
+
+		return (_binary_search(array, i / 2, size - 1, value));
+	}
+	return (-1);
 }
