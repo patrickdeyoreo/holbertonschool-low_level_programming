@@ -8,26 +8,32 @@
 	printf("Value found between indexes [%lu] and [%lu]\n", (low), (high))
 
 /**
- * jump_list - search for a value in a sorted list of integers
+ * linear_skip - search for a value in a sorted list of integers
  * @list: list of values
- * @size: number of values
  * @value: value to locate
  *
  * Return: If value is not present in list or list is NULL, return -1.
  * Otherwise, returh the first node where value is located.
  */
-listint_t *jump_list(listint_t *list, size_t size, int value)
+skiplist_t *linear_skip(skiplist_t *list, int value)
 {
-	listint_t *head = list;
-	size_t rep = 0;
+	skiplist_t *head = list;
 
-	if (list && size)
+	if (list)
 	{
-		while (list->next && value > list->n)
+		while (list->express && value > list->n)
 		{
 			head = list;
-			for (rep = sqrt(size); list->next && rep; --rep)
-				list = list->next;
+			list = list->express;
+			VALUE_CHECKED(list->index, list->n);
+		}
+		if (value > list->n)
+		{
+			head = list;
+		}
+		while (list->next && value > list->n)
+		{
+			list = list->next;
 			VALUE_CHECKED(list->index, list->n);
 		}
 		VALUE_BOUNDED(head->index, list->index);
