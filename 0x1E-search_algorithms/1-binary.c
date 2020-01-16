@@ -2,9 +2,9 @@
 
 /**
  * print_array - print the values in an array
- * @array: array of values to print
- * @lo: the smallest index to print
- * @hi: the greatest index to print
+ * @array: the array of values
+ * @lo: the smallest index
+ * @hi: the greatest index
  */
 static void print_array(int *array, size_t lo, size_t hi)
 {
@@ -29,23 +29,28 @@ static void print_array(int *array, size_t lo, size_t hi)
  */
 int binary_search(int *array, size_t size, int value)
 {
-	size_t lo, mid, hi;
+	size_t lo = 0, hi = size - 1, mid = 0;
 
 	if (array && size)
 	{
-		lo = 0;
-		hi = size - 1;
-		while (print_array(array, lo, hi), lo < hi)
+		while (1)
 		{
 			mid = (lo + hi) / 2;
+
+			print_array(array, lo, hi);
+
+			if (lo == hi)
+				return (array[lo] == value ? (int) lo : -1);
+
 			if (array[mid] == value)
 				return (mid);
+
 			if (array[mid] < value)
 				lo = mid + 1;
 			else
 				hi = mid - 1;
 		}
-		return (array[lo] == value ? (int) lo : -1);
+
 	}
 	return (-1);
 }

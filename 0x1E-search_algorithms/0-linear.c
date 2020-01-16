@@ -5,9 +5,9 @@
 
 /**
  * linear_search - search for a value in an array of integers
- * @array: array of values to search
- * @size: size of the array
- * @value: value to find
+ * @array: the array of values
+ * @size: the number of values
+ * @value: the value to locate
  *
  * Return: If value is not present in array or array is NULL, return -1.
  * Otherwise, returh the first index where value is located.
