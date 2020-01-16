@@ -1,12 +1,10 @@
 #include "search_algos.h"
 
-#define JUMPSIZE 3
+#define VALUE_CHECKED(idx, item) \
+	printf("Value checked array[%lu] = [%d]\n", (idx), (item))
 
-#define VALUE_CHECKED(array, index) \
-	printf("Value checked array[%lu] = [%d]\n", (index), (array)[index])
-
-#define VALUE_BOUNDED(lower, upper) \
-	printf("Value found between indexes [%lu] and [%lu]\n", (lower), (upper))
+#define VALUE_BOUNDED(low, high) \
+	printf("Value found between indexes [%lu] and [%lu]\n", (low), (high))
 
 /**
  * jump_search - search for a value in a sorted array of integers
@@ -19,22 +17,24 @@
  */
 int jump_search(int *array, size_t size, int value)
 {
-	size_t i;
+	size_t i = 0, j = 0;
 
 	if (array && size)
 	{
-		for (i = 0; i < size && array[i] < value; i += JUMPSIZE)
+		while (j < size && array[j] < value)
 		{
-			VALUE_CHECKED(array, i);
+			VALUE_CHECKED(j, array[j]);
+			i = j, j += 3;
 		}
-		VALUE_BOUNDED(i - JUMPSIZE, i);
-		if (size > i)
-			size = i + 1;
-		for (i -= JUMPSIZE; i < size; ++i)
+		VALUE_BOUNDED(i, j);
+		if (size <= j)
+			j = size - 1;
+		while (i <= j)
 		{
-			VALUE_CHECKED(array, i);
+			VALUE_CHECKED(i, array[i]);
 			if (array[i] == value)
 				return (i);
+			++i;
 		}
 	}
 	return (-1);

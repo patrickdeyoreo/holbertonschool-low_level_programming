@@ -1,10 +1,10 @@
 #include "search_algos.h"
 
-#define VALUE_CHECKED(array, index) \
-	printf("Value checked array[%lu] = [%d]\n", (index), (array)[index])
+#define VALUE_CHECKED(idx, item) \
+	printf("Value checked array[%lu] = [%d]\n", (idx), (item))
 
-#define VALUE_BOUNDED(lower, upper) \
-	printf("Value found between indexes [%lu] and [%lu]\n", (lower), (upper))
+#define VALUE_BOUNDED(low, high) \
+	printf("Value found between indexes [%lu] and [%lu]\n", (low), (high))
 
 /**
  * print_array - print the values in an array
@@ -68,20 +68,19 @@ static int _binary_search(int *array, size_t lo, size_t hi, int value)
  */
 int exponential_search(int *array, size_t size, int value)
 {
-	size_t i = 1;
+	size_t i = 0, j = 1;
 
 	if (array && size)
 	{
-		while (i < size && array[i] < value)
+		while (j < size && array[j] < value)
 		{
-			VALUE_CHECKED(array, i);
-			i *= 2;
+			VALUE_CHECKED(j, array[j]);
+			i = j, j *= 2;
 		}
-		VALUE_BOUNDED(i / 2, i - 1);
-		if (size > i)
-			size = i;
-
-		return (_binary_search(array, i / 2, size - 1, value));
+		if (size <= j)
+			j = size - 1;
+		VALUE_BOUNDED(i, j);
+		return (_binary_search(array, i, j, value));
 	}
 	return (-1);
 }
