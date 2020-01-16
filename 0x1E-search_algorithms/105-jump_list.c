@@ -2,7 +2,7 @@
 #include <math.h>
 
 #define VALUE_CHECKED(idx, item) \
-	printf("Value checked array[%lu] = [%d]\n", (idx), (item))
+	printf("Value checked at index [%lu] = [%d]\n", (idx), (item))
 
 #define VALUE_BOUNDED(low, high) \
 	printf("Value found between indexes [%lu] and [%lu]\n", (low), (high))
