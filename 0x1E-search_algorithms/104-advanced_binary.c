@@ -30,22 +30,17 @@ static void print_array(int *array, size_t lo, size_t hi)
  */
 static int _advanced_binary(int *array, size_t lo, size_t hi, int value)
 {
-	size_t mid;
+	size_t mid = (lo + hi) / 2;
 
 	print_array(array, lo, hi);
-
 	if (lo == hi)
 		return (array[lo] == value ? (int) lo : -1);
-
-	mid = (lo + hi) / 2;
-
 	if (array[mid] < value)
 		return (_advanced_binary(array, mid + 1, hi, value));
 	if (array[mid] > value)
 		return (_advanced_binary(array, lo, mid - 1, value));
-	if (lo != mid)
+	if (array[mid - 1] == value)
 		return (_advanced_binary(array, lo, mid, value));
-
 	return (mid);
 }
 
