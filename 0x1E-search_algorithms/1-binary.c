@@ -1,44 +1,21 @@
 #include "search_algos.h"
 
 /**
- * print_array - print a slice of an array
+ * print_array - print the values in an array
  * @array: array of values to print
- * @lower: lower bound
- * @upper: upper bound
+ * @lo: the smallest index to print
+ * @hi: the greatest index to print
  */
-static void print_array(int *array, size_t lower, size_t upper)
+static void print_array(int *array, size_t lo, size_t hi)
 {
-	while (lower < upper)
-	{
-		printf("%d", array[lower]);
-		printf(++lower < upper ? ", " : "\n");
-	}
-}
-
-/**
- * _binary_search - search for a value in a sorted array of integers
- * @array: array of values to search
- * @value: value to find
- * @lower: lower bound
- * @upper: upper bound
- *
- * Return: If value is not present in array or array is NULL, return -1.
- * Otherwise, returh the index where value is located.
- */
-int _binary_search(int *array, int value, size_t lower, size_t upper)
-{
-	size_t middle = (lower + upper - 1) / 2;
-
 	printf("Searching in array: ");
-	print_array(array, lower, upper);
-
-	if (upper - lower == 1)
-		return (array[middle] == value ? (int) middle : -1);
-	if (array[middle] < value)
-		return (_binary_search(array, value, middle + 1, upper));
-	if (array[middle] > value)
-		return (_binary_search(array, value, lower, middle));
-	return (middle);
+	while (lo <= hi)
+	{
+		if (lo < hi)
+			printf("%d, ", array[lo++]);
+		else
+			printf("%d\n", array[lo++]);
+	}
 }
 
 /**
@@ -52,5 +29,23 @@ int _binary_search(int *array, int value, size_t lower, size_t upper)
  */
 int binary_search(int *array, size_t size, int value)
 {
-	return (array && size ? _binary_search(array, value, 0, size) : -1);
+	size_t lo = 0, mid, hi = size - 1;
+
+	if (array)
+	{
+		while (lo < hi)
+		{
+			print_array(array, lo, hi);
+			mid = (lo + hi - 1) / 2;
+			if (lo == hi)
+				return (*array == value ? (int) mid : -1);
+			if (array[mid] == value)
+				return mid;
+			if (array[mid] < value)
+				lo += mid + 1;
+			else
+				hi -= mid + 2;
+		}
+	}
+	return (-1);
 }
