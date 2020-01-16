@@ -19,41 +19,33 @@ static void print_array(int *array, size_t lo, size_t hi)
 }
 
 /**
- * _binary_search - search for a value in a sorted array of integers
- * @array: array of values to search
- * @lo: the smallest index to print
- * @hi: the greatest index to print
- * @value: value to find
- *
- * Return: If value is not present in array or array is NULL, return -1.
- * Otherwise, returh the first index where value is located.
- */
-int _binary_search(int *array, size_t lo, size_t hi, int value)
-{
-	size_t mid = (lo + hi) / 2;
-
-	print_array(array, lo, hi);
-
-	if (lo == hi)
-		return (array[mid] == value ? (int) mid : -1);
-	if (array[mid] < value)
-		return (_binary_search(array, mid + 1, hi, value));
-	if (array[mid] > value)
-		return (_binary_search(array, lo, mid - 1, value));
-
-	return (mid);
-}
-
-/**
  * binary_search - search for a value in a sorted array of integers
- * @array: array of values to search
- * @size: size of the array
- * @value: value to find
+ * @array: the array of values
+ * @size: the number of values
+ * @value: the value to locate
  *
  * Return: If value is not present in array or array is NULL, return -1.
  * Otherwise, returh the first index where value is located.
  */
 int binary_search(int *array, size_t size, int value)
 {
-	return (array && size ? _binary_search(array, 0, size - 1, value) : -1);
+	size_t lo, mid, hi;
+
+	if (array && size)
+	{
+		lo = 0;
+		hi = size - 1;
+		while (print_array(array, lo, hi), lo < hi)
+		{
+			mid = (lo + hi) / 2;
+			if (array[mid] == value)
+				return (mid);
+			if (array[mid] < value)
+				lo = mid + 1;
+			else
+				hi = mid - 1;
+		}
+		return (array[lo] == value ? (int) lo : -1);
+	}
+	return (-1);
 }
