@@ -1,7 +1,5 @@
 #include "search_algos.h"
 
-#define FACTOR 2
-
 #define VALUE_CHECKED(array, index) \
 	printf("Value checked array[%lu] = [%d]\n", (index), (array)[index])
 
