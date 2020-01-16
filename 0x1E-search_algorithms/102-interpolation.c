@@ -1,9 +1,9 @@
 #include "search_algos.h"
 
-#define VALUE_CHECKED(array, index) \
+#define PRINT_CHECKED(array, index) \
 	(printf("Value checked array[%lu] = [%d]\n", (mid), (array)[mid]))
 
-#define VALUE_NOT_IN_RANGE(index) \
+#define PRINT_NOT_IN_RANGE(index) \
 	(printf("Value checked array[%lu] is out of range\n", (mid)))
 
 #define MID_POS(arr, lo, hi, val) \
@@ -31,7 +31,7 @@ int interpolation_search(int *array, size_t size, int value)
 			if (mid > hi)
 				break;
 
-			VALUE_CHECKED(array, mid);
+			PRINT_CHECKED(array, mid);
 
 			if (lo == hi)
 				return (array[lo] == value ? (int) lo : -1);
@@ -44,7 +44,7 @@ int interpolation_search(int *array, size_t size, int value)
 			else
 				hi = mid - 1;
 		}
-		VALUE_NOT_IN_RANGE(mid);
+		PRINT_NOT_IN_RANGE(mid);
 	}
 	return (-1);
 }

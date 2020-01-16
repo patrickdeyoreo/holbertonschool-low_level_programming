@@ -1,9 +1,9 @@
 #include "search_algos.h"
 
-#define VALUE_CHECKED(idx, item) \
+#define PRINT_CHECKED(idx, item) \
 	printf("Value checked array[%lu] = [%d]\n", (idx), (item))
 
-#define VALUE_BOUNDED(low, high) \
+#define PRINT_BOUNDED(low, high) \
 	printf("Value found between indexes [%lu] and [%lu]\n", (low), (high))
 
 /**
@@ -23,15 +23,15 @@ int jump_search(int *array, size_t size, int value)
 	{
 		while (j < size && array[j] < value)
 		{
-			VALUE_CHECKED(j, array[j]);
+			PRINT_CHECKED(j, array[j]);
 			i = j, j += 3;
 		}
-		VALUE_BOUNDED(i, j);
+		PRINT_BOUNDED(i, j);
 		if (size <= j)
 			j = size - 1;
 		while (i <= j)
 		{
-			VALUE_CHECKED(i, array[i]);
+			PRINT_CHECKED(i, array[i]);
 			if (array[i] == value)
 				return (i);
 			++i;

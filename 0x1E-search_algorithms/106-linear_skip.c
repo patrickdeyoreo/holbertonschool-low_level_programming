@@ -1,10 +1,10 @@
 #include "search_algos.h"
 #include <math.h>
 
-#define VALUE_CHECKED(idx, item) \
+#define PRINT_CHECKED(idx, item) \
 	printf("Value checked at index [%lu] = [%d]\n", (idx), (item))
 
-#define VALUE_BOUNDED(low, high) \
+#define PRINT_BOUNDED(low, high) \
 	printf("Value found between indexes [%lu] and [%lu]\n", (low), (high))
 
 /**
@@ -25,7 +25,7 @@ skiplist_t *linear_skip(skiplist_t *list, int value)
 		{
 			list = tail;
 			tail = tail->express;
-			VALUE_CHECKED(tail->index, tail->n);
+			PRINT_CHECKED(tail->index, tail->n);
 		}
 		if (value > tail->n)
 		{
@@ -33,11 +33,11 @@ skiplist_t *linear_skip(skiplist_t *list, int value)
 			while (tail->next)
 				tail = tail->next;
 		}
-		VALUE_BOUNDED(list->index, tail->index);
+		PRINT_BOUNDED(list->index, tail->index);
 		tail = tail->next;
 		while (list != tail)
 		{
-			VALUE_CHECKED(list->index, list->n);
+			PRINT_CHECKED(list->index, list->n);
 			if (list->n == value)
 				return (list);
 			list = list->next;
