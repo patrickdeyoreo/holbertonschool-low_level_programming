@@ -18,26 +18,27 @@
  */
 listint_t *jump_list(listint_t *list, size_t size, int value)
 {
-	listint_t *head = list;
-	size_t rep = 0;
+	listint_t *tail = list;
+	size_t jump = sqrt(size);
 
 	if (list && size)
 	{
-		while (list->next && value > list->n)
+		while (tail->next && value > tail->n)
 		{
-			head = list;
-			for (rep = sqrt(size); list->next && rep; --rep)
-				list = list->next;
-			PRINT_CHECKED(list->index, list->n);
+			list = tail;
+			size = jump;
+			while (size-- && tail->next)
+				tail = tail->next;
+			PRINT_CHECKED(tail->index, tail->n);
 		}
-		PRINT_BOUNDED(head->index, list->index);
-		list = list->next;
-		while (head != list)
+		PRINT_BOUNDED(list->index, tail->index);
+		tail = tail->next;
+		while (list != tail)
 		{
-			PRINT_CHECKED(head->index, head->n);
-			if (head->n == value)
-				return (head);
-			head = head->next;
+			PRINT_CHECKED(list->index, list->n);
+			if (list->n == value)
+				return (list);
+			list = list->next;
 		}
 	}
 	return (NULL);
