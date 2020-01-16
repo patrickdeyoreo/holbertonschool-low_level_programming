@@ -27,18 +27,17 @@ static void print_array(int *array, size_t lower, size_t upper)
  */
 int _binary_search(int *array, int value, size_t lower, size_t upper)
 {
-	size_t middle = (upper - lower - 1) / 2;
+	size_t middle = (lower + upper - 1) / 2;
 
 	printf("Searching in array: ");
 	print_array(array, lower, upper);
 
-	printf("%d\n", array[middle]);
 	if (upper - lower == 1)
 		return (array[middle] == value ? (int) middle : -1);
 	if (array[middle] < value)
-		return (_binary_search(array, value, lower + middle + 1, upper));
+		return (_binary_search(array, value, middle + 1, upper));
 	if (array[middle] > value)
-		return (_binary_search(array, value, lower, upper - middle - 1));
+		return (_binary_search(array, value, lower, middle));
 	return (middle);
 }
 
