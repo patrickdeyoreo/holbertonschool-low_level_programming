@@ -1,5 +1,5 @@
 # Holberton School - Low Level Programming
-### My first C projects at Holberton School
+## My Adventures in the Land of C at Holberton
 
 * **0x00. C - Hello, World**
   * My first C project at Holberton School
